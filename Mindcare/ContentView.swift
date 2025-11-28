@@ -10,16 +10,52 @@ import SwiftData
 
 struct ContentView: View {
     @StateObject private var authService = AuthService.shared
+    @State private var appState: AppState = .welcome
+    @AppStorage("hasSeenJourney") private var hasSeenJourney: Bool = false
+    
+    enum AppState {
+        case welcome
+        case journey
+        case main
+    }
     
     var body: some View {
-        Group {
-            if authService.isAuthenticated {
-                MainTabView()
-            } else {
-                LoginView()
+        ZStack {
+            switch appState {
+            case .welcome:
+                WelcomeView {
+                    // Transition to Journey or Main based on logic
+                    if !hasSeenJourney {
+                        withAnimation {
+                            appState = .journey
+                        }
+                    } else {
+                        withAnimation {
+                            appState = .main
+                        }
+                    }
+                }
+                
+            case .journey:
+                JourneyView {
+                    // Mark journey as seen and go to main
+                    hasSeenJourney = true
+                    withAnimation {
+                        appState = .main
+                    }
+                }
+                
+            case .main:
+                Group {
+                    if authService.isAuthenticated {
+                        MainTabView()
+                    } else {
+                        LoginView()
+                    }
+                }
+                .transition(.opacity)
             }
         }
-        .animation(.easeInOut, value: authService.isAuthenticated)
     }
 }
 
