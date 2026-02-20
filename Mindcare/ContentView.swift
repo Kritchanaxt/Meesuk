@@ -50,7 +50,7 @@ struct ContentView: View {
                     if authService.isAuthenticated {
                         MainTabView()
                     } else {
-                        LoginView()
+                        
                     }
                 }
                 .transition(.opacity)
