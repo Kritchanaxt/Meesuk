@@ -103,7 +103,7 @@ struct MainTabView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 10)
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .ignoresSafeArea(.keyboard, edges: .bottom) // Ensure tab bar stays behind keyboard
     }
 }
 

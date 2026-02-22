@@ -36,12 +36,17 @@ final class AuthService: NSObject, ObservableObject {
     
     /// ตรวจสอบสถานะการ Login
     private func checkAuthState() {
+        // Force logout on app start as requested
+        isAuthenticated = false
+        
+        /*
         if let token = KeychainManager.shared.get(key: AppConstants.Keychain.accessToken) {
             isAuthenticated = !token.isEmpty
             
             // Load cached user profile
             loadCachedUser()
         }
+        */
     }
     
     private func loadCachedUser() {

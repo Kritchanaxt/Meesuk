@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ChatView: View {
     @State private var messageText = ""
+    @State private var keyboardHeight: CGFloat = 0
     @State private var messages: [ChatMessage] = [
         ChatMessage(
             id: "1", conversationId: "1", role: .assistant,
@@ -44,21 +45,62 @@ struct ChatView: View {
                             }
                         }
                         .padding()
+                        .padding(.bottom, 10) // Space for last message
                     }
                     .onChange(of: messages.count) { _ in
-                        if let lastMessage = messages.last {
-                            withAnimation {
-                                proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                            }
-                        }
+                        scrollToBottom(proxy: proxy)
+                    }
+                    .onChange(of: keyboardHeight) { _ in
+                        scrollToBottom(proxy: proxy)
                     }
                 }
 
                 // Input Area
                 ChatInputView(messageText: $messageText, onSend: sendMessage)
+                    .padding(.bottom, keyboardHeight > 0 ? keyboardHeight : 90)
+            }
+        }
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
+        .onAppear {
+            self.setupKeyboardObservers()
+        }
+        .onDisappear {
+            self.removeKeyboardObservers()
+        }
+    }
+    
+    private func scrollToBottom(proxy: ScrollViewProxy) {
+        if let lastMessage = messages.last {
+            withAnimation {
+                proxy.scrollTo(lastMessage.id, anchor: .bottom)
             }
         }
     }
+    
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                withAnimation(.easeOut(duration: 0.25)) {
+                    self.keyboardHeight = keyboardFrame.height
+                }
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+            withAnimation(.easeIn(duration: 0.25)) {
+                self.keyboardHeight = 0
+            }
+        }
+    }
+    
+    private func removeKeyboardObservers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+
 
     private func sendMessage() {
         guard !messageText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
@@ -247,8 +289,10 @@ struct ChatInputView: View {
                     .fill(Color.mindHexColor("FDF1E5").opacity(0.5))
             )
             .padding(.horizontal, 10)
-            .padding(.bottom, 100)
+            .padding(.bottom, 10)
         }
+        .background(Color.mindHexColor("FFF8E7"))
+        // .offset(y: -100) // Removed manual offset
     }
 }
 
@@ -293,6 +337,8 @@ struct BubbleShape: Shape {
             
         } else {
             // Assistant: Tail on left
+            let r: CGFloat = 20
+            
             // Start top-left
             p.move(to: CGPoint(x: r, y: 0))
             
@@ -304,16 +350,17 @@ struct BubbleShape: Shape {
             
             // Right edge
             p.addLine(to: CGPoint(x: w, y: h - r))
-            
+
             // Bottom-right corner
             p.addArc(center: CGPoint(x: w - r, y: h - r), radius: r, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
             
             // Bottom edge
-            p.addLine(to: CGPoint(x: 0, y: h)) // Go all the way to bottom-left corner
+            p.addLine(to: CGPoint(x: r, y: h))
             
-            // Tail
-            p.addLine(to: CGPoint(x: -10, y: h - 10))
-            p.addLine(to: CGPoint(x: 0, y: h - 20))
+            // Bottom-left corner (with tail)
+            p.addLine(to: CGPoint(x: 0, y: h))         // To corner
+            p.addLine(to: CGPoint(x: -10, y: h - 10))  // Tail tip
+            p.addLine(to: CGPoint(x: 0, y: h - 20))    // Back to side
             
             // Left edge
             p.addLine(to: CGPoint(x: 0, y: r))

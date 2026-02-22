@@ -52,19 +52,19 @@ struct ResetPasswordView: View {
                             Spacer()
 
                             // Back Button
-                            Button(action: {
-                                dismiss()
-                            }) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "chevron.left")
-                                    Text("Back")
-                                }
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
-                            }
-                            .padding(.bottom, 40)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 8)
+//                            Button(action: {
+//                                dismiss()
+//                            }) {
+//                                HStack(spacing: 8) {
+//                                    Image(systemName: "chevron.left")
+//                                    Text("Back")
+//                                }
+//                                .font(.system(size: 16, weight: .bold))
+//                                .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
+//                            }
+//                            .padding(.bottom, 40)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                            .padding(.horizontal, 8)
                         }
                         .padding(.horizontal, 32)
                         .padding(.top, 30)
