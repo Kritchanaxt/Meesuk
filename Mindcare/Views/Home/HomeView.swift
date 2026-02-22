@@ -73,12 +73,13 @@ struct HomeHeaderView: View {
                         .fill(Color.white)
                         .frame(width: 45, height: 45)
                         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-
-                    Image("Notification")  // Asset: Session2/Page1_homepage/Notification
-                        .resizable()
+                    
+                    Image(systemName: "bell")
+                        .foregroundColor(Color.mindHexColor("EB6538"))
+                        .font(.title3)
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .offset(x: -10.5, y: 10.5)  // Center manually if position() was problematic
+                        .offset(x: -10.5, y: 10.5)
 
                     Circle()
                         .fill(Color.orange)

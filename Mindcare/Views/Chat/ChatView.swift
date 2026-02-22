@@ -64,28 +64,49 @@ struct ChatView: View {
         guard !messageText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
 
         // Add user message
+        let userContent = messageText
         let userMsg = ChatMessage(
             id: UUID().uuidString,
             conversationId: "1",
             role: .user,
-            content: messageText,
+            content: userContent,
             createdAt: Date(),
             isRead: true
         )
         messages.append(userMsg)
         messageText = ""
 
-        // Simulate AI response
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            let aiMsg = ChatMessage(
-                id: UUID().uuidString,
-                conversationId: "1",
-                role: .assistant,
-                content: "I'm here to support you. Tell me more about how you're feeling.",
-                createdAt: Date(),
-                isRead: true
-            )
-            messages.append(aiMsg)
+        // Call API
+        Task {
+            do {
+                // Call the test service
+                let responseText = try await ChatTestService.shared.sendMessage(userContent)
+                
+                await MainActor.run {
+                    let aiMsg = ChatMessage(
+                        id: UUID().uuidString,
+                        conversationId: "1",
+                        role: .assistant,
+                        content: responseText,
+                        createdAt: Date(),
+                        isRead: true
+                    )
+                    messages.append(aiMsg)
+                }
+            } catch {
+                print("Error sending message: \(error)")
+                await MainActor.run {
+                     let errorMsg = ChatMessage(
+                        id: UUID().uuidString,
+                        conversationId: "1",
+                        role: .assistant,
+                        content: "Sorry, something went wrong. Please try again later. (Error: \(error.localizedDescription))",
+                        createdAt: Date(),
+                        isRead: true
+                    )
+                    messages.append(errorMsg)
+                }
+            }
         }
     }
 }
@@ -127,12 +148,12 @@ struct MessageBubble: View {
 
     var body: some View {
         VStack(alignment: isUser ? .trailing : .leading, spacing: 5) {
-            HStack(alignment: .bottom, spacing: 8) {
+            HStack(alignment: .bottom, spacing: 12) {
                 if !isUser {
-                    Image("Ai_icon")
+                    Image("Mee_Good")
                         .resizable()
-                        .frame(width: 30, height: 30)
-                        .padding(.bottom, 20)
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
                 } else {
                     Spacer()
                 }
@@ -157,17 +178,15 @@ struct MessageBubble: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .background(isUser ? Color.mindHexColor("FFF59D") : Color.white)
-                .cornerRadius(20)
-                .overlay(
-                    BubbleTail(isUser: isUser)
-                        .stroke(isUser ? Color.clear : Color.mindHexColor("FF9F9F"), lineWidth: 1)
-                        .background(BubbleTail(isUser: isUser).fill(isUser ? Color.mindHexColor("FFF59D") : Color.white))
+                .background(
+                    BubbleShape(isUser: isUser)
+                        .fill(isUser ? Color.mindHexColor("FFF59D") : Color.white)
                 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 20)
+                    BubbleShape(isUser: isUser)
                         .stroke(isUser ? Color.clear : Color.mindHexColor("FF9F9F"), lineWidth: 1)
                 )
+                .padding(isUser ? .trailing : .leading, 10) // Reserve space for the tail
             }
 
             Text(message.createdAt.formatted(.dateTime.hour().minute()))
@@ -194,9 +213,10 @@ struct ChatInputView: View {
                     .background(Color.mindHexColor("FDF1E5"))
                     .clipShape(Circle())
 
-                TextField("Write Here...", text: $messageText)
+                TextField("Write Here...", text: $messageText, axis: .vertical)
+                    .lineLimit(1...5)
                     .padding(.horizontal, 16)
-                    .frame(height: 44)
+                    .padding(.vertical, 8)
                     .background(Color.white)
                     .cornerRadius(25)
                     .overlay(
@@ -205,18 +225,19 @@ struct ChatInputView: View {
                     )
 
                 Button(action: {}) {
-                    Image("Microphone Icon")  // Asset: Session2/Page2_Chat/Microphone Icon
-                        .resizable()
+                    Image(systemName: "microphone")
+                        .foregroundColor(Color.mindHexColor("EB6538"))
+                        .font(.title3)
                         .scaledToFit()
                         .frame(width: 24, height: 24)
-                        .foregroundColor(Color.mindHexColor("FF9F9F"))
                 }
 
                 Button(action: onSend) {
-                    Image("Send Icon")  // Asset: Session2/Page2_Chat/Send Icon
-                        .resizable()
+                    Image(systemName: "paperplane.fill")
+                        .foregroundColor(Color.mindHexColor("EB6538"))
+                        .font(.title3)
                         .scaledToFit()
-                        .frame(width: 36, height: 36)
+                        .frame(width: 24, height: 24)
                 }
             }
             .padding(.horizontal, 20)
@@ -231,23 +252,77 @@ struct ChatInputView: View {
     }
 }
 
-struct BubbleTail: Shape {
+struct BubbleShape: Shape {
     let isUser: Bool
-
+    
     func path(in rect: CGRect) -> Path {
-        var path = Path()
+        var p = Path()
+        let w = rect.width
+        let h = rect.height
+        let r: CGFloat = 20
+        
         if isUser {
-            // Right tail
-            path.move(to: CGPoint(x: rect.maxX, y: rect.maxY - 20))
-            path.addLine(to: CGPoint(x: rect.maxX + 10, y: rect.maxY - 10))
-            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            // User: Tail on right
+            // Start top-left
+            p.move(to: CGPoint(x: r, y: 0))
+            
+            // Top edge
+            p.addLine(to: CGPoint(x: w - r, y: 0))
+            
+            // Top-right corner
+            p.addArc(center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
+            
+            // Right edge to tail start
+            p.addLine(to: CGPoint(x: w, y: h - 20))
+            
+            // Tail
+            p.addLine(to: CGPoint(x: w + 10, y: h - 10))
+            p.addLine(to: CGPoint(x: w, y: h))
+            
+            // Bottom edge
+            p.addLine(to: CGPoint(x: r, y: h))
+            
+            // Bottom-left corner
+            p.addArc(center: CGPoint(x: r, y: h - r), radius: r, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
+            
+            // Left edge
+            p.addLine(to: CGPoint(x: 0, y: r))
+            
+            // Top-left corner
+            p.addArc(center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+            
         } else {
-            // Left tail
-            path.move(to: CGPoint(x: rect.minX, y: rect.maxY - 20))
-            path.addLine(to: CGPoint(x: rect.minX - 10, y: rect.maxY - 10))
-            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+            // Assistant: Tail on left
+            // Start top-left
+            p.move(to: CGPoint(x: r, y: 0))
+            
+            // Top edge
+            p.addLine(to: CGPoint(x: w - r, y: 0))
+            
+            // Top-right corner
+            p.addArc(center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
+            
+            // Right edge
+            p.addLine(to: CGPoint(x: w, y: h - r))
+            
+            // Bottom-right corner
+            p.addArc(center: CGPoint(x: w - r, y: h - r), radius: r, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
+            
+            // Bottom edge
+            p.addLine(to: CGPoint(x: 0, y: h)) // Go all the way to bottom-left corner
+            
+            // Tail
+            p.addLine(to: CGPoint(x: -10, y: h - 10))
+            p.addLine(to: CGPoint(x: 0, y: h - 20))
+            
+            // Left edge
+            p.addLine(to: CGPoint(x: 0, y: r))
+            
+            // Top-left corner
+            p.addArc(center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
         }
-        return path
+        
+        return p
     }
 }
 

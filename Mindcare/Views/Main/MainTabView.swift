@@ -17,28 +17,33 @@ struct MainTabView: View {
         case psychiatrist = "Psychiatrist"
         case profile = "Profile"
 
+        // Unused when all tabs use SF Symbols; keep if you later add asset-based icons
         var icon: String {
             switch self {
-            case .home: return "Home"
-            case .chat: return "Chat_gray"
-            case .psychiatrist: return "Psychiatrist_gray"
-            case .profile: return "Profile_gray"
+            case .home: return "house"
+            case .chat: return "ellipsis.message"
+            case .psychiatrist: return "heart"
+            case .profile: return "person"
             }
         }
 
+        // Name for selected state (SF Symbol names)
         var selectedIcon: String {
             switch self {
-            case .home: return "Home"
-            case .chat: return "Chat_Or"
-            case .psychiatrist: return "Psychiatrist_Or"
-            case .profile: return "Profile_Or"
+            case .home: return "house"
+            case .chat: return "ellipsis.message"
+            case .psychiatrist: return "heart"
+            case .profile: return "person"
             }
         }
 
-        var systemIcon: String? {
+        // Use SF Symbols for all tabs
+        var systemIcon: String {
             switch self {
+            case .home: return "house"
+            case .chat: return "ellipsis.message"
             case .psychiatrist: return "heart"
-            default: return nil
+            case .profile: return "person"
             }
         }
     }
@@ -69,27 +74,23 @@ struct MainTabView: View {
                         }
                     }) {
                         VStack(spacing: 4) {
-                            if let systemIcon = tab.systemIcon {
-                                Image(
-                                    systemName: selectedTab == tab
-                                        ? "\(systemIcon).fill" : systemIcon
-                                )
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(
-                                    selectedTab == tab ? Color.mindHexColor("E67E22") : Color.gray)
-                            } else {
-                                Image(selectedTab == tab ? tab.selectedIcon : tab.icon)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                            }
+                            Image(
+                                systemName: selectedTab == tab
+                                    ? tab.selectedIcon
+                                    : tab.systemIcon
+                            )
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(
+                                selectedTab == tab ? Color.mindHexColor("E67E22") : Color.gray
+                            )
 
                             Text(tab.rawValue)
                                 .font(.custom("Outfit-Medium", size: 10))
                                 .foregroundColor(
-                                    selectedTab == tab ? Color.mindHexColor("E67E22") : Color.gray)
+                                    selectedTab == tab ? Color.mindHexColor("E67E22") : Color.gray
+                                )
                         }
                     }
                     Spacer()

@@ -106,9 +106,9 @@ struct ProfileView: View {
 
                                 Spacer()
 
-                                Image("chat")  // Asset: Session2/Page5_Profile/chat
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
+                                Image("chat")
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
                             }
                             .padding(15)
                             .background(Color.mindHexColor("FDF1E5"))
@@ -119,25 +119,33 @@ struct ProfileView: View {
                         .cornerRadius(25)
                         .padding(.horizontal, 20)
 
-                        // Settings List
+                        // Settings List (use systemName)
                         VStack(spacing: 15) {
                             ProfileListRow(
-                                icon: "Subcription", title: "Subcription Plan",
-                                subtitle: "Premium Monthly • Renew Oct 12")
+                                systemIconName: "star.circle.fill",
+                                title: "Subcription Plan",
+                                subtitle: "Premium Monthly • Renew Oct 12"
+                            )
                             ProfileListRow(
-                                icon: "Emergency", title: "Emergency Contacts",
-                                subtitle: "2 contacts assigned")
+                                systemIconName: "light.beacon.max.fill",
+                                title: "Emergency Contacts",
+                                subtitle: "2 contacts assigned"
+                            )
                             ProfileListRow(
-                                icon: "Setting", title: "App Settings",
-                                subtitle: "2 contacts assigned")  // Based on screenshot
+                                systemIconName: "bell.fill",
+                                title: "App Settings",
+                                subtitle: "2 contacts assigned"
+                            )
                         }
                         .padding(.horizontal, 20)
 
                         // Sign Out
                         Button(action: {}) {
                             HStack {
-                                Image("signout")  // Asset: Session2/Page5_Profile/signout
-                                    .resizable()
+                                Image(systemName: "iphone.and.arrow.right.outward")
+                                    .foregroundColor(Color.mindHexColor("EB6538"))
+                                    .font(.title3)
+                                    .scaledToFit()
                                     .frame(width: 24, height: 24)
                                 Text("Sign Out")
                                     .font(.custom("Outfit-Bold", size: 16))
@@ -160,15 +168,21 @@ struct ProfileView: View {
 }
 
 struct ProfileListRow: View {
-    let icon: String
+    // SF Symbol name
+    let systemIconName: String
     let title: String
     let subtitle: String
 
     var body: some View {
         HStack(spacing: 15) {
-            Image(icon)
+            Image(systemName: systemIconName)
                 .resizable()
-                .frame(width: 40, height: 40)
+                .scaledToFit()
+                .frame(width: 22, height: 22)
+                .foregroundColor(Color.mindHexColor("E67E22"))
+                .padding(9)
+                .background(Color.mindHexColor("FDF1E5"))
+                .cornerRadius(12)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
