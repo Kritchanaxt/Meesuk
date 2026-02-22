@@ -10,7 +10,7 @@ import SwiftUI
 struct JourneyView: View {
     @State private var currentPage = 0
     var onFinished: () -> Void
-    
+
     private let pages: [JourneyPage] = [
         JourneyPage(
             imageName: "Journey-1",
@@ -32,9 +32,9 @@ struct JourneyView: View {
             description: "Monitor your mood, build healthy habits, and\ncelebrate progress",
             buttonText: "Get Started",
             showArrow: false
-        )
+        ),
     ]
-    
+
     var body: some View {
         ZStack {
             // Page Content (Full Screen Background)
@@ -46,19 +46,24 @@ struct JourneyView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
-            
+
             // Bottom Controls Overlay
             VStack {
                 Spacer()
-                
+
                 VStack(spacing: 24) {
                     // Page Indicators
                     HStack(spacing: 8) {
                         ForEach(0..<pages.count, id: \.self) { index in
                             Capsule()
-                                .fill(currentPage == index ? Color(hex: "FF8FA3") : Color(hex: "E0E0E0"))
+                                .fill(
+                                    currentPage == index
+                                        ? Color.mindHexColor("FF8FA3") : Color.mindHexColor("E0E0E0")
+                                )
                                 .frame(width: currentPage == index ? 24 : 8, height: 8)
-                                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentPage)
+                                .animation(
+                                    .spring(response: 0.3, dampingFraction: 0.7), value: currentPage
+                                )
                                 .onTapGesture {
                                     withAnimation {
                                         currentPage = index
@@ -66,7 +71,7 @@ struct JourneyView: View {
                                 }
                         }
                     }
-                    
+
                     // Button
                     Button(action: {
                         if currentPage < pages.count - 1 {
@@ -82,7 +87,7 @@ struct JourneyView: View {
                         HStack(spacing: 8) {
                             Text(pages[currentPage].buttonText)
                                 .font(.system(size: 16, weight: .semibold))
-                            
+
                             if pages[currentPage].showArrow {
                                 Image(systemName: "arrow.right")
                                     .font(.system(size: 14, weight: .semibold))
@@ -93,14 +98,18 @@ struct JourneyView: View {
                         .frame(height: 56)
                         .background(
                             LinearGradient(
-                                colors: [Color(hex: "5ED4B8"), Color(hex: "7DD9C8")],
+                                colors: [Color.mindHexColor("5ED4B8"), Color.mindHexColor("7DD9C8")],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
                         )
                         .cornerRadius(28)
-                        .shadow(color: Color(hex: "5ED4B8").opacity(0.3), radius: 3, x: 0, y: 4)
-                        .shadow(color: Color(hex: "5ED4B8").opacity(0.3), radius: 7.5, x: 0, y: 10)
+                        .shadow(
+                            color: Color.mindHexColor("5ED4B8").opacity(0.3), radius: 3, x: 0, y: 4
+                        )
+                        .shadow(
+                            color: Color.mindHexColor("5ED4B8").opacity(0.3), radius: 7.5, x: 0, y: 10
+                        )
                     }
                     .padding(.horizontal, 40)
                 }
@@ -115,23 +124,23 @@ struct JourneyView: View {
 
 struct JourneyPageView: View {
     let page: JourneyPage
-    
+
     var body: some View {
         ZStack(alignment: .bottom) {
             // Full Screen Background Image
             Image(page.imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
-            
+
             // Text Content Positioned appropriately
             VStack(spacing: 16) {
                 Text(page.title)
                     .font(.system(size: 28, weight: .bold))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
-                
+
                 Text(page.description)
                     .font(.system(size: 16))
                     .multilineTextAlignment(.center)
@@ -139,7 +148,7 @@ struct JourneyPageView: View {
                     .lineSpacing(4)
             }
             .padding(.horizontal, 30)
-            .padding(.bottom, 180) // Space for bottom controls
+            .padding(.bottom, 180)  // Space for bottom controls
         }
     }
 }

@@ -5,49 +5,49 @@
 //  Created for MindCareAI Project
 //
 
-import Foundation
 import Alamofire
 import Combine
+import Foundation
 
 /// Network Manager - จัดการ API Requests ด้วย Alamofire
 final class NetworkManager: ObservableObject {
-    
+
     // MARK: - Singleton
     static let shared = NetworkManager()
-    
+
     // MARK: - Properties
     private let session: Session
     private let baseURL: String
-    
+
     @Published var isConnected: Bool = true
-    
+
     // MARK: - Initialization
-    
+
     private init() {
         self.baseURL = AppEnvironment.current.baseURL
-        
+
         // Configure Session
         let configuration = URLSessionConfiguration.af.default
         configuration.timeoutIntervalForRequest = AppConstants.requestTimeout
         configuration.timeoutIntervalForResource = AppConstants.resourceTimeout
         configuration.waitsForConnectivity = true
-        
+
         // Interceptor for Auth
         let interceptor = AuthInterceptor()
-        
+
         // Create Session
         self.session = Session(
             configuration: configuration,
             interceptor: interceptor,
             eventMonitors: [NetworkLogger()]
         )
-        
+
         // Monitor Network
         setupNetworkMonitor()
     }
-    
+
     // MARK: - Network Monitor
-    
+
     private func setupNetworkMonitor() {
         let monitor = NetworkReachabilityManager()
         monitor?.startListening { [weak self] status in
@@ -61,9 +61,9 @@ final class NetworkManager: ObservableObject {
             }
         }
     }
-    
+
     // MARK: - Generic Request Methods
-    
+
     /// GET Request
     func get<T: Decodable>(
         _ endpoint: String,
@@ -78,7 +78,7 @@ final class NetworkManager: ObservableObject {
             headers: headers
         )
     }
-    
+
     /// POST Request
     func post<T: Decodable>(
         _ endpoint: String,
@@ -93,7 +93,7 @@ final class NetworkManager: ObservableObject {
             headers: headers
         )
     }
-    
+
     /// POST with Encodable Body
     func post<T: Decodable, B: Encodable>(
         _ endpoint: String,
@@ -107,7 +107,7 @@ final class NetworkManager: ObservableObject {
             headers: headers
         )
     }
-    
+
     /// PUT Request
     func put<T: Decodable, B: Encodable>(
         _ endpoint: String,
@@ -121,7 +121,7 @@ final class NetworkManager: ObservableObject {
             headers: headers
         )
     }
-    
+
     /// PATCH Request
     func patch<T: Decodable, B: Encodable>(
         _ endpoint: String,
@@ -135,7 +135,7 @@ final class NetworkManager: ObservableObject {
             headers: headers
         )
     }
-    
+
     /// DELETE Request
     func delete<T: Decodable>(
         _ endpoint: String,
@@ -150,15 +150,15 @@ final class NetworkManager: ObservableObject {
             headers: headers
         )
     }
-    
+
     /// DELETE with no response body
     func delete(
         _ endpoint: String,
         parameters: Parameters? = nil,
         headers: HTTPHeaders? = nil
     ) async throws {
-        let url = baseURL + endpoint
-        
+        let url = endpoint.contains("://") ? endpoint : baseURL + endpoint
+
         _ = try await session.request(
             url,
             method: .delete,
@@ -170,9 +170,9 @@ final class NetworkManager: ObservableObject {
         .serializingData()
         .value
     }
-    
+
     // MARK: - Private Request Methods
-    
+
     private func request<T: Decodable>(
         _ endpoint: String,
         method: HTTPMethod,
@@ -180,8 +180,8 @@ final class NetworkManager: ObservableObject {
         encoding: ParameterEncoding,
         headers: HTTPHeaders?
     ) async throws -> T {
-        let url = baseURL + endpoint
-        
+        let url = endpoint.contains("://") ? endpoint : baseURL + endpoint
+
         let response = try await session.request(
             url,
             method: method,
@@ -192,18 +192,18 @@ final class NetworkManager: ObservableObject {
         .validate()
         .serializingDecodable(T.self, decoder: JSONDecoder.apiDecoder)
         .value
-        
+
         return response
     }
-    
+
     private func requestWithBody<T: Decodable, B: Encodable>(
         _ endpoint: String,
         method: HTTPMethod,
         body: B,
         headers: HTTPHeaders?
     ) async throws -> T {
-        let url = baseURL + endpoint
-        
+        let url = endpoint.contains("://") ? endpoint : baseURL + endpoint
+
         let response = try await session.request(
             url,
             method: method,
@@ -214,12 +214,12 @@ final class NetworkManager: ObservableObject {
         .validate()
         .serializingDecodable(T.self, decoder: JSONDecoder.apiDecoder)
         .value
-        
+
         return response
     }
-    
+
     // MARK: - Upload
-    
+
     /// Upload File
     func upload<T: Decodable>(
         _ endpoint: String,
@@ -228,12 +228,13 @@ final class NetworkManager: ObservableObject {
         mimeType: String,
         parameters: [String: String]? = nil
     ) async throws -> T {
-        let url = baseURL + endpoint
-        
+        let url = endpoint.contains("://") ? endpoint : baseURL + endpoint
+
         let response = try await session.upload(
             multipartFormData: { multipartFormData in
-                multipartFormData.append(fileURL, withName: "file", fileName: fileName, mimeType: mimeType)
-                
+                multipartFormData.append(
+                    fileURL, withName: "file", fileName: fileName, mimeType: mimeType)
+
                 parameters?.forEach { key, value in
                     if let data = value.data(using: .utf8) {
                         multipartFormData.append(data, withName: key)
@@ -245,10 +246,10 @@ final class NetworkManager: ObservableObject {
         .validate()
         .serializingDecodable(T.self, decoder: JSONDecoder.apiDecoder)
         .value
-        
+
         return response
     }
-    
+
     /// Upload Data
     func upload<T: Decodable>(
         _ endpoint: String,
@@ -257,50 +258,54 @@ final class NetworkManager: ObservableObject {
         mimeType: String,
         fieldName: String = "file"
     ) async throws -> T {
-        let url = baseURL + endpoint
-        
+        let url = endpoint.contains("://") ? endpoint : baseURL + endpoint
+
         let response = try await session.upload(
             multipartFormData: { multipartFormData in
-                multipartFormData.append(data, withName: fieldName, fileName: fileName, mimeType: mimeType)
+                multipartFormData.append(
+                    data, withName: fieldName, fileName: fileName, mimeType: mimeType)
             },
             to: url
         )
         .validate()
         .serializingDecodable(T.self, decoder: JSONDecoder.apiDecoder)
         .value
-        
+
         return response
     }
-    
+
     // MARK: - Download
-    
+
     /// Download File
     func download(
         _ endpoint: String,
         to destination: URL? = nil,
         progress: ((Double) -> Void)? = nil
     ) async throws -> URL {
-        let url = baseURL + endpoint
-        
+        let url = endpoint.contains("://") ? endpoint : baseURL + endpoint
+
         let downloadDestination: DownloadRequest.Destination = { temporaryURL, response in
-            let destinationURL = destination ?? FileManager.default.temporaryDirectory.appendingPathComponent(response.suggestedFilename ?? "download")
+            let destinationURL =
+                destination
+                ?? FileManager.default.temporaryDirectory.appendingPathComponent(
+                    response.suggestedFilename ?? "download")
             return (destinationURL, [.removePreviousFile, .createIntermediateDirectories])
         }
-        
+
         let request = session.download(url, to: downloadDestination)
-        
+
         if let progress = progress {
             request.downloadProgress { prog in
                 progress(prog.fractionCompleted)
             }
         }
-        
+
         let response = await request.serializingDownloadedFileURL().response
-        
+
         guard let fileURL = response.value else {
             throw NetworkError.downloadFailed
         }
-        
+
         return fileURL
     }
 }
@@ -308,28 +313,34 @@ final class NetworkManager: ObservableObject {
 // MARK: - Auth Interceptor
 
 class AuthInterceptor: RequestInterceptor {
-    
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+
+    func adapt(
+        _ urlRequest: URLRequest, for session: Session,
+        completion: @escaping (Result<URLRequest, Error>) -> Void
+    ) {
         var request = urlRequest
-        
+
         // Add Auth Token
         if let token = KeychainManager.shared.get(key: AppConstants.Keychain.accessToken) {
             request.headers.add(.authorization(bearerToken: token))
         }
-        
+
         // Add Common Headers
         request.headers.add(.contentType("application/json"))
         request.headers.add(.accept("application/json"))
-        
+
         completion(.success(request))
     }
-    
-    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+
+    func retry(
+        _ request: Request, for session: Session, dueTo error: Error,
+        completion: @escaping (RetryResult) -> Void
+    ) {
         guard let response = request.task?.response as? HTTPURLResponse else {
             completion(.doNotRetry)
             return
         }
-        
+
         // Retry on 401 with token refresh
         if response.statusCode == 401 {
             Task {
@@ -349,23 +360,25 @@ class AuthInterceptor: RequestInterceptor {
 // MARK: - Network Logger
 
 class NetworkLogger: EventMonitor {
-    
+
     func requestDidResume(_ request: Request) {
         #if DEBUG
-        print("🌐 Request: \(request.description)")
+            print("🌐 Request: \(request.description)")
         #endif
     }
-    
-    func request<Value>(_ request: DataRequest, didParseResponse response: DataResponse<Value, AFError>) {
+
+    func request<Value>(
+        _ request: DataRequest, didParseResponse response: DataResponse<Value, AFError>
+    ) {
         #if DEBUG
-        if let statusCode = response.response?.statusCode {
-            let emoji = (200...299).contains(statusCode) ? "✅" : "❌"
-            print("\(emoji) Response [\(statusCode)]: \(request.description)")
-        }
-        
-        if let error = response.error {
-            print("❌ Error: \(error.localizedDescription)")
-        }
+            if let statusCode = response.response?.statusCode {
+                let emoji = (200...299).contains(statusCode) ? "✅" : "❌"
+                print("\(emoji) Response [\(statusCode)]: \(request.description)")
+            }
+
+            if let error = response.error {
+                print("❌ Error: \(error.localizedDescription)")
+            }
         #endif
     }
 }
@@ -382,7 +395,7 @@ enum NetworkError: LocalizedError {
     case uploadFailed
     case noConnection
     case unknown(Error)
-    
+
     var errorDescription: String? {
         switch self {
         case .invalidURL:
@@ -416,21 +429,21 @@ extension JSONDecoder {
         decoder.dateDecodingStrategy = .custom { decoder in
             let container = try decoder.singleValueContainer()
             let dateString = try container.decode(String.self)
-            
+
             // Try ISO8601 with fractional seconds
             let iso8601Formatter = ISO8601DateFormatter()
             iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-            
+
             if let date = iso8601Formatter.date(from: dateString) {
                 return date
             }
-            
+
             // Try ISO8601 without fractional seconds
             iso8601Formatter.formatOptions = [.withInternetDateTime]
             if let date = iso8601Formatter.date(from: dateString) {
                 return date
             }
-            
+
             throw DecodingError.dataCorruptedError(
                 in: container,
                 debugDescription: "Invalid date format: \(dateString)"

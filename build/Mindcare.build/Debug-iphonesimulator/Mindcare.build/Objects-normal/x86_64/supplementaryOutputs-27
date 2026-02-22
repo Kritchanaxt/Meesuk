@@ -1,0 +1,44 @@
+{
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Services/CoreMotion/CoreMotionManager.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/CoreMotionManager.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/CoreMotionManager.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/CoreMotionManager.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/CoreMotionManager.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/CoreMotionManager.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Services/HealthKit/HealthKitManager.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/HealthKitManager.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/HealthKitManager.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/HealthKitManager.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/HealthKitManager.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/HealthKitManager.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Services/HealthKit/WorkoutManager.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/WorkoutManager.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/WorkoutManager.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/WorkoutManager.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/WorkoutManager.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/WorkoutManager.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Services/Network/APIEndpoints.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIEndpoints.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIEndpoints.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIEndpoints.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIEndpoints.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIEndpoints.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Services/Network/APIService.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIService.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIService.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIService.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIService.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/APIService.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Services/Network/NetworkManager.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/NetworkManager.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/NetworkManager.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/NetworkManager.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/NetworkManager.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/NetworkManager.swiftdeps"
+  }
+}

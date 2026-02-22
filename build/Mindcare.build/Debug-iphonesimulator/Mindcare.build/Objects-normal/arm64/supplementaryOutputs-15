@@ -1,0 +1,44 @@
+{
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/App/AppDelegate.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppDelegate.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppDelegate.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppDelegate.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppDelegate.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/App/AppEnvironment.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppEnvironment.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppEnvironment.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppEnvironment.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppEnvironment.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppEnvironment.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Models/ActivityModels.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ActivityModels.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ActivityModels.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ActivityModels.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ActivityModels.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ActivityModels.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Models/AppointmentModels.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppointmentModels.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppointmentModels.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppointmentModels.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppointmentModels.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AppointmentModels.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Models/AuthModels.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AuthModels.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AuthModels.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AuthModels.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AuthModels.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/AuthModels.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Models/ChatModels.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ChatModels.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ChatModels.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ChatModels.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ChatModels.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/arm64/ChatModels.swiftdeps"
+  }
+}

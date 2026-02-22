@@ -1,0 +1,44 @@
+{
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Views/Journey/JourneyView.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/JourneyView.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/JourneyView.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/JourneyView.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/JourneyView.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/JourneyView.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Views/Main/MainTabView.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/MainTabView.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/MainTabView.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/MainTabView.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/MainTabView.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/MainTabView.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Views/Payment/ApplePayButtonView.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ApplePayButtonView.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ApplePayButtonView.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ApplePayButtonView.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ApplePayButtonView.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ApplePayButtonView.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Views/Profile/ProfileView.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ProfileView.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ProfileView.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ProfileView.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ProfileView.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/ProfileView.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Views/Psychiatrist/PsychiatristView.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/PsychiatristView.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/PsychiatristView.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/PsychiatristView.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/PsychiatristView.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/PsychiatristView.swiftdeps"
+  },
+  "/Users/mr.kritchanat/Desktop/Mindcare/Mindcare/Views/RolePage/RolePageView.swift" : {
+    "const-values" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/RolePageView.swiftconstvalues",
+    "dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/RolePageView.d",
+    "diagnostics" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/RolePageView.dia",
+    "object" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/RolePageView.o",
+    "swift-dependencies" : "/Users/mr.kritchanat/Desktop/Mindcare/build/Mindcare.build/Debug-iphonesimulator/Mindcare.build/Objects-normal/x86_64/RolePageView.swiftdeps"
+  }
+}
