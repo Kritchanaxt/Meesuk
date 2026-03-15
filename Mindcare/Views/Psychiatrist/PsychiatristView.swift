@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct PsychiatristView: View {
+    @State private var appointments: [Appointment] = []
+    @StateObject private var viewModel = PsychiatristViewModel()
+
     @State private var showQuestionnaire = false
     @State private var showRecommendation = false
     @State private var showChangeDoctor = false
@@ -18,7 +21,20 @@ struct PsychiatristView: View {
                         .foregroundColor(Color.mindHexColor("4A3422"))
                         .padding(.top, 40)
 
-                    DoctorCardOverview(onTapChange: { showChangeDoctor = true })
+                    if let selectedDoc = viewModel.selectedDoctor {
+                        DoctorCardOverview(
+                            doctor: selectedDoc, onTapChange: { showChangeDoctor = true })
+                    } else {
+                        // Default if none selected yet but we are in matched state
+                        Button(action: { showQuestionnaire = true }) {
+                            Text("Find Your Doctor")
+                                .font(.custom("Outfit-Bold", size: 18))
+                                .foregroundColor(.white)
+                                .frame(width: 240, height: 60)
+                                .background(Color.mindHexColor("E67E22"))
+                                .cornerRadius(30)
+                        }
+                    }
 
                     Spacer()
                 }
@@ -65,235 +81,44 @@ struct PsychiatristView: View {
             }
         }
         .sheet(isPresented: $showQuestionnaire) {
-            QuestionnaireView(onFinished: {
+            QuestionnaireView(viewModel: viewModel) {
                 showQuestionnaire = false
+                // Optional: You could pass the exact matched doctor to recommendation view
                 // Small delay to let sheet dismiss before showing next
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     showRecommendation = true
                 }
-            })
+            }
         }
         .sheet(isPresented: $showChangeDoctor) {
-            ChangeDoctorView()
+            if let currentDoc = viewModel.selectedDoctor {
+                ChangeDoctorView(doctor: currentDoc) {
+                    showChangeDoctor = false
+                    viewModel.resetForm()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        showQuestionnaire = true
+                    }
+                }
+            }
         }
         .sheet(isPresented: $showRecommendation) {
-            DoctorRecommendationView(onFinish: {
-                isMatched = true
-                showRecommendation = false
-            })
+            DoctorRecommendationView(
+                doctors: viewModel.recommendedDoctors,
+                onSelect: { selectedDoc in
+                    viewModel.selectedDoctor = selectedDoc
+                    isMatched = true
+                    showRecommendation = false
+                })
         }
     }
 }
 
-// MARK: - Supporting Views for Psychiatrist Flow
-
-struct QuestionnaireView: View {
-    @State private var currentStep = 2
-    @Environment(\.dismiss) var dismiss
-    var onFinished: () -> Void
-
-    private let totalSteps = 5
-
-    var body: some View {
-        ZStack {
-            Color.mindHexColor("FFF8E7")  // Warm background
-                .ignoresSafeArea()
-
-            VStack(spacing: 0) {
-                // Header
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(Color.mindHexColor("4A3422"))
-                            .font(.title3)
-                    }
-
-                    Spacer()
-
-                    Text("Matching Questionnaire")
-                        .font(.custom("Outfit-Bold", size: 20))
-                        .foregroundColor(Color.mindHexColor("4A3422"))
-
-                    Spacer()
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-
-                // Progress
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Matching progress...")
-                            .font(.custom("Outfit-Regular", size: 14))
-                            .foregroundColor(Color.mindHexColor("7C6A5B"))
-
-                        Spacer()
-
-                        Text("Step \(currentStep) of \(totalSteps)")
-                            .font(.custom("Outfit-Regular", size: 14))
-                            .foregroundColor(Color.mindHexColor("7C6A5B"))
-                    }
-
-                    GeometryReader { geo in
-                        ZStack(alignment: .leading) {
-                            Capsule()
-                                .fill(Color.mindHexColor("E0E0E0"))
-                                .frame(height: 6)
-
-                            Capsule()
-                                .fill(Color.mindHexColor("E67E22"))
-                                .frame(
-                                    width: geo.size.width * CGFloat(currentStep)
-                                        / CGFloat(totalSteps), height: 6)
-                        }
-                    }
-                    .frame(height: 6)
-                }
-                .padding(25)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 25) {
-                        // Question
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(
-                                currentStep == 2
-                                    ? "How Intense Does This Feel Right Now?"
-                                    : "What Kind Of Support Feels Right For You?"
-                            )
-                            .font(.custom("Outfit-Bold", size: 20))
-                            .foregroundColor(Color.mindHexColor("4A3422"))
-
-                            Text(
-                                currentStep == 2
-                                    ? "How much does this affect your daily life?"
-                                    : "Everyone connects differently. What feels best for you?"
-                            )
-                            .font(.custom("Outfit-Regular", size: 14))
-                            .foregroundColor(Color.mindHexColor("7C6A5B"))
-                        }
-
-                        // Options
-                        VStack(spacing: 15) {
-                            if currentStep == 2 {
-                                ChoiceOptionButton(
-                                    title: "Mild – I Can Manage Most Days", isSelected: true)
-                                ChoiceOptionButton(
-                                    title: "Moderate – It’s Starting To Interfere",
-                                    isSelected: false)
-                                ChoiceOptionButton(
-                                    title: "High – It’s Affecting My Work Or Relationships",
-                                    isSelected: false)
-                                ChoiceOptionButton(
-                                    title: "Very High – I Need Professional Support",
-                                    isSelected: false)
-                            } else {
-                                LazyVGrid(
-                                    columns: [GridItem(.flexible()), GridItem(.flexible())],
-                                    spacing: 15
-                                ) {
-                                    ChoiceOptionButton(title: "Warm & Supportive", isSelected: true)
-                                    ChoiceOptionButton(
-                                        title: "Calm And A Good Listener", isSelected: false)
-                                    ChoiceOptionButton(
-                                        title: "Structured & Goal-Oriented", isSelected: false)
-                                    ChoiceOptionButton(
-                                        title: "Practical With Clear Advice", isSelected: false)
-                                    ChoiceOptionButton(
-                                        title: "Friendly & Conversational", isSelected: false)
-                                    ChoiceOptionButton(
-                                        title: "Not Sure — Help Me Decide", isSelected: false)
-                                }
-                            }
-                        }
-
-                        // AI Recommendation Box
-                        HStack(alignment: .top, spacing: 12) {
-                            Image(systemName: "sparkles")
-                                .foregroundColor(Color.mindHexColor("3498DB"))
-
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("AI Recommendation")
-                                    .font(.custom("Outfit-Bold", size: 14))
-                                    .foregroundColor(Color.mindHexColor("3498DB"))
-
-                                Text(
-                                    "Select specific areas helps our algorithm map your needs to psychiatrists who specialize in those clinical areas."
-                                )
-                                .font(.custom("Outfit-Regular", size: 12))
-                                .foregroundColor(Color.mindHexColor("7C6A5B"))
-                                .lineSpacing(2)
-                            }
-                        }
-                        .padding(20)
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.mindHexColor("3498DB"), lineWidth: 1)
-                                .background(Color.white.opacity(0.5))
-                        )
-                        .cornerRadius(15)
-
-                        // Continue Button
-                        Button(action: {
-                            if currentStep < totalSteps {
-                                currentStep += 1
-                            } else {
-                                onFinished()
-                            }
-                        }) {
-                            HStack {
-                                Spacer()
-                                Text("Continue")
-                                    .font(.custom("Outfit-Bold", size: 16))
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 14, weight: .bold))
-                            }
-                            .foregroundColor(Color.mindHexColor("E67E22"))
-                            .padding(.vertical, 12)
-                            .padding(.horizontal, 20)
-                            .background(Color.mindHexColor("FDF1E5"))
-                            .cornerRadius(12)
-                        }
-                    }
-                    .padding(25)
-                    .background(Color.white)
-                    .cornerRadius(30)
-                    .padding(.horizontal, 20)
-                }
-
-                Spacer()
-            }
-        }
-    }
-}
-
-struct ChoiceOptionButton: View {
-    let title: String
-    let isSelected: Bool
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.custom("Outfit-Medium", size: 14))
-                .foregroundColor(Color.mindHexColor("4A3422"))
-
-            Spacer()
-
-            if isSelected {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(Color.green)
-            }
-        }
-        .padding(.vertical, 16)
-        .padding(.horizontal, 20)
-        .background(
-            RoundedRectangle(cornerRadius: 30)
-                .fill(Color.mindHexColor(isSelected ? "C4FBCA" : "FDF1E5"))
-        )
-    }
-}
+// Extracted Questionnaire View and ChoiceOptionButton to QuestionnaireView.swift
 
 struct DoctorRecommendationView: View {
+    let doctors: [Psychiatrist]
+    var onSelect: (Psychiatrist) -> Void
     @Environment(\.dismiss) var dismiss
-    var onFinish: () -> Void
 
     var body: some View {
         ZStack {
@@ -324,99 +149,21 @@ struct DoctorRecommendationView: View {
                     VStack(spacing: 25) {
                         // Success Message
                         VStack(spacing: 8) {
-                            Text("We’ve Found Your Perfect Match")
+                            Text("We’ve Found Your Top Matches")
                                 .font(.custom("Outfit-Bold", size: 24))
                                 .foregroundColor(Color.mindHexColor("E67E22"))
                                 .multilineTextAlignment(.center)
                         }
                         .padding(.horizontal, 40)
 
-                        // Doctor Card
-                        VStack(alignment: .leading, spacing: 20) {
-                            ZStack(alignment: .topTrailing) {
-                                Image("Dr_img")  // Asset: Session2/Page3_Match/Dr_img
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(height: 250)
-                                    .clipped()
-                                    .cornerRadius(25)
-
-                                HStack(spacing: 4) {
-                                    Image(systemName: "sparkles")
-                                    Text("98% Match")
-                                        .font(.custom("Outfit-Bold", size: 12))
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(Color.white.opacity(0.9))
-                                .foregroundColor(Color.mindHexColor("3498DB"))
-                                .cornerRadius(20)
-                                .padding(15)
-                            }
-
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text("Dr. Sarah Jenkins, MD")
-                                        .font(.custom("Outfit-Bold", size: 22))
-                                        .foregroundColor(Color.mindHexColor("3498DB"))
-
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(Color.mindHexColor("3498DB"))
-                                }
-
-                                Text("Psychiatrist • 12+ Years Experience")
-                                    .font(.custom("Outfit-Medium", size: 14))
-                                    .foregroundColor(Color.mindHexColor("3498DB"))
-
-                                // Skills Tags
-                                HStack(spacing: 10) {
-                                    SkillTag(title: "CBT")
-                                    SkillTag(title: "ANXIETY MANAGEMENT")
-                                }
-                                SkillTag(title: "ADHD SPECAILIST")
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 20)
-
-                            VStack(alignment: .leading, spacing: 15) {
-                                HStack(spacing: 12) {
-                                    Image("Personal")  // Asset: Session2/Page3_Match/Personal
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                    Text("PERSONAL PHILOSOPHY")
-                                        .font(.custom("Outfit-Bold", size: 16))
-                                        .foregroundColor(Color.mindHexColor("4A3422"))
-                                }
-
-                                Text(
-                                    "Dr. Jenkins specializes in adult tele-psychiatry with a focus on holistic mental wellness. She was matched with you because of your preference for evening sessions and evidence-based CBT approaches."
-                                )
-                                .font(.custom("Outfit-Regular", size: 14))
-                                .foregroundColor(Color.mindHexColor("7C6A5B"))
-                                .lineSpacing(4)
-                            }
-                            .padding(25)
-
-                            Divider()
-                                .padding(.horizontal, 25)
-
-                            HStack {
-                                Image("Credentrails")  // Asset: Session2/Page3_Match/Credentrails
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-
-                                Text("View Full Credentials")
-                                    .font(.custom("Outfit-Bold", size: 16))
-                                    .foregroundColor(Color.mindHexColor("4A3422"))
-
-                                Spacer()
-                            }
-                            .padding(.horizontal, 25)
-                            .padding(.bottom, 10)
+                        // Doctor Cards Loop
+                        ForEach(Array(doctors.enumerated()), id: \.element.id) { index, doctor in
+                            DoctorMatchCard(
+                                doctor: doctor, rank: index + 1,
+                                onSelect: {
+                                    onSelect(doctor)
+                                })
                         }
-                        .background(Color.white)
-                        .cornerRadius(30)
-                        .padding(.horizontal, 20)
 
                         // Other Options
                         VStack(spacing: 8) {
@@ -425,32 +172,143 @@ struct DoctorRecommendationView: View {
                                 .foregroundColor(Color.mindHexColor("7C6A5B"))
 
                             Button(action: { dismiss() }) {
-                                Text("See Other Doctor Recommendations")
+                                Text("Browse All Doctors")
                                     .font(.custom("Outfit-Bold", size: 14))
                                     .foregroundColor(Color.mindHexColor("E67E22"))
                             }
                         }
-
-                        // Action Button
-                        Button(action: onFinish) {
-                            HStack {
-                                Text("Start With This Doctor")
-                                    .font(.custom("Outfit-Bold", size: 18))
-                                Image(systemName: "chevron.right")
-                            }
-                            .foregroundColor(Color.mindHexColor("4A3422"))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 60)
-                            .background(Color.mindHexColor("FBC58B"))
-                            .cornerRadius(15)
-                        }
-                        .padding(.horizontal, 40)
+                        .padding(.top, 10)
                         .padding(.bottom, 30)
                     }
                     .padding(.top, 10)
                 }
             }
         }
+    }
+}
+
+struct DoctorMatchCard: View {
+    let doctor: Psychiatrist
+    let rank: Int
+    var onSelect: () -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 20) {
+                ZStack(alignment: .topTrailing) {
+                    Image("Dr_img")  // Asset: Session2/Page3_Match/Dr_img
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 250)
+                        .clipped()
+                        .cornerRadius(25)
+
+                    HStack(spacing: 4) {
+                        Image(systemName: "sparkles")
+                        Text(rank == 1 ? "Top Match" : "Great Match")
+                            .font(.custom("Outfit-Bold", size: 12))
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.9))
+                    .foregroundColor(Color.mindHexColor("3498DB"))
+                    .cornerRadius(20)
+                    .padding(15)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(doctor.name)
+                            .font(.custom("Outfit-Bold", size: 22))
+                            .foregroundColor(Color.mindHexColor("3498DB"))
+
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(Color.mindHexColor("3498DB"))
+                    }
+
+                    Text(
+                        "\(doctor.specialization) • \(doctor.yearsOfExperience)+ Years Experience"
+                    )
+                    .font(.custom("Outfit-Medium", size: 14))
+                    .foregroundColor(Color.mindHexColor("3498DB"))
+
+                    // Skills Tags
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            if let specs = doctor.specialties {
+                                ForEach(specs, id: \.self) { spec in
+                                    SkillTag(title: spec.uppercased())
+                                }
+                            }
+                            if let styles = doctor.styles {
+                                ForEach(styles, id: \.self) { style in
+                                    SkillTag(title: style.uppercased())
+                                }
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+
+                VStack(alignment: .leading, spacing: 15) {
+                    HStack(spacing: 12) {
+                        Image("Personal")  // Asset: Session2/Page3_Match/Personal
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                        Text("PERSONAL PHILOSOPHY")
+                            .font(.custom("Outfit-Bold", size: 16))
+                            .foregroundColor(Color.mindHexColor("4A3422"))
+                    }
+
+                    Text(
+                        doctor.bio
+                            ?? "An exceptionally matched professional tailored for your needs."
+                    )
+                    .font(.custom("Outfit-Regular", size: 14))
+                    .foregroundColor(Color.mindHexColor("7C6A5B"))
+                    .lineSpacing(4)
+                }
+                .padding(25)
+
+                Divider()
+                    .padding(.horizontal, 25)
+
+                HStack {
+                    Image("Credentrails")  // Asset: Session2/Page3_Match/Credentrails
+                        .resizable()
+                        .frame(width: 30, height: 30)
+
+                    Text("View Full Credentials")
+                        .font(.custom("Outfit-Bold", size: 16))
+                        .foregroundColor(Color.mindHexColor("4A3422"))
+
+                    Spacer()
+                }
+                .padding(.horizontal, 25)
+                .padding(.bottom, 10)
+            }
+            .background(Color.white)
+            .cornerRadius(30)
+            .padding(.horizontal, 20)
+
+            // Action Button
+            Button(action: onSelect) {
+                HStack {
+                    Text("Start With This Doctor")
+                        .font(.custom("Outfit-Bold", size: 18))
+                    Image(systemName: "chevron.right")
+                }
+                .foregroundColor(Color.mindHexColor("4A3422"))
+                .frame(maxWidth: .infinity)
+                .frame(height: 60)
+                .background(Color.mindHexColor("FBC58B"))
+                .cornerRadius(15)
+            }
+            .padding(.horizontal, 40)
+            .padding(.bottom, 30)
+        }
+        .padding(.bottom, 15)
     }
 }
 
@@ -486,9 +344,11 @@ struct InfoBadgeView: View {
 }
 
 struct ChangeDoctorView: View {
+    let doctor: Psychiatrist
     @State private var reason = ""
     @State private var anythingElse = ""
     @Environment(\.dismiss) var dismiss
+    var onRequestNewMatch: () -> Void
 
     var body: some View {
         ZStack {
@@ -543,7 +403,7 @@ struct ChangeDoctorView: View {
                                     .font(.custom("Outfit-Medium", size: 12))
                                     .foregroundColor(Color.mindHexColor("9A8B7F"))
 
-                                Text("Dr. Aris Thorne, MD")
+                                Text(doctor.name)
                                     .font(.custom("Outfit-Bold", size: 16))
                                     .foregroundColor(Color.mindHexColor("4A3422"))
                             }
@@ -559,21 +419,35 @@ struct ChangeDoctorView: View {
                                 .font(.custom("Outfit-Bold", size: 16))
                                 .foregroundColor(Color.mindHexColor("4A3422"))
 
-                            HStack {
-                                Text(reason.isEmpty ? "Select a reason" : reason)
-                                    .foregroundColor(
-                                        reason.isEmpty
-                                            ? Color.mindHexColor("7C6A5B")
-                                            : Color.mindHexColor("4A3422"))
-                                Spacer()
-                                Image(systemName: "chevron.down")
-                                    .foregroundColor(Color.mindHexColor("E67E22"))
+                            Menu {
+                                Button(
+                                    "Schedule Conflicts", action: { reason = "Schedule Conflicts" })
+                                Button(
+                                    "Communication Style",
+                                    action: { reason = "Communication Style" })
+                                Button(
+                                    "Need Different Specialty",
+                                    action: { reason = "Need Different Specialty" })
+                                Button(
+                                    "Financial Reasons", action: { reason = "Financial Reasons" })
+                                Button("Other", action: { reason = "Other" })
+                            } label: {
+                                HStack {
+                                    Text(reason.isEmpty ? "Select a reason" : reason)
+                                        .foregroundColor(
+                                            reason.isEmpty
+                                                ? Color.mindHexColor("7C6A5B")
+                                                : Color.mindHexColor("4A3422"))
+                                    Spacer()
+                                    Image(systemName: "chevron.down")
+                                        .foregroundColor(Color.mindHexColor("E67E22"))
+                                }
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 30)
+                                        .stroke(Color.mindHexColor("E6D5C3"), lineWidth: 1)
+                                )
                             }
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 30)
-                                    .stroke(Color.mindHexColor("E6D5C3"), lineWidth: 1)
-                            )
                         }
 
                         // Additional Info
@@ -610,7 +484,10 @@ struct ChangeDoctorView: View {
 
                         // Action Buttons
                         VStack(spacing: 15) {
-                            Button(action: {}) {
+                            Button(action: {
+                                dismiss()
+                                onRequestNewMatch()
+                            }) {
                                 HStack {
                                     Image("Request")  // Asset: Session2/Page4_Change/Request
                                         .resizable()
@@ -645,23 +522,24 @@ struct ChangeDoctorView: View {
 }
 
 struct DoctorCardOverview: View {
+    let doctor: Psychiatrist
     var onTapChange: () -> Void
 
     var body: some View {
         VStack(spacing: 20) {
             HStack(spacing: 15) {
-                Image("Dr_img")  // Asset: Session2/Page3_Match/Dr_img
+                Image(doctor.avatar ?? "Dr_img")  // Asset: Session2/Page3_Match/Dr_img
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
                     .clipShape(Circle())
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Dr. Aris Thorne, MD")
+                    Text(doctor.name)
                         .font(.custom("Outfit-Bold", size: 18))
                         .foregroundColor(Color.mindHexColor("4A3422"))
 
-                    Text("Clinical Psychiatrist")
+                    Text(doctor.specialization)
                         .font(.custom("Outfit-Medium", size: 14))
                         .foregroundColor(Color.mindHexColor("7C6A5B"))
                 }

@@ -45,7 +45,7 @@ struct ChatView: View {
                             }
                         }
                         .padding()
-                        .padding(.bottom, 10) // Space for last message
+                        .padding(.bottom, 10)  // Space for last message
                     }
                     .onChange(of: messages.count) { _ in
                         scrollToBottom(proxy: proxy)
@@ -61,7 +61,8 @@ struct ChatView: View {
             }
         }
         .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
         .onAppear {
             self.setupKeyboardObservers()
@@ -70,7 +71,7 @@ struct ChatView: View {
             self.removeKeyboardObservers()
         }
     }
-    
+
     private func scrollToBottom(proxy: ScrollViewProxy) {
         if let lastMessage = messages.last {
             withAnimation {
@@ -78,29 +79,35 @@ struct ChatView: View {
             }
         }
     }
-    
+
     private func setupKeyboardObservers() {
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
-            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+        NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main
+        ) { notification in
+            if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+                as? CGRect
+            {
                 withAnimation(.easeOut(duration: 0.25)) {
                     self.keyboardHeight = keyboardFrame.height
                 }
             }
         }
-        
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+
+        NotificationCenter.default.addObserver(
+            forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main
+        ) { _ in
             withAnimation(.easeIn(duration: 0.25)) {
                 self.keyboardHeight = 0
             }
         }
     }
-    
+
     private func removeKeyboardObservers() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(
+            self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(
+            self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-
-
 
     private func sendMessage() {
         guard !messageText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
@@ -121,15 +128,16 @@ struct ChatView: View {
         // Call API
         Task {
             do {
-                // Call the test service
-                let responseText = try await ChatTestService.shared.sendMessage(userContent)
-                
+                // Use the dedicated chat bot API with session_id
+                let response = try await APIService.shared.sendMessageToChatBot(
+                    userContent, sessionId: "1")
+
                 await MainActor.run {
                     let aiMsg = ChatMessage(
                         id: UUID().uuidString,
                         conversationId: "1",
                         role: .assistant,
-                        content: responseText,
+                        content: response.response,
                         createdAt: Date(),
                         isRead: true
                     )
@@ -138,11 +146,12 @@ struct ChatView: View {
             } catch {
                 print("Error sending message: \(error)")
                 await MainActor.run {
-                     let errorMsg = ChatMessage(
+                    let errorMsg = ChatMessage(
                         id: UUID().uuidString,
                         conversationId: "1",
                         role: .assistant,
-                        content: "Sorry, something went wrong. Please try again later. (Error: \(error.localizedDescription))",
+                        content:
+                            "Sorry, something went wrong. Please try again later. (Error: \(error.localizedDescription))",
                         createdAt: Date(),
                         isRead: true
                     )
@@ -228,7 +237,7 @@ struct MessageBubble: View {
                     BubbleShape(isUser: isUser)
                         .stroke(isUser ? Color.clear : Color.mindHexColor("FF9F9F"), lineWidth: 1)
                 )
-                .padding(isUser ? .trailing : .leading, 10) // Reserve space for the tail
+                .padding(isUser ? .trailing : .leading, 10)  // Reserve space for the tail
             }
 
             Text(message.createdAt.formatted(.dateTime.hour().minute()))
@@ -298,81 +307,92 @@ struct ChatInputView: View {
 
 struct BubbleShape: Shape {
     let isUser: Bool
-    
+
     func path(in rect: CGRect) -> Path {
         var p = Path()
         let w = rect.width
         let h = rect.height
         let r: CGFloat = 20
-        
+
         if isUser {
             // User: Tail on right
             // Start top-left
             p.move(to: CGPoint(x: r, y: 0))
-            
+
             // Top edge
             p.addLine(to: CGPoint(x: w - r, y: 0))
-            
+
             // Top-right corner
-            p.addArc(center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
-            
+            p.addArc(
+                center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90),
+                endAngle: .degrees(0), clockwise: false)
+
             // Right edge to tail start
             p.addLine(to: CGPoint(x: w, y: h - 20))
-            
+
             // Tail
             p.addLine(to: CGPoint(x: w + 10, y: h - 10))
             p.addLine(to: CGPoint(x: w, y: h))
-            
+
             // Bottom edge
             p.addLine(to: CGPoint(x: r, y: h))
-            
+
             // Bottom-left corner
-            p.addArc(center: CGPoint(x: r, y: h - r), radius: r, startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
-            
+            p.addArc(
+                center: CGPoint(x: r, y: h - r), radius: r, startAngle: .degrees(90),
+                endAngle: .degrees(180), clockwise: false)
+
             // Left edge
             p.addLine(to: CGPoint(x: 0, y: r))
-            
+
             // Top-left corner
-            p.addArc(center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
-            
+            p.addArc(
+                center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180),
+                endAngle: .degrees(270), clockwise: false)
+
         } else {
             // Assistant: Tail on left
             let r: CGFloat = 20
-            
+
             // Start top-left
             p.move(to: CGPoint(x: r, y: 0))
-            
+
             // Top edge
             p.addLine(to: CGPoint(x: w - r, y: 0))
-            
+
             // Top-right corner
-            p.addArc(center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
-            
+            p.addArc(
+                center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90),
+                endAngle: .degrees(0), clockwise: false)
+
             // Right edge
             p.addLine(to: CGPoint(x: w, y: h - r))
 
             // Bottom-right corner
-            p.addArc(center: CGPoint(x: w - r, y: h - r), radius: r, startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
-            
+            p.addArc(
+                center: CGPoint(x: w - r, y: h - r), radius: r, startAngle: .degrees(0),
+                endAngle: .degrees(90), clockwise: false)
+
             // Bottom edge
             p.addLine(to: CGPoint(x: r, y: h))
-            
+
             // Bottom-left corner (with tail)
-            p.addLine(to: CGPoint(x: 0, y: h))         // To corner
+            p.addLine(to: CGPoint(x: 0, y: h))  // To corner
             p.addLine(to: CGPoint(x: -10, y: h - 10))  // Tail tip
-            p.addLine(to: CGPoint(x: 0, y: h - 20))    // Back to side
-            
+            p.addLine(to: CGPoint(x: 0, y: h - 20))  // Back to side
+
             // Left edge
             p.addLine(to: CGPoint(x: 0, y: r))
-            
+
             // Top-left corner
-            p.addArc(center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+            p.addArc(
+                center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180),
+                endAngle: .degrees(270), clockwise: false)
         }
-        
+
         return p
     }
 }
-
 
 #Preview {
     ChatView()

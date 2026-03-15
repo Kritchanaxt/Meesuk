@@ -16,13 +16,13 @@ struct Appointment: Codable, Identifiable {
     let psychiatristName: String?
     let patientName: String?
     let scheduledAt: Date
-    let duration: Int // minutes
+    let duration: Int  // minutes
     let type: AppointmentType
     var status: AppointmentStatus
     let notes: String?
     let meetingUrl: String?
     let createdAt: Date
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case patientId = "patient_id"
@@ -37,15 +37,15 @@ struct Appointment: Codable, Identifiable {
         case meetingUrl = "meeting_url"
         case createdAt = "created_at"
     }
-    
+
     var endTime: Date {
         Calendar.current.date(byAdding: .minute, value: duration, to: scheduledAt) ?? scheduledAt
     }
-    
+
     var isUpcoming: Bool {
         scheduledAt > Date() && status == .scheduled
     }
-    
+
     var isPast: Bool {
         scheduledAt < Date()
     }
@@ -58,7 +58,7 @@ enum AppointmentType: String, Codable {
     case followUp = "follow_up"
     case emergency = "emergency"
     case consultation = "consultation"
-    
+
     var displayName: String {
         switch self {
         case .initial: return "Initial Consultation"
@@ -67,7 +67,7 @@ enum AppointmentType: String, Codable {
         case .consultation: return "Consultation"
         }
     }
-    
+
     var icon: String {
         switch self {
         case .initial: return "person.badge.plus"
@@ -88,7 +88,7 @@ enum AppointmentStatus: String, Codable {
     case cancelled = "cancelled"
     case noShow = "no_show"
     case rescheduled = "rescheduled"
-    
+
     var displayName: String {
         switch self {
         case .scheduled: return "Scheduled"
@@ -100,7 +100,7 @@ enum AppointmentStatus: String, Codable {
         case .rescheduled: return "Rescheduled"
         }
     }
-    
+
     var color: String {
         switch self {
         case .scheduled: return "blue"
@@ -121,7 +121,7 @@ struct CreateAppointmentRequest: Codable {
     let duration: Int
     let type: AppointmentType
     let notes: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case psychiatristId = "psychiatrist_id"
         case scheduledAt = "scheduled_at"
@@ -137,7 +137,7 @@ struct RescheduleAppointmentRequest: Codable {
     let appointmentId: String
     let newScheduledAt: Date
     let reason: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case appointmentId = "appointment_id"
         case newScheduledAt = "new_scheduled_at"
@@ -153,7 +153,7 @@ struct AvailableSlot: Codable, Identifiable {
     let startTime: Date
     let endTime: Date
     let duration: Int
-    
+
     enum CodingKeys: String, CodingKey {
         case psychiatristId = "psychiatrist_id"
         case startTime = "start_time"
@@ -175,12 +175,24 @@ struct Psychiatrist: Codable, Identifiable {
     let yearsOfExperience: Int
     let languages: [String]
     let isAvailable: Bool
-    
+
+    // MARK: - Matching Properties
+    var specialties: [String]?
+    var styles: [String]?
+    var intensitySupport: [String]?
+    var communicationMethods: [String]?
+    var priceLevel: String?
+
     enum CodingKeys: String, CodingKey {
         case id, name, avatar, specialization, bio, rating
         case reviewCount = "review_count"
         case yearsOfExperience = "years_of_experience"
         case languages
         case isAvailable = "is_available"
+        case specialties
+        case styles
+        case intensitySupport = "intensity_support"
+        case communicationMethods = "communication_methods"
+        case priceLevel = "price_level"
     }
 }

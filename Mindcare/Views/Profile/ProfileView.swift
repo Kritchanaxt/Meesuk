@@ -2,7 +2,12 @@ import SwiftUI
 
 struct ProfileView: View {
     @Environment(\.dismiss) var dismiss
-
+    @StateObject var viewModel = UserViewModel()
+    // Injecting the shared psychiatrist VM if possible, or using a new one for demo
+    // Ideally this should be shared at the App level or Parent level
+    @StateObject var psychiatristVM = PsychiatristViewModel()
+    @State private var showEditProfile = false
+    @State private var showSignOutAlert = false
     var body: some View {
         ZStack {
             Color.mindHexColor("FFF8E7")
@@ -24,6 +29,12 @@ struct ProfileView: View {
                         .foregroundColor(Color.mindHexColor("4A3422"))
 
                     Spacer()
+
+                    Button(action: { showEditProfile = true }) {
+                        Text("Edit")
+                            .font(.custom("Outfit-Medium", size: 16))
+                            .foregroundColor(Color.mindHexColor("E67E22"))
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
@@ -32,14 +43,14 @@ struct ProfileView: View {
                     VStack(spacing: 25) {
                         // Profile Info
                         VStack(spacing: 12) {
-                            Image("Profile")  // Asset: Session2/Page5_Profile/Profile
+                            Image(viewModel.userProfile?.avatar ?? "Profile")  // Asset: Session2/Page5_Profile/Profile
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 120, height: 120)
                                 .clipShape(Circle())
 
                             VStack(spacing: 4) {
-                                Text("Elena Rodriguez")
+                                Text(viewModel.name)
                                     .font(.custom("Outfit-Bold", size: 22))
                                     .foregroundColor(Color.mindHexColor("4A3422"))
 
@@ -52,7 +63,7 @@ struct ProfileView: View {
                                 Image("Location")  // Asset: Session2/Page5_Profile/Location
                                     .resizable()
                                     .frame(width: 20, height: 20)
-                                Text("Chonburi, Thailand")
+                                Text(viewModel.location)
                                     .font(.custom("Outfit-Medium", size: 14))
                                     .foregroundColor(Color.mindHexColor("E67E22"))
                             }
@@ -82,37 +93,46 @@ struct ProfileView: View {
                                 .font(.custom("Outfit-Bold", size: 18))
                                 .foregroundColor(Color.mindHexColor("4A3422"))
 
-                            HStack(spacing: 15) {
-                                Image("Dr")  // Asset: Session2/Page5_Profile/Dr
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 60, height: 60)
+                            if let doctor = psychiatristVM.selectedDoctor {
+                                HStack(spacing: 15) {
+                                    Image(doctor.avatar ?? "Dr")  // Asset: Session2/Page5_Profile/Dr
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 60, height: 60)
+                                        .clipShape(Circle())
 
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text("Dr. Aris Thorne, MD")
-                                        .font(.custom("Outfit-Bold", size: 16))
-                                        .foregroundColor(Color.mindHexColor("4A3422"))
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(doctor.name)
+                                            .font(.custom("Outfit-Bold", size: 16))
+                                            .foregroundColor(Color.mindHexColor("4A3422"))
 
-                                    Text("Psychiatrist, M.D.")
-                                        .font(.custom("Outfit-Regular", size: 12))
-                                        .foregroundColor(Color.mindHexColor("7C6A5B"))
+                                        Text(doctor.specialization)
+                                            .font(.custom("Outfit-Regular", size: 12))
+                                            .foregroundColor(Color.mindHexColor("7C6A5B"))
 
-                                    HStack(spacing: 4) {
-                                        Circle().fill(Color.green).frame(width: 6, height: 6)
-                                        Text("ONLINE").font(.custom("Outfit-Bold", size: 10))
-                                            .foregroundColor(.green)
+                                        HStack(spacing: 4) {
+                                            Circle().fill(Color.green).frame(width: 6, height: 6)
+                                            Text("ONLINE").font(.custom("Outfit-Bold", size: 10))
+                                                .foregroundColor(.green)
+                                        }
                                     }
+
+                                    Spacer()
+
+                                    Image(systemName: "bubble.left.and.bubble.right.fill")
+                                        .foregroundColor(Color.mindHexColor("E67E22"))
+                                        .font(.title2)
                                 }
-
-                                Spacer()
-
-                                Image("chat")
-                                    .scaledToFit()
-                                    .frame(width: 60, height: 60)
+                                .padding(15)
+                                .background(Color.mindHexColor("FDF1E5"))
+                                .cornerRadius(20)
+                            } else {
+                                Text("No doctor matched yet")
+                                    .font(.custom("Outfit-Medium", size: 14))
+                                    .foregroundColor(Color.mindHexColor("7C6A5B"))
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(.vertical, 20)
                             }
-                            .padding(15)
-                            .background(Color.mindHexColor("FDF1E5"))
-                            .cornerRadius(20)
                         }
                         .padding(20)
                         .background(Color.white)
@@ -140,7 +160,7 @@ struct ProfileView: View {
                         .padding(.horizontal, 20)
 
                         // Sign Out
-                        Button(action: {}) {
+                        Button(action: { showSignOutAlert = true }) {
                             HStack {
                                 Image(systemName: "iphone.and.arrow.right.outward")
                                     .foregroundColor(Color.mindHexColor("EB6538"))
@@ -163,6 +183,18 @@ struct ProfileView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showEditProfile) {
+            EditProfileView(viewModel: viewModel)
+        }
+        .alert("Sign Out", isPresented: $showSignOutAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Sign Out", role: .destructive) {
+                viewModel.signOut()
+                dismiss()
+            }
+        } message: {
+            Text("Are you sure you want to sign out?")
         }
     }
 }
