@@ -42,6 +42,7 @@ struct MindcareApp: App {
             ContentView()
                 .environmentObject(authService)
                 .environmentObject(healthKitManager)
+                .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
     }

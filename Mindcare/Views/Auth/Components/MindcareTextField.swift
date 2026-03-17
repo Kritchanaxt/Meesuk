@@ -17,11 +17,15 @@ struct MindcareTextField: View {
                 if isSecure && !isPasswordVisible {
                     SecureField(
                         "", text: $text,
-                        prompt: Text(placeholder).foregroundColor(.gray.opacity(0.6)))
+                        prompt: Text(placeholder).foregroundColor(.gray.opacity(0.6))
+                    )
+                    .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
                 } else {
                     TextField(
                         "", text: $text,
-                        prompt: Text(placeholder).foregroundColor(.gray.opacity(0.6)))
+                        prompt: Text(placeholder).foregroundColor(.gray.opacity(0.6))
+                    )
+                    .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
                 }
 
                 if isSecure {
