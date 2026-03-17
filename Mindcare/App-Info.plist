@@ -52,5 +52,9 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>เราต้องการเข้าถึงข้อมูลสุขภาพของคุณเพื่อวิเคราะห์สภาวะอารมณ์และความเครียด</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>เราต้องการบันทึกข้อมูลสุขภาพของคุณเพื่อติดตามพัฒนาการด้านสุขภาพจิต</string>
 </dict>
 </plist>

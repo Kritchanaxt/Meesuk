@@ -27,6 +27,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		805753C42F69A06E00DA136D /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		8034CF612ED873790076FBB6 /* Mindcare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mindcare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8034CF702ED8737C0076FBB6 /* MindcareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindcareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,6 +120,7 @@
 				8034CF5D2ED873790076FBB6 /* Sources */,
 				8034CF5E2ED873790076FBB6 /* Frameworks */,
 				8034CF5F2ED873790076FBB6 /* Resources */,
+				805753C42F69A06E00DA136D /* Embed Watch Content */,
 			);
 			buildRules = (
 			);

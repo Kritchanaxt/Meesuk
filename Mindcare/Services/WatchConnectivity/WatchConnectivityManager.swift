@@ -182,9 +182,10 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
         
         if let error = error {
-            print("❌ WCSession activation failed: \(error)")
+            print("❌ WCSession activation failed: \(error.localizedDescription)")
         } else {
             print("✅ WCSession activated with state: \(activationState.rawValue)")
+            print("📱 Paired: \(session.isPaired), Watch App Installed: \(session.isWatchAppInstalled), Reachable: \(session.isReachable)")
         }
     }
     
@@ -207,6 +208,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
     #endif
     
     func sessionReachabilityDidChange(_ session: WCSession) {
+        print("📡 Watch Reachability Changed: \(session.isReachable)")
         DispatchQueue.main.async {
             self.isReachable = session.isReachable
         }
@@ -215,6 +217,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
     // MARK: - Receive Message
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        print("📨 Received message from Watch: \(message)")
         DispatchQueue.main.async {
             self.lastReceivedMessage = message
             self.onMessageReceived?(message)

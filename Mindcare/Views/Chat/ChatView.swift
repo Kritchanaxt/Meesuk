@@ -107,7 +107,7 @@ struct ChatView: View {
             self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(
             self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
+    };
 
     private func sendMessage() {
         guard !messageText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
@@ -266,6 +266,7 @@ struct ChatInputView: View {
 
                 TextField("Write Here...", text: $messageText, axis: .vertical)
                     .lineLimit(1...5)
+                    .foregroundColor(Color.mindHexColor("4A3422"))
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                     .background(Color.white)

@@ -83,10 +83,12 @@ final class HealthKitManager: ObservableObject {
             throw HealthKitError.notAvailable
         }
         
+        print("🔐 Requesting HealthKit authorization...")
         try await healthStore.requestAuthorization(toShare: writeTypes, read: readTypes)
         
         await MainActor.run {
             self.isAuthorized = true
+            print("✅ HealthKit authorization granted!")
             UserDefaults.standard.set(true, forKey: AppConstants.UserDefaultsKeys.isHealthKitAuthorized)
         }
     }
@@ -370,13 +372,20 @@ final class HealthKitManager: ObservableObject {
     func startHeartRateObserver(handler: @escaping (Double) -> Void) {
         guard let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return }
         
+        // ใช้ predicate 24 ชั่วโมงล่าสุดเพื่อให้ได้ข้อมูลปัจจุบันจาก Watch
+        let startDate = Calendar.current.date(byAdding: .hour, value: -24, to: Date()) ?? Date()
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: nil, options: .strictStartDate)
+        
         let query = HKAnchoredObjectQuery(
             type: heartRateType,
-            predicate: nil,
+            predicate: predicate,
             anchor: nil,
             limit: HKObjectQueryNoLimit
         ) { [weak self] _, samples, _, _, error in
-            guard error == nil else { return }
+            guard error == nil else {
+                print("⚠️ [HeartRateObserver] Initial query error: \(error!.localizedDescription)")
+                return
+            }
             self?.processHeartRateSamples(samples, handler: handler)
         }
         
@@ -387,19 +396,31 @@ final class HealthKitManager: ObservableObject {
         
         activeQueries.append(query)
         healthStore.execute(query)
+        print("👁️ Heart rate observer started (with 24h predicate)")
     }
     
     private func processHeartRateSamples(_ samples: [HKSample]?, handler: (Double) -> Void) {
-        guard let samples = samples as? [HKQuantitySample], let latest = samples.last else { return }
+        // samples from HKAnchoredObjectQuery (sorted ascending by end date)
+        // We want the LATEST one = last element
+        guard let samples = samples as? [HKQuantitySample], !samples.isEmpty else { return }
+        
+        // Sort manually to ensure we pick the newest
+        let sorted = samples.sorted { $0.endDate > $1.endDate }
+        guard let latest = sorted.first else { return }
         
         let unit = HKUnit.count().unitDivided(by: .minute())
         let value = latest.quantity.doubleValue(for: unit)
         
-        DispatchQueue.main.async {
-            self.latestHeartRate = value
+        //Only notify if the value has changed or it's the first value
+        if value != self.latestHeartRate {
+            print("💓 [processHeartRateSamples] Value changed: \(value) BPM, sample date: \(latest.endDate)")
+            
+            DispatchQueue.main.async {
+                self.latestHeartRate = value
+            }
+            
+            handler(value)
         }
-        
-        handler(value)
     }
     
     // MARK: - HKObserverQuery - สำหรับ Background Updates
