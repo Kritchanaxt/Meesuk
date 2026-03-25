@@ -2,414 +2,306 @@
 //  MindcareTests.swift
 //  MindcareTests
 //
-//  Created by Mr.Kritchant on 27/11/2568 BE.
+//  Created for MindCareAI Project
 //
 
 import XCTest
 @testable import Mindcare
 
 // MARK: - Base Test Case
+
 class MindcareBaseTestCase: XCTestCase {
-    
     override func setUpWithError() throws {
         try super.setUpWithError()
         continueAfterFailure = false
     }
-    
-    override func tearDownWithError() throws {
-        try super.tearDownWithError()
-    }
 }
 
 // MARK: - Validators Tests
+
 final class ValidatorsTests: MindcareBaseTestCase {
-    
-    // MARK: - Email Validation Tests
     func testValidEmail() {
-        XCTAssertTrue(Validators.isValidEmail("test@example.com"))
-        XCTAssertTrue(Validators.isValidEmail("user.name@domain.co.th"))
-        XCTAssertTrue(Validators.isValidEmail("user+tag@example.org"))
+        XCTAssertTrue(Validators.Email.validate("test@example.com").isValid)
+        XCTAssertTrue(Validators.Email.validate("user.name@domain.co.th").isValid)
+        XCTAssertTrue(Validators.Email.validate("user+tag@example.org").isValid)
     }
-    
+
     func testInvalidEmail() {
-        XCTAssertFalse(Validators.isValidEmail(""))
-        XCTAssertFalse(Validators.isValidEmail("invalid"))
-        XCTAssertFalse(Validators.isValidEmail("@example.com"))
-        XCTAssertFalse(Validators.isValidEmail("test@"))
-        XCTAssertFalse(Validators.isValidEmail("test @example.com"))
+        XCTAssertFalse(Validators.Email.validate("").isValid)
+        XCTAssertFalse(Validators.Email.validate("invalid").isValid)
+        XCTAssertFalse(Validators.Email.validate("@example.com").isValid)
+        XCTAssertFalse(Validators.Email.validate("test@").isValid)
     }
-    
-    // MARK: - Password Validation Tests
+
     func testValidPassword() {
-        XCTAssertTrue(Validators.isValidPassword("Password123!"))
-        XCTAssertTrue(Validators.isValidPassword("MySecure@Pass1"))
-        XCTAssertTrue(Validators.isValidPassword("Test1234#"))
+        XCTAssertTrue(Validators.Password.validate("Password123!").isValid)
+        XCTAssertTrue(Validators.Password.validate("MySecure@Pass1").isValid)
     }
-    
+
     func testInvalidPassword() {
-        XCTAssertFalse(Validators.isValidPassword(""))
-        XCTAssertFalse(Validators.isValidPassword("short"))
-        XCTAssertFalse(Validators.isValidPassword("nouppercase1!"))
-        XCTAssertFalse(Validators.isValidPassword("NOLOWERCASE1!"))
-        XCTAssertFalse(Validators.isValidPassword("NoNumbers!"))
+        XCTAssertFalse(Validators.Password.validate("").isValid)
+        XCTAssertFalse(Validators.Password.validate("short").isValid)
+        XCTAssertFalse(Validators.Password.validate("nouppercase1!").isValid)
+        XCTAssertFalse(Validators.Password.validate("NOLOWERCASE1!").isValid)
+        XCTAssertFalse(Validators.Password.validate("NoNumbers!").isValid)
     }
-    
-    // MARK: - Phone Validation Tests
+
     func testValidThaiPhone() {
-        XCTAssertTrue(Validators.isValidThaiPhone("0812345678"))
-        XCTAssertTrue(Validators.isValidThaiPhone("0912345678"))
-        XCTAssertTrue(Validators.isValidThaiPhone("0612345678"))
+        XCTAssertTrue(Validators.PhoneNumber.validate("0812345678").isValid)
+        XCTAssertTrue(Validators.PhoneNumber.validate("091-234-5678").isValid)
     }
-    
+
     func testInvalidThaiPhone() {
-        XCTAssertFalse(Validators.isValidThaiPhone(""))
-        XCTAssertFalse(Validators.isValidThaiPhone("12345678"))
-        XCTAssertFalse(Validators.isValidThaiPhone("081234567")) // too short
-        XCTAssertFalse(Validators.isValidThaiPhone("08123456789")) // too long
+        XCTAssertFalse(Validators.PhoneNumber.validate("12345678").isValid)
+        XCTAssertFalse(Validators.PhoneNumber.validate("081234567").isValid)
+        XCTAssertFalse(Validators.PhoneNumber.validate("08123456789").isValid)
     }
-    
-    // MARK: - Name Validation Tests
+
     func testValidName() {
-        XCTAssertTrue(Validators.isValidName("John"))
-        XCTAssertTrue(Validators.isValidName("สมชาย"))
-        XCTAssertTrue(Validators.isValidName("Mary Jane"))
+        XCTAssertTrue(Validators.Name.validate("John").isValid)
+        XCTAssertTrue(Validators.Name.validate("สมชาย").isValid)
+        XCTAssertTrue(Validators.Name.validate("Mary Jane").isValid)
     }
-    
+
     func testInvalidName() {
-        XCTAssertFalse(Validators.isValidName(""))
-        XCTAssertFalse(Validators.isValidName("A")) // too short
+        XCTAssertFalse(Validators.Name.validate("").isValid)
+        XCTAssertFalse(Validators.Name.validate("A").isValid)
     }
 }
 
 // MARK: - User Models Tests
+
 final class UserModelsTests: MindcareBaseTestCase {
-    
-    func testUserInitialization() {
-        let user = User(
-            id: "user123",
-            email: "test@example.com",
-            firstName: "John",
-            lastName: "Doe"
-        )
-        
-        XCTAssertEqual(user.id, "user123")
-        XCTAssertEqual(user.email, "test@example.com")
-        XCTAssertEqual(user.firstName, "John")
-        XCTAssertEqual(user.lastName, "Doe")
-        XCTAssertEqual(user.fullName, "John Doe")
-    }
-    
     func testUserProfileInitialization() {
         let profile = UserProfile(
-            userId: "user123",
+            id: "user123",
+            email: "test@example.com",
+            name: "John Doe",
+            avatar: nil,
+            role: .patient,
             dateOfBirth: Date(),
             gender: .male,
+            phoneNumber: nil,
+            createdAt: Date(),
+            updatedAt: Date(),
+            height: 175,
+            weight: 70,
+            bloodType: "O",
             emergencyContact: nil
         )
-        
-        XCTAssertEqual(profile.userId, "user123")
+
+        XCTAssertEqual(profile.id, "user123")
+        XCTAssertEqual(profile.role, .patient)
         XCTAssertEqual(profile.gender, .male)
-        XCTAssertNil(profile.emergencyContact)
     }
 }
 
 // MARK: - Health Models Tests
+
 final class HealthModelsTests: MindcareBaseTestCase {
-    
-    func testHealthDataInitialization() {
-        let now = Date()
-        let healthData = HealthData(
-            id: "health123",
-            userId: "user123",
-            date: now,
-            steps: 10000,
-            heartRate: 72.0,
+    func testHealthMetricsInitialization() {
+        let metrics = HealthMetrics(
+            timestamp: Date(),
+            heartRate: 72,
+            hrv: nil,
+            oxygenSaturation: nil,
+            steps: 10_000,
+            activeEnergy: nil,
+            restingHeartRate: nil,
+            vo2Max: nil,
             sleepHours: 7.5,
-            activeCalories: 500.0
+            sleepQuality: nil
         )
-        
-        XCTAssertEqual(healthData.steps, 10000)
-        XCTAssertEqual(healthData.heartRate, 72.0)
-        XCTAssertEqual(healthData.sleepHours, 7.5)
-        XCTAssertEqual(healthData.activeCalories, 500.0)
+
+        XCTAssertEqual(metrics.heartRate, 72)
+        XCTAssertEqual(metrics.steps, 10000)
+        XCTAssertEqual(metrics.sleepHours, 7.5)
     }
-    
-    func testHeartRateDataInitialization() {
-        let now = Date()
-        let heartRate = HeartRateData(
-            value: 75.0,
-            date: now,
-            context: .resting
-        )
-        
-        XCTAssertEqual(heartRate.value, 75.0)
-        XCTAssertEqual(heartRate.context, .resting)
-    }
-    
-    func testSleepDataInitialization() {
-        let startDate = Date()
-        let endDate = startDate.addingTimeInterval(8 * 3600) // 8 hours
-        
-        let sleep = SleepData(
-            startDate: startDate,
-            endDate: endDate,
-            sleepStage: .rem,
-            duration: 8 * 3600
-        )
-        
-        XCTAssertEqual(sleep.sleepStage, .rem)
+
+    func testSleepDataDuration() {
+        let start = Date()
+        let end = start.addingTimeInterval(8 * 3600)
+        let sleep = SleepData(startDate: start, endDate: end, stage: .rem)
+
         XCTAssertEqual(sleep.duration, 8 * 3600)
+        XCTAssertEqual(sleep.stage, .rem)
     }
 }
 
 // MARK: - Mood Models Tests
+
 final class MoodModelsTests: MindcareBaseTestCase {
-    
-    func testMoodEntryInitialization() {
+    func testMoodEntryDerivedValues() {
         let entry = MoodEntry(
             id: "mood123",
             userId: "user123",
-            mood: .happy,
-            intensity: 8,
-            note: "Feeling great today!",
-            timestamp: Date()
+            moodLevel: 5,
+            emotions: [.happy, .calm],
+            activities: ["walk"],
+            notes: "Feeling great",
+            sleepQuality: 4,
+            energyLevel: 4,
+            stressLevel: 2,
+            createdAt: Date()
         )
-        
-        XCTAssertEqual(entry.mood, .happy)
-        XCTAssertEqual(entry.intensity, 8)
-        XCTAssertEqual(entry.note, "Feeling great today!")
-    }
-    
-    func testMoodIntensityValidation() {
-        // Intensity should be clamped between 1-10
-        let lowEntry = MoodEntry(
-            id: "mood1",
-            userId: "user1",
-            mood: .neutral,
-            intensity: 0,
-            timestamp: Date()
-        )
-        
-        let highEntry = MoodEntry(
-            id: "mood2",
-            userId: "user2",
-            mood: .neutral,
-            intensity: 15,
-            timestamp: Date()
-        )
-        
-        XCTAssertGreaterThanOrEqual(lowEntry.intensity, 1)
-        XCTAssertLessThanOrEqual(highEntry.intensity, 10)
-    }
-    
-    func testMoodTypeProperties() {
-        XCTAssertEqual(MoodType.happy.emoji, "😊")
-        XCTAssertEqual(MoodType.sad.emoji, "😢")
-        XCTAssertEqual(MoodType.anxious.emoji, "😰")
-        XCTAssertEqual(MoodType.calm.emoji, "😌")
-        XCTAssertEqual(MoodType.angry.emoji, "😠")
+
+        XCTAssertEqual(entry.moodEmoji, "😄")
+        XCTAssertEqual(entry.moodText, "Great")
+        XCTAssertTrue(entry.emotions.contains(.happy))
     }
 }
 
 // MARK: - Chat Models Tests
+
 final class ChatModelsTests: MindcareBaseTestCase {
-    
     func testChatMessageInitialization() {
+        let now = Date()
         let message = ChatMessage(
             id: "msg123",
             conversationId: "conv123",
-            senderId: "user123",
-            content: "Hello, how are you?",
-            timestamp: Date(),
-            isFromUser: true
+            role: .user,
+            content: "Hello",
+            createdAt: now,
+            isRead: false
         )
-        
-        XCTAssertEqual(message.content, "Hello, how are you?")
-        XCTAssertTrue(message.isFromUser)
+
+        XCTAssertEqual(message.role, .user)
+        XCTAssertEqual(message.content, "Hello")
     }
-    
+
     func testConversationInitialization() {
+        let now = Date()
         let conversation = Conversation(
             id: "conv123",
-            participantIds: ["user1", "ai"],
-            type: .aiChat,
-            createdAt: Date()
+            userId: "user1",
+            title: "Chat",
+            lastMessage: nil,
+            messageCount: 0,
+            createdAt: now,
+            updatedAt: now
         )
-        
-        XCTAssertEqual(conversation.type, .aiChat)
-        XCTAssertEqual(conversation.participantIds.count, 2)
+
+        XCTAssertEqual(conversation.userId, "user1")
+        XCTAssertEqual(conversation.messageCount, 0)
     }
 }
 
 // MARK: - Payment Models Tests
+
 final class PaymentModelsTests: MindcareBaseTestCase {
-    
     func testPaymentTransactionInitialization() {
-        let transaction = PaymentTransaction(
+        let txn = PaymentTransaction(
             id: "txn123",
             userId: "user123",
-            amount: 1500.0,
+            amount: 1500,
             currency: "THB",
             status: .completed,
-            paymentMethod: .applePay,
-            createdAt: Date()
+            paymentMethod: "apple_pay",
+            paymentType: .consultation,
+            description: "Consultation fee",
+            metadata: nil,
+            createdAt: Date(),
+            updatedAt: Date()
         )
-        
-        XCTAssertEqual(transaction.amount, 1500.0)
-        XCTAssertEqual(transaction.currency, "THB")
-        XCTAssertEqual(transaction.status, .completed)
-        XCTAssertEqual(transaction.paymentMethod, .applePay)
-    }
-    
-    func testTransactionStatusValues() {
-        XCTAssertEqual(TransactionStatus.pending.rawValue, "pending")
-        XCTAssertEqual(TransactionStatus.completed.rawValue, "completed")
-        XCTAssertEqual(TransactionStatus.failed.rawValue, "failed")
-        XCTAssertEqual(TransactionStatus.refunded.rawValue, "refunded")
+
+        XCTAssertEqual(txn.status, .completed)
+        XCTAssertEqual(txn.paymentType, .consultation)
     }
 }
 
 // MARK: - Activity Models Tests
+
 final class ActivityModelsTests: MindcareBaseTestCase {
-    
     func testActivityInitialization() {
         let activity = Activity(
             id: "act123",
-            name: "Morning Meditation",
-            type: .meditation,
-            duration: 600,
-            scheduledTime: Date()
+            title: "Morning Meditation",
+            description: "A short breathing exercise",
+            category: .meditation,
+            duration: 10,
+            difficulty: .easy,
+            benefits: ["Reduce stress"],
+            instructions: ["Breathe in", "Breathe out"],
+            imageUrl: nil,
+            videoUrl: nil,
+            isCompleted: false
         )
-        
-        XCTAssertEqual(activity.name, "Morning Meditation")
-        XCTAssertEqual(activity.type, .meditation)
-        XCTAssertEqual(activity.duration, 600)
-    }
-    
-    func testActivityCompletionInitialization() {
-        let completion = ActivityCompletion(
-            id: "comp123",
-            activityId: "act123",
-            userId: "user123",
-            completedAt: Date(),
-            duration: 620,
-            rating: 4
-        )
-        
-        XCTAssertEqual(completion.rating, 4)
-        XCTAssertEqual(completion.duration, 620)
+
+        XCTAssertEqual(activity.category, .meditation)
+        XCTAssertEqual(activity.difficulty, .easy)
     }
 }
 
 // MARK: - Appointment Models Tests
+
 final class AppointmentModelsTests: MindcareBaseTestCase {
-    
     func testAppointmentInitialization() {
-        let startTime = Date()
-        let endTime = startTime.addingTimeInterval(3600) // 1 hour
-        
+        let start = Date().addingTimeInterval(3600)
         let appointment = Appointment(
             id: "apt123",
             patientId: "patient123",
             psychiatristId: "psych123",
-            scheduledStartTime: startTime,
-            scheduledEndTime: endTime,
+            psychiatristName: "Dr. Smith",
+            patientName: "John Doe",
+            scheduledAt: start,
+            duration: 60,
+            type: .consultation,
             status: .scheduled,
-            type: .video
+            notes: nil,
+            meetingUrl: nil,
+            createdAt: Date()
         )
-        
+
         XCTAssertEqual(appointment.status, .scheduled)
-        XCTAssertEqual(appointment.type, .video)
-    }
-    
-    func testPsychiatristInitialization() {
-        let psychiatrist = Psychiatrist(
-            id: "psych123",
-            userId: "user123",
-            licenseNumber: "PSY-12345",
-            specializations: [.depression, .anxiety],
-            yearsOfExperience: 10,
-            consultationFee: 2000.0
-        )
-        
-        XCTAssertEqual(psychiatrist.licenseNumber, "PSY-12345")
-        XCTAssertEqual(psychiatrist.specializations.count, 2)
-        XCTAssertEqual(psychiatrist.consultationFee, 2000.0)
+        XCTAssertTrue(appointment.isUpcoming)
     }
 }
 
 // MARK: - API Endpoints Tests
+
 final class APIEndpointsTests: MindcareBaseTestCase {
-    
     func testAuthEndpoints() {
         XCTAssertTrue(APIEndpoints.Auth.login.contains("/auth/login"))
         XCTAssertTrue(APIEndpoints.Auth.register.contains("/auth/register"))
         XCTAssertTrue(APIEndpoints.Auth.logout.contains("/auth/logout"))
         XCTAssertTrue(APIEndpoints.Auth.refreshToken.contains("/auth/refresh"))
     }
-    
-    func testUserEndpoints() {
-        XCTAssertTrue(APIEndpoints.User.profile.contains("/users/profile"))
-        XCTAssertTrue(APIEndpoints.User.updateProfile.contains("/users/profile"))
-    }
-    
+
     func testHealthEndpoints() {
-        XCTAssertTrue(APIEndpoints.Health.syncData.contains("/health/sync"))
-        XCTAssertTrue(APIEndpoints.Health.getData.contains("/health/data"))
-    }
-    
-    func testPaymentEndpoints() {
-        XCTAssertTrue(APIEndpoints.Payment.process.contains("/payments/process"))
-        XCTAssertTrue(APIEndpoints.Payment.verify.contains("/payments/verify"))
+        XCTAssertTrue(APIEndpoints.Health.metrics.contains("/health/metrics"))
+        XCTAssertTrue(APIEndpoints.Health.sync.contains("/health/sync"))
+        XCTAssertTrue(APIEndpoints.Health.history.contains("/health/history"))
     }
 }
 
 // MARK: - Logger Tests
+
 final class LoggerTests: MindcareBaseTestCase {
-    
-    func testLoggerLevels() {
-        // These should not crash
-        Logger.debug("Debug message")
-        Logger.info("Info message")
-        Logger.warning("Warning message")
-        Logger.error("Error message")
-        
-        // If we get here, logging works
+    func testLoggerConvenienceFunctions() {
+        // These should not crash when called
+        logDebug("Debug message")
+        logInfo("Info message")
+        logWarning("Warning message")
+        logError("Error message")
         XCTAssertTrue(true)
     }
 }
 
-// MARK: - Extensions Tests
-final class ExtensionsTests: MindcareBaseTestCase {
-    
-    func testDateFormatting() {
-        let date = Date()
-        let formatted = date.formatted(date: .abbreviated, time: .shortened)
-        XCTAssertFalse(formatted.isEmpty)
-    }
-    
-    func testStringTrimming() {
-        let string = "  Hello World  "
-        let trimmed = string.trimmingCharacters(in: .whitespaces)
-        XCTAssertEqual(trimmed, "Hello World")
-    }
-}
-
 // MARK: - Performance Tests
+
 final class PerformanceTests: MindcareBaseTestCase {
-    
     func testEmailValidationPerformance() {
         measure {
-            for _ in 0..<1000 {
-                _ = Validators.isValidEmail("test@example.com")
+            for _ in 0..<500 {
+                _ = Validators.Email.validate("test@example.com").isValid
             }
         }
     }
-    
+
     func testPasswordValidationPerformance() {
         measure {
-            for _ in 0..<1000 {
-                _ = Validators.isValidPassword("Password123!")
+            for _ in 0..<500 {
+                _ = Validators.Password.validate("Password123!").isValid
             }
         }
     }

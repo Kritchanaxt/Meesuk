@@ -16,41 +16,28 @@ final class KeychainManagerTests: XCTestCase {
     
     override func tearDownWithError() throws {
         // Clean up test data
-        try? KeychainManager.shared.delete(key: testKey)
+        _ = KeychainManager.shared.delete(key: testKey)
         try super.tearDownWithError()
     }
     
-    func testSaveAndRetrieve() throws {
-        // Save
-        try KeychainManager.shared.save(key: testKey, value: testValue)
-        
-        // Retrieve
-        let retrieved = try KeychainManager.shared.retrieve(key: testKey)
+    func testSaveAndRetrieve() {
+        XCTAssertTrue(KeychainManager.shared.save(key: testKey, value: testValue))
+        let retrieved = KeychainManager.shared.get(key: testKey)
         XCTAssertEqual(retrieved, testValue)
     }
     
-    func testDelete() throws {
-        // Save first
-        try KeychainManager.shared.save(key: testKey, value: testValue)
-        
-        // Delete
-        try KeychainManager.shared.delete(key: testKey)
-        
-        // Should throw or return nil
-        XCTAssertThrowsError(try KeychainManager.shared.retrieve(key: testKey))
+    func testDelete() {
+        _ = KeychainManager.shared.save(key: testKey, value: testValue)
+        XCTAssertTrue(KeychainManager.shared.delete(key: testKey))
+        XCTAssertNil(KeychainManager.shared.get(key: testKey))
     }
     
-    func testUpdate() throws {
+    func testUpdate() {
         let newValue = "new_test_value"
         
-        // Save initial value
-        try KeychainManager.shared.save(key: testKey, value: testValue)
-        
-        // Update
-        try KeychainManager.shared.save(key: testKey, value: newValue)
-        
-        // Verify update
-        let retrieved = try KeychainManager.shared.retrieve(key: testKey)
+        XCTAssertTrue(KeychainManager.shared.save(key: testKey, value: testValue))
+        XCTAssertTrue(KeychainManager.shared.update(key: testKey, value: newValue))
+        let retrieved = KeychainManager.shared.get(key: testKey)
         XCTAssertEqual(retrieved, newValue)
     }
 }
@@ -68,7 +55,7 @@ final class AuthServiceTests: XCTestCase {
     override func tearDownWithError() throws {
         // Logout after each test
         Task {
-            try? await authService.logout()
+            await authService.logout()
         }
         try super.tearDownWithError()
     }
@@ -157,32 +144,22 @@ final class NotificationServiceTests: XCTestCase {
     }
     
     func testNotificationCategoryTypes() {
-        // Verify notification categories are defined
-        XCTAssertFalse(NotificationService.NotificationCategory.allCases.isEmpty)
+        XCTAssertFalse(NotificationService.Category.healthAlert.rawValue.isEmpty)
+        XCTAssertFalse(NotificationService.Category.reminder.rawValue.isEmpty)
+        XCTAssertFalse(NotificationService.Category.chat.rawValue.isEmpty)
+        XCTAssertFalse(NotificationService.Category.dailyCheckIn.rawValue.isEmpty)
     }
 }
 
 // MARK: - ApplePayManager Tests
 final class ApplePayManagerTests: XCTestCase {
     
-    var applePayManager: ApplePayManager!
-    
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        applePayManager = ApplePayManager.shared
-    }
-    
-    func testApplePayManagerInitialization() {
-        XCTAssertNotNil(applePayManager)
-    }
-    
     func testMerchantIdentifierConfigured() {
-        // Verify merchant identifier is set
-        XCTAssertFalse(applePayManager.merchantIdentifier.isEmpty)
+        XCTAssertFalse(ApplePayManager.merchantIdentifier.isEmpty)
     }
     
     func testSupportedPaymentNetworks() {
-        let networks = applePayManager.supportedNetworks
+        let networks = ApplePayManager.supportedNetworks
         XCTAssertFalse(networks.isEmpty)
         // Should at least support Visa and Mastercard
         XCTAssertTrue(networks.contains(.visa))

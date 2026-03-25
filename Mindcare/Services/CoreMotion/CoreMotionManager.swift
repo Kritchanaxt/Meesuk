@@ -150,9 +150,8 @@ final class CoreMotionManager: ObservableObject {
         }
         
         activityManager.startActivityUpdates(to: .main) { [weak self] activity in
-            guard let activity = activity else { return }
-            
-            self?.currentActivity = self?.mapActivity(activity) ?? .unknown
+            guard let strongSelf = self, let activity = activity else { return }
+            strongSelf.currentActivity = strongSelf.mapActivity(activity)
         }
     }
     
@@ -201,7 +200,7 @@ final class CoreMotionManager: ObservableObject {
         }
         
         motionManager.deviceMotionUpdateInterval = interval
-        motionManager.startDeviceMotionUpdates(to: .main) { [weak self] motion, error in
+        motionManager.startDeviceMotionUpdates(to: .main) { motion, error in
             guard let motion = motion, error == nil else { return }
             
             // Process motion data if needed

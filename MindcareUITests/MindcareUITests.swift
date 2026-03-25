@@ -185,7 +185,7 @@ final class MindcareUITests: XCTestCase {
     @MainActor
     func testPaymentButtonExists() throws {
         // Look for Apple Pay button
-        let applePayButton = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Pay'")).firstMatch
+        _ = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'Pay'")).firstMatch
         
         // Just verify these can be found when navigating to payment
         XCTAssertTrue(true)

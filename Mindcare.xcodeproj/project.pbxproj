@@ -3,350 +3,591 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8034CFEC2ED881ED0076FBB6 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 8034CFEC2ED881800076FBB6 /* Alamofire */; };
+		02836217D23C1EEED8CD107D /* AppSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E435F3B6E75590C45B64FA /* AppSession.swift */; };
+		0317854B4234A3CF40705C7E /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900A9280B94F26CFD60F6904 /* APIService.swift */; };
+		085F525226D8A39122CFAB00 /* MindcareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE40D01C43AB665A620A14B1 /* MindcareTests.swift */; };
+		10B1DE3DF21E345AC7D891D4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A50415E313A3D8472490F /* AppDelegate.swift */; };
+		17E635B3B35C8836C0051538 /* ApplePayButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3B80C106D8B93543B8395B /* ApplePayButtonView.swift */; };
+		1B2BF80259240A7287BD48CA /* AuthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C443387F4B3E5D404F47A19 /* AuthModels.swift */; };
+		21ADC4A048C659D17F1829B2 /* HealthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4014875941D4515E6F029B21 /* HealthViewModel.swift */; };
+		2A52803404255F5EBF12A1EA /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DBE1AEED05C3DD65218CEB /* Logger.swift */; };
+		38671C93A192090BE9BDF1EC /* HealthKitOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F011F6D9F4A18BBED79AA992 /* HealthKitOnboardingView.swift */; };
+		490C267518F272ACCB958086 /* UserModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248FA8807673E89FCD56863D /* UserModels.swift */; };
+		505028982EEBEFF100FB8BC9 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505028972EEBEFEC00FB8BC9 /* Untitled.swift */; };
+		5050289A2EEBF00A00FB8BC9 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505028992EEBF00A00FB8BC9 /* SwiftUIView.swift */; };
+		5964BABC1856A0AB37F849D6 /* ChatModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2752DE06EA587F9EC5D38C8D /* ChatModels.swift */; };
+		5E81E34B4601FCBADFC7A516 /* PaymentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607F3E001828CAA702524038 /* PaymentModels.swift */; };
+		5FC9879871BD88075569024D /* Validators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2844C44DE8FAE1E56AAE5D53 /* Validators.swift */; };
+		6133A75870851C4F1FEF10ED /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B069B2B87B3C22F8BFFA4051 /* NotificationService.swift */; };
+		657AB03626FE2190F7DF7E5D /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3878287ED026941D1B0426A9 /* AppEnvironment.swift */; };
+		6EE7AD67BACEF954C670D6DC /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5A78EABC09C39870F1D060 /* BaseViewModel.swift */; };
+		735F6735BF9567FDA1394138 /* ApplePayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEC521BF3F0DFE41CC5C329 /* ApplePayManager.swift */; };
+		8006FC874F8F2ECE9C3177A5 /* HealthModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64579D9CCB6C0CA136D650D /* HealthModels.swift */; };
+		89E04B6634E19181E39C9325 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2960167431400B3CC05666C1 /* KeychainManager.swift */; };
+		9194F7F289685BA35E24F554 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1F087933CB4161D2D177426 /* HealthKitManager.swift */; };
+		959FAA3E83B46F7903C7FF15 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FD6CE6ABC4F65BE4910979 /* NetworkManager.swift */; };
+		965EA86BE0F0BF329E472299 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF8DC0BF1FC2B6EF01B0503 /* Item.swift */; };
+		966977262E05BB898F9CBFCC /* APIEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C0EEA5AB2AD763E81E2BC1 /* APIEndpoints.swift */; };
+		97A1C47630B24E149D81AF5C /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7FA08E5E7879EE6777E5F8 /* ViewModelTests.swift */; };
+		A7715389826C08FEE4A90418 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7470CAD040205B7AA8E3B13 /* ContentView.swift */; };
+		ACE9A6F91EB148ABBE74CFA8 /* MoodModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95B317A26A1A2ED7ED325D5E /* MoodModels.swift */; };
+		AD07B8D933BD0987837C23E0 /* ActivityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA96BCA2ABBE73F118D8DD74 /* ActivityModels.swift */; };
+		BC2FB653BCE20C11EA2334AD /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC0B293E6A589993A2CCFB3 /* MainTabView.swift */; };
+		C3B735F624AB164CDE4A305E /* CoreMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC27BF1CC9A1D3BC9117F76 /* CoreMotionManager.swift */; };
+		C700425B1E57EE9E62998CC7 /* AppointmentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FC43CF541C8A5CAE15F523 /* AppointmentModels.swift */; };
+		CC598AD9FFB12235534191D6 /* MindcareUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1B34C80CC87269D006A4CD /* MindcareUITestsLaunchTests.swift */; };
+		CF267AC0B617939ED94B9611 /* WorkoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2328060408329CF31A2CD12E /* WorkoutManager.swift */; };
+		D9078619A23046DCC135A804 /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947D80BACC64CFD1D9C0036C /* ServiceTests.swift */; };
+		DF7B8D4C1E820B98E4A67402 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BC84EF0DE4DDF0C457F6D7FD /* Alamofire */; };
+		EACCDE29DEE646DA81A19698 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC59829EF1C0F8DCE2075D39 /* AuthService.swift */; };
+		EED0C600EE2E2329810CE151 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 41F7CCA73FB1DCA2D0F90BBA /* Assets.xcassets */; };
+		F029EC6FDA7A7CC96D9B6D51 /* MindcareUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB642E72AD144E9AE8DDCA3 /* MindcareUITests.swift */; };
+		F17D7F36E6EDA0501DA62D9A /* WatchConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D79D16E3D290D4B6673AAFD /* WatchConnectivityManager.swift */; };
+		FCAA023578A52B83B2170566 /* MindcareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE48FC1107F016D1F74B1D3 /* MindcareApp.swift */; };
+		FD4F53FD05CE35A660899173 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705CCD36D7210B5686766BA1 /* LoginView.swift */; };
+		FE9D65AF03D788B293428CE3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DCE180F7AD1B0E6A0C4123 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		8034CF712ED8737C0076FBB6 /* PBXContainerItemProxy */ = {
+		116206CC8B822F5CEFF168C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8034CF592ED873790076FBB6 /* Project object */;
+			containerPortal = D74EF6B00D2E89CBF3506037 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8034CF602ED873790076FBB6;
+			remoteGlobalIDString = 5B7D346F2B8D0045C2F58388;
 			remoteInfo = Mindcare;
 		};
-		8034CF7B2ED8737C0076FBB6 /* PBXContainerItemProxy */ = {
+		1359AB398C5200E4D46A2D6F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 8034CF592ED873790076FBB6 /* Project object */;
+			containerPortal = D74EF6B00D2E89CBF3506037 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8034CF602ED873790076FBB6;
+			remoteGlobalIDString = 5B7D346F2B8D0045C2F58388;
 			remoteInfo = Mindcare;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8034CF612ED873790076FBB6 /* Mindcare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mindcare.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8034CF702ED8737C0076FBB6 /* MindcareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindcareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8034CF7A2ED8737C0076FBB6 /* MindcareUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindcareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		04DCE180F7AD1B0E6A0C4123 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		0813C7D332F67A73BD400753 /* MindcareTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MindcareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EEC521BF3F0DFE41CC5C329 /* ApplePayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayManager.swift; sourceTree = "<group>"; };
+		10C0EEA5AB2AD763E81E2BC1 /* APIEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoints.swift; sourceTree = "<group>"; };
+		19FD6CE6ABC4F65BE4910979 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		1EF8DC0BF1FC2B6EF01B0503 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		20FC43CF541C8A5CAE15F523 /* AppointmentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentModels.swift; sourceTree = "<group>"; };
+		215A50415E313A3D8472490F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2328060408329CF31A2CD12E /* WorkoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutManager.swift; sourceTree = "<group>"; };
+		248FA8807673E89FCD56863D /* UserModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModels.swift; sourceTree = "<group>"; };
+		2752DE06EA587F9EC5D38C8D /* ChatModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
+		2844C44DE8FAE1E56AAE5D53 /* Validators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
+		2960167431400B3CC05666C1 /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		2C443387F4B3E5D404F47A19 /* AuthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModels.swift; sourceTree = "<group>"; };
+		2D7FA08E5E7879EE6777E5F8 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
+		334629C8E0B656C38284A69B /* MindcareUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MindcareUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3878287ED026941D1B0426A9 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		3B051D849922C44CF5E0945C /* Mindcare.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Mindcare.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EC0B293E6A589993A2CCFB3 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		4014875941D4515E6F029B21 /* HealthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthViewModel.swift; sourceTree = "<group>"; };
+		41F7CCA73FB1DCA2D0F90BBA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4A3B80C106D8B93543B8395B /* ApplePayButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePayButtonView.swift; sourceTree = "<group>"; };
+		505028972EEBEFEC00FB8BC9 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
+		505028992EEBF00A00FB8BC9 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		57E435F3B6E75590C45B64FA /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
+		607F3E001828CAA702524038 /* PaymentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModels.swift; sourceTree = "<group>"; };
+		63E943D66B7AB1C90090CE56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6A1B34C80CC87269D006A4CD /* MindcareUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindcareUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		705CCD36D7210B5686766BA1 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		851CA27B91CCC0EE3C94277D /* Mindcare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mindcare.entitlements; sourceTree = "<group>"; };
+		900A9280B94F26CFD60F6904 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		947D80BACC64CFD1D9C0036C /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
+		95B317A26A1A2ED7ED325D5E /* MoodModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodModels.swift; sourceTree = "<group>"; };
+		9AE48FC1107F016D1F74B1D3 /* MindcareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindcareApp.swift; sourceTree = "<group>"; };
+		9CC27BF1CC9A1D3BC9117F76 /* CoreMotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMotionManager.swift; sourceTree = "<group>"; };
+		9D79D16E3D290D4B6673AAFD /* WatchConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnectivityManager.swift; sourceTree = "<group>"; };
+		A6DBE1AEED05C3DD65218CEB /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		AC59829EF1C0F8DCE2075D39 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		AE5A78EABC09C39870F1D060 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
+		B069B2B87B3C22F8BFFA4051 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		B64579D9CCB6C0CA136D650D /* HealthModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthModels.swift; sourceTree = "<group>"; };
+		B7470CAD040205B7AA8E3B13 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BA96BCA2ABBE73F118D8DD74 /* ActivityModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityModels.swift; sourceTree = "<group>"; };
+		E1F087933CB4161D2D177426 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		EBB642E72AD144E9AE8DDCA3 /* MindcareUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindcareUITests.swift; sourceTree = "<group>"; };
+		EE40D01C43AB665A620A14B1 /* MindcareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindcareTests.swift; sourceTree = "<group>"; };
+		F011F6D9F4A18BBED79AA992 /* HealthKitOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitOnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		8034CF632ED873790076FBB6 /* Mindcare */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Mindcare;
-			sourceTree = "<group>";
-		};
-		8034CF732ED8737C0076FBB6 /* MindcareTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MindcareTests;
-			sourceTree = "<group>";
-		};
-		8034CF7D2ED8737C0076FBB6 /* MindcareUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MindcareUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		8034CF5E2ED873790076FBB6 /* Frameworks */ = {
+		44A1B024A2E078AA73C0060A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8034CFEC2ED881ED0076FBB6 /* Alamofire in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8034CF6D2ED8737C0076FBB6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8034CF772ED8737C0076FBB6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				DF7B8D4C1E820B98E4A67402 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8034CF582ED873790076FBB6 = {
+		066D9F88EC11B3D2FF1C2209 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				8034CF632ED873790076FBB6 /* Mindcare */,
-				8034CF732ED8737C0076FBB6 /* MindcareTests */,
-				8034CF7D2ED8737C0076FBB6 /* MindcareUITests */,
-				8034CF622ED873790076FBB6 /* Products */,
+				10C0EEA5AB2AD763E81E2BC1 /* APIEndpoints.swift */,
+				900A9280B94F26CFD60F6904 /* APIService.swift */,
+				19FD6CE6ABC4F65BE4910979 /* NetworkManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		10F90BE628158B189C5DEEC8 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				04DCE180F7AD1B0E6A0C4123 /* Extensions.swift */,
+				A6DBE1AEED05C3DD65218CEB /* Logger.swift */,
+				2844C44DE8FAE1E56AAE5D53 /* Validators.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		11BA139269653400E856A533 /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				0EEC521BF3F0DFE41CC5C329 /* ApplePayManager.swift */,
+				57E435F3B6E75590C45B64FA /* AppSession.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		154B4123D2132DA768DE7882 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				505028962EEBEFE600FB8BC9 /* New Group */,
+				38791AF3948C687F40D102A6 /* Auth */,
+				74C0510D2FAD2D9E74903390 /* Main */,
+				5D7D3A9D622594786AD95B19 /* Onboarding */,
+				4DEC7D234F14490ED529C2BF /* Payment */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		25DCB2DFE826C5A3B03CD50F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BA96BCA2ABBE73F118D8DD74 /* ActivityModels.swift */,
+				20FC43CF541C8A5CAE15F523 /* AppointmentModels.swift */,
+				2C443387F4B3E5D404F47A19 /* AuthModels.swift */,
+				2752DE06EA587F9EC5D38C8D /* ChatModels.swift */,
+				B64579D9CCB6C0CA136D650D /* HealthModels.swift */,
+				95B317A26A1A2ED7ED325D5E /* MoodModels.swift */,
+				607F3E001828CAA702524038 /* PaymentModels.swift */,
+				248FA8807673E89FCD56863D /* UserModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		38791AF3948C687F40D102A6 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				705CCD36D7210B5686766BA1 /* LoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		4D88C02E8E4B37AD8E094BB1 /* MindcareUITests */ = {
+			isa = PBXGroup;
+			children = (
+				EBB642E72AD144E9AE8DDCA3 /* MindcareUITests.swift */,
+				6A1B34C80CC87269D006A4CD /* MindcareUITestsLaunchTests.swift */,
+			);
+			path = MindcareUITests;
+			sourceTree = "<group>";
+		};
+		4DEC7D234F14490ED529C2BF /* Payment */ = {
+			isa = PBXGroup;
+			children = (
+				4A3B80C106D8B93543B8395B /* ApplePayButtonView.swift */,
+			);
+			path = Payment;
+			sourceTree = "<group>";
+		};
+		505028962EEBEFE600FB8BC9 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				505028972EEBEFEC00FB8BC9 /* Untitled.swift */,
+				505028992EEBF00A00FB8BC9 /* SwiftUIView.swift */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		5D7D3A9D622594786AD95B19 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				F011F6D9F4A18BBED79AA992 /* HealthKitOnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		63BF3BF6EFA393A7334D1106 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				AC59829EF1C0F8DCE2075D39 /* AuthService.swift */,
+				2960167431400B3CC05666C1 /* KeychainManager.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		74C0510D2FAD2D9E74903390 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				3EC0B293E6A589993A2CCFB3 /* MainTabView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		789256E9A8E3731B93FCA8A1 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				215A50415E313A3D8472490F /* AppDelegate.swift */,
+				3878287ED026941D1B0426A9 /* AppEnvironment.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7C21E300EFD5D58DCA9F197F /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				B069B2B87B3C22F8BFFA4051 /* NotificationService.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		7D000E402487346DE3394FC0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B051D849922C44CF5E0945C /* Mindcare.app */,
+				0813C7D332F67A73BD400753 /* MindcareTests.xctest */,
+				334629C8E0B656C38284A69B /* MindcareUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8043E4F709B490B18CDE6F47 /* Mindcare */ = {
+			isa = PBXGroup;
+			children = (
+				41F7CCA73FB1DCA2D0F90BBA /* Assets.xcassets */,
+				B7470CAD040205B7AA8E3B13 /* ContentView.swift */,
+				63E943D66B7AB1C90090CE56 /* Info.plist */,
+				1EF8DC0BF1FC2B6EF01B0503 /* Item.swift */,
+				851CA27B91CCC0EE3C94277D /* Mindcare.entitlements */,
+				9AE48FC1107F016D1F74B1D3 /* MindcareApp.swift */,
+				789256E9A8E3731B93FCA8A1 /* App */,
+				25DCB2DFE826C5A3B03CD50F /* Models */,
+				F83709BF08DEB50C8BF95733 /* Services */,
+				10F90BE628158B189C5DEEC8 /* Utilities */,
+				8DDA8E2BB8A9C32878661125 /* ViewModels */,
+				154B4123D2132DA768DE7882 /* Views */,
+			);
+			path = Mindcare;
+			sourceTree = "<group>";
+		};
+		8B7A21A809E083DD1B3E2C8C = {
+			isa = PBXGroup;
+			children = (
+				8043E4F709B490B18CDE6F47 /* Mindcare */,
+				B7AD8FFA9FBB90217877A76D /* MindcareTests */,
+				4D88C02E8E4B37AD8E094BB1 /* MindcareUITests */,
+				7D000E402487346DE3394FC0 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		8034CF622ED873790076FBB6 /* Products */ = {
+		8DDA8E2BB8A9C32878661125 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				8034CF612ED873790076FBB6 /* Mindcare.app */,
-				8034CF702ED8737C0076FBB6 /* MindcareTests.xctest */,
-				8034CF7A2ED8737C0076FBB6 /* MindcareUITests.xctest */,
+				AE5A78EABC09C39870F1D060 /* BaseViewModel.swift */,
+				4014875941D4515E6F029B21 /* HealthViewModel.swift */,
 			);
-			name = Products;
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		98D9B99C653E64DE5D1CC5DF /* CoreMotion */ = {
+			isa = PBXGroup;
+			children = (
+				9CC27BF1CC9A1D3BC9117F76 /* CoreMotionManager.swift */,
+			);
+			path = CoreMotion;
+			sourceTree = "<group>";
+		};
+		B7AD8FFA9FBB90217877A76D /* MindcareTests */ = {
+			isa = PBXGroup;
+			children = (
+				EE40D01C43AB665A620A14B1 /* MindcareTests.swift */,
+				947D80BACC64CFD1D9C0036C /* ServiceTests.swift */,
+				2D7FA08E5E7879EE6777E5F8 /* ViewModelTests.swift */,
+			);
+			path = MindcareTests;
+			sourceTree = "<group>";
+		};
+		CB81847E1698019FD29ACC61 /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				E1F087933CB4161D2D177426 /* HealthKitManager.swift */,
+				2328060408329CF31A2CD12E /* WorkoutManager.swift */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		CBFD2B4B2CC14DA77BC3DE4F /* WatchConnectivity */ = {
+			isa = PBXGroup;
+			children = (
+				9D79D16E3D290D4B6673AAFD /* WatchConnectivityManager.swift */,
+			);
+			path = WatchConnectivity;
+			sourceTree = "<group>";
+		};
+		F83709BF08DEB50C8BF95733 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				63BF3BF6EFA393A7334D1106 /* Auth */,
+				98D9B99C653E64DE5D1CC5DF /* CoreMotion */,
+				CB81847E1698019FD29ACC61 /* HealthKit */,
+				066D9F88EC11B3D2FF1C2209 /* Network */,
+				7C21E300EFD5D58DCA9F197F /* Notifications */,
+				11BA139269653400E856A533 /* Payment */,
+				CBFD2B4B2CC14DA77BC3DE4F /* WatchConnectivity */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8034CF602ED873790076FBB6 /* Mindcare */ = {
+		0AA7BBAED48BD734E25A7A38 /* MindcareTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8034CF842ED8737C0076FBB6 /* Build configuration list for PBXNativeTarget "Mindcare" */;
+			buildConfigurationList = A20E866FE09902D01B3E1026 /* Build configuration list for PBXNativeTarget "MindcareTests" */;
 			buildPhases = (
-				8034CF5D2ED873790076FBB6 /* Sources */,
-				8034CF5E2ED873790076FBB6 /* Frameworks */,
-				8034CF5F2ED873790076FBB6 /* Resources */,
+				DF846054FB253A61A7442CE9 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				8034CF632ED873790076FBB6 /* Mindcare */,
-			);
-			name = Mindcare;
-			packageProductDependencies = (
-				8034CFEC2ED881800076FBB6 /* Alamofire */,
-			);
-			productName = Mindcare;
-			productReference = 8034CF612ED873790076FBB6 /* Mindcare.app */;
-			productType = "com.apple.product-type.application";
-		};
-		8034CF6F2ED8737C0076FBB6 /* MindcareTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8034CF872ED8737C0076FBB6 /* Build configuration list for PBXNativeTarget "MindcareTests" */;
-			buildPhases = (
-				8034CF6C2ED8737C0076FBB6 /* Sources */,
-				8034CF6D2ED8737C0076FBB6 /* Frameworks */,
-				8034CF6E2ED8737C0076FBB6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				8034CF722ED8737C0076FBB6 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				8034CF732ED8737C0076FBB6 /* MindcareTests */,
+				4053B4B8EE4D23CB8C72F050 /* PBXTargetDependency */,
 			);
 			name = MindcareTests;
 			packageProductDependencies = (
 			);
 			productName = MindcareTests;
-			productReference = 8034CF702ED8737C0076FBB6 /* MindcareTests.xctest */;
+			productReference = 0813C7D332F67A73BD400753 /* MindcareTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		8034CF792ED8737C0076FBB6 /* MindcareUITests */ = {
+		18CAB2FA9FD3ED108B1B4A10 /* MindcareUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8034CF8A2ED8737C0076FBB6 /* Build configuration list for PBXNativeTarget "MindcareUITests" */;
+			buildConfigurationList = C8BDB9BB1FEA6764BE5763F7 /* Build configuration list for PBXNativeTarget "MindcareUITests" */;
 			buildPhases = (
-				8034CF762ED8737C0076FBB6 /* Sources */,
-				8034CF772ED8737C0076FBB6 /* Frameworks */,
-				8034CF782ED8737C0076FBB6 /* Resources */,
+				E6EBEDB836487A4F09013813 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				8034CF7C2ED8737C0076FBB6 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				8034CF7D2ED8737C0076FBB6 /* MindcareUITests */,
+				9711A2DB21BB3950F5E52302 /* PBXTargetDependency */,
 			);
 			name = MindcareUITests;
 			packageProductDependencies = (
 			);
 			productName = MindcareUITests;
-			productReference = 8034CF7A2ED8737C0076FBB6 /* MindcareUITests.xctest */;
+			productReference = 334629C8E0B656C38284A69B /* MindcareUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		5B7D346F2B8D0045C2F58388 /* Mindcare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 681793330FFF32FF65592E7F /* Build configuration list for PBXNativeTarget "Mindcare" */;
+			buildPhases = (
+				FA9D6D9DA9A658BAB82E8512 /* Sources */,
+				9C6FF9EF9D2B7E85CCD1F19C /* Resources */,
+				44A1B024A2E078AA73C0060A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mindcare;
+			packageProductDependencies = (
+				BC84EF0DE4DDF0C457F6D7FD /* Alamofire */,
+			);
+			productName = Mindcare;
+			productReference = 3B051D849922C44CF5E0945C /* Mindcare.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		8034CF592ED873790076FBB6 /* Project object */ = {
+		D74EF6B00D2E89CBF3506037 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2610;
-				LastUpgradeCheck = 2610;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					8034CF602ED873790076FBB6 = {
-						CreatedOnToolsVersion = 26.1.1;
-					};
-					8034CF6F2ED8737C0076FBB6 = {
-						CreatedOnToolsVersion = 26.1.1;
-						TestTargetID = 8034CF602ED873790076FBB6;
-					};
-					8034CF792ED8737C0076FBB6 = {
-						CreatedOnToolsVersion = 26.1.1;
-						TestTargetID = 8034CF602ED873790076FBB6;
+					18CAB2FA9FD3ED108B1B4A10 = {
+						TestTargetID = 5B7D346F2B8D0045C2F58388;
 					};
 				};
 			};
-			buildConfigurationList = 8034CF5C2ED873790076FBB6 /* Build configuration list for PBXProject "Mindcare" */;
+			buildConfigurationList = 5FBA5B34CA0B597A288882E5 /* Build configuration list for PBXProject "Mindcare" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = 8034CF582ED873790076FBB6;
+			mainGroup = 8B7A21A809E083DD1B3E2C8C;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				8034CFEB2ED8817D0076FBB6 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				C71800BC5E6F6896FC45D46A /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 8034CF622ED873790076FBB6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8034CF602ED873790076FBB6 /* Mindcare */,
-				8034CF6F2ED8737C0076FBB6 /* MindcareTests */,
-				8034CF792ED8737C0076FBB6 /* MindcareUITests */,
+				5B7D346F2B8D0045C2F58388 /* Mindcare */,
+				0AA7BBAED48BD734E25A7A38 /* MindcareTests */,
+				18CAB2FA9FD3ED108B1B4A10 /* MindcareUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		8034CF5F2ED873790076FBB6 /* Resources */ = {
+		9C6FF9EF9D2B7E85CCD1F19C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8034CF6E2ED8737C0076FBB6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8034CF782ED8737C0076FBB6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				EED0C600EE2E2329810CE151 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8034CF5D2ED873790076FBB6 /* Sources */ = {
+		DF846054FB253A61A7442CE9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				085F525226D8A39122CFAB00 /* MindcareTests.swift in Sources */,
+				D9078619A23046DCC135A804 /* ServiceTests.swift in Sources */,
+				97A1C47630B24E149D81AF5C /* ViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8034CF6C2ED8737C0076FBB6 /* Sources */ = {
+		E6EBEDB836487A4F09013813 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F029EC6FDA7A7CC96D9B6D51 /* MindcareUITests.swift in Sources */,
+				CC598AD9FFB12235534191D6 /* MindcareUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8034CF762ED8737C0076FBB6 /* Sources */ = {
+		FA9D6D9DA9A658BAB82E8512 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				966977262E05BB898F9CBFCC /* APIEndpoints.swift in Sources */,
+				0317854B4234A3CF40705C7E /* APIService.swift in Sources */,
+				5050289A2EEBF00A00FB8BC9 /* SwiftUIView.swift in Sources */,
+				AD07B8D933BD0987837C23E0 /* ActivityModels.swift in Sources */,
+				10B1DE3DF21E345AC7D891D4 /* AppDelegate.swift in Sources */,
+				657AB03626FE2190F7DF7E5D /* AppEnvironment.swift in Sources */,
+				02836217D23C1EEED8CD107D /* AppSession.swift in Sources */,
+				17E635B3B35C8836C0051538 /* ApplePayButtonView.swift in Sources */,
+				735F6735BF9567FDA1394138 /* ApplePayManager.swift in Sources */,
+				C700425B1E57EE9E62998CC7 /* AppointmentModels.swift in Sources */,
+				1B2BF80259240A7287BD48CA /* AuthModels.swift in Sources */,
+				EACCDE29DEE646DA81A19698 /* AuthService.swift in Sources */,
+				6EE7AD67BACEF954C670D6DC /* BaseViewModel.swift in Sources */,
+				5964BABC1856A0AB37F849D6 /* ChatModels.swift in Sources */,
+				A7715389826C08FEE4A90418 /* ContentView.swift in Sources */,
+				C3B735F624AB164CDE4A305E /* CoreMotionManager.swift in Sources */,
+				FE9D65AF03D788B293428CE3 /* Extensions.swift in Sources */,
+				505028982EEBEFF100FB8BC9 /* Untitled.swift in Sources */,
+				9194F7F289685BA35E24F554 /* HealthKitManager.swift in Sources */,
+				38671C93A192090BE9BDF1EC /* HealthKitOnboardingView.swift in Sources */,
+				8006FC874F8F2ECE9C3177A5 /* HealthModels.swift in Sources */,
+				21ADC4A048C659D17F1829B2 /* HealthViewModel.swift in Sources */,
+				965EA86BE0F0BF329E472299 /* Item.swift in Sources */,
+				89E04B6634E19181E39C9325 /* KeychainManager.swift in Sources */,
+				2A52803404255F5EBF12A1EA /* Logger.swift in Sources */,
+				FD4F53FD05CE35A660899173 /* LoginView.swift in Sources */,
+				BC2FB653BCE20C11EA2334AD /* MainTabView.swift in Sources */,
+				FCAA023578A52B83B2170566 /* MindcareApp.swift in Sources */,
+				ACE9A6F91EB148ABBE74CFA8 /* MoodModels.swift in Sources */,
+				959FAA3E83B46F7903C7FF15 /* NetworkManager.swift in Sources */,
+				6133A75870851C4F1FEF10ED /* NotificationService.swift in Sources */,
+				5E81E34B4601FCBADFC7A516 /* PaymentModels.swift in Sources */,
+				490C267518F272ACCB958086 /* UserModels.swift in Sources */,
+				5FC9879871BD88075569024D /* Validators.swift in Sources */,
+				F17D7F36E6EDA0501DA62D9A /* WatchConnectivityManager.swift in Sources */,
+				CF267AC0B617939ED94B9611 /* WorkoutManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8034CF722ED8737C0076FBB6 /* PBXTargetDependency */ = {
+		4053B4B8EE4D23CB8C72F050 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8034CF602ED873790076FBB6 /* Mindcare */;
-			targetProxy = 8034CF712ED8737C0076FBB6 /* PBXContainerItemProxy */;
+			target = 5B7D346F2B8D0045C2F58388 /* Mindcare */;
+			targetProxy = 1359AB398C5200E4D46A2D6F /* PBXContainerItemProxy */;
 		};
-		8034CF7C2ED8737C0076FBB6 /* PBXTargetDependency */ = {
+		9711A2DB21BB3950F5E52302 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8034CF602ED873790076FBB6 /* Mindcare */;
-			targetProxy = 8034CF7B2ED8737C0076FBB6 /* PBXContainerItemProxy */;
+			target = 5B7D346F2B8D0045C2F58388 /* Mindcare */;
+			targetProxy = 116206CC8B822F5CEFF168C6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		8034CF822ED8737C0076FBB6 /* Debug */ = {
+		1E9B32373BD13237BA13F7C5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mindcare/Mindcare.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Mindcare/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
+					"@executable_path/Frameworks",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.Mindcare;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5913AA789C75B8059EBA12CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MindcareTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mindcare.app/Mindcare";
 			};
 			name = Debug;
 		};
-		8034CF832ED8737C0076FBB6 /* Release */ = {
+		781500A84B59218B38CA0578 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -376,8 +617,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -385,278 +625,205 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		8034CF852ED8737C0076FBB6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Mindcare/Mindcare.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9L5F5JTQ9B;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
-				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
-				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
-				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
-				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
-				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
-				ENABLE_RESOURCE_ACCESS_USB = NO;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mindcareai.Mindcare.MrMax;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.1;
-			};
-			name = Debug;
-		};
-		8034CF862ED8737C0076FBB6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Mindcare/Mindcare.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9L5F5JTQ9B;
-				ENABLE_APP_SANDBOX = YES;
-				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
-				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
-				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
-				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
-				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
-				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
-				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
-				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
-				ENABLE_RESOURCE_ACCESS_USB = NO;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mindcareai.Mindcare.MrMax;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				REGISTER_APP_GROUPS = YES;
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				XROS_DEPLOYMENT_TARGET = 26.1;
-			};
-			name = Release;
-		};
-		8034CF882ED8737C0076FBB6 /* Debug */ = {
+		90A22AC78EF40708B313159F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mindcareai.Mindcare.MindcareTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mindcare.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Mindcare";
-				XROS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MindcareUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Mindcare;
 			};
-			name = Debug;
+			name = Release;
 		};
-		8034CF892ED8737C0076FBB6 /* Release */ = {
+		BF58B931D450D88D60C96F52 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mindcareai.Mindcare.MindcareTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mindcare.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Mindcare";
-				XROS_DEPLOYMENT_TARGET = 26.1;
-			};
-			name = Release;
-		};
-		8034CF8B2ED8737C0076FBB6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mindcareai.Mindcare.MindcareUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MindcareUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Mindcare;
-				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Debug;
 		};
-		8034CF8C2ED8737C0076FBB6 /* Release */ = {
+		E60D6AA1D277C02ABB4D9881 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mindcareai.Mindcare.MindcareUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = Mindcare;
-				XROS_DEPLOYMENT_TARGET = 26.1;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.MindcareTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Mindcare.app/Mindcare";
 			};
 			name = Release;
+		};
+		F720844F786920F3814945FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Mindcare/Mindcare.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Mindcare/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.Mindcare;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FD0EBD7159A66E65F61CA806 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8034CF5C2ED873790076FBB6 /* Build configuration list for PBXProject "Mindcare" */ = {
+		5FBA5B34CA0B597A288882E5 /* Build configuration list for PBXProject "Mindcare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8034CF822ED8737C0076FBB6 /* Debug */,
-				8034CF832ED8737C0076FBB6 /* Release */,
+				FD0EBD7159A66E65F61CA806 /* Debug */,
+				781500A84B59218B38CA0578 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		8034CF842ED8737C0076FBB6 /* Build configuration list for PBXNativeTarget "Mindcare" */ = {
+		681793330FFF32FF65592E7F /* Build configuration list for PBXNativeTarget "Mindcare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8034CF852ED8737C0076FBB6 /* Debug */,
-				8034CF862ED8737C0076FBB6 /* Release */,
+				F720844F786920F3814945FD /* Debug */,
+				1E9B32373BD13237BA13F7C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		8034CF872ED8737C0076FBB6 /* Build configuration list for PBXNativeTarget "MindcareTests" */ = {
+		A20E866FE09902D01B3E1026 /* Build configuration list for PBXNativeTarget "MindcareTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8034CF882ED8737C0076FBB6 /* Debug */,
-				8034CF892ED8737C0076FBB6 /* Release */,
+				5913AA789C75B8059EBA12CB /* Debug */,
+				E60D6AA1D277C02ABB4D9881 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		8034CF8A2ED8737C0076FBB6 /* Build configuration list for PBXNativeTarget "MindcareUITests" */ = {
+		C8BDB9BB1FEA6764BE5763F7 /* Build configuration list for PBXNativeTarget "MindcareUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8034CF8B2ED8737C0076FBB6 /* Debug */,
-				8034CF8C2ED8737C0076FBB6 /* Release */,
+				BF58B931D450D88D60C96F52 /* Debug */,
+				90A22AC78EF40708B313159F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		8034CFEB2ED8817D0076FBB6 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		C71800BC5E6F6896FC45D46A /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
+				minimumVersion = 5.8.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8034CFEC2ED881800076FBB6 /* Alamofire */ = {
+		BC84EF0DE4DDF0C457F6D7FD /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8034CFEB2ED8817D0076FBB6 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = C71800BC5E6F6896FC45D46A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 8034CF592ED873790076FBB6 /* Project object */;
+	rootObject = D74EF6B00D2E89CBF3506037 /* Project object */;
 }

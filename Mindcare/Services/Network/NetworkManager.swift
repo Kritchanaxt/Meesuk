@@ -307,7 +307,7 @@ final class NetworkManager: ObservableObject {
 
 // MARK: - Auth Interceptor
 
-class AuthInterceptor: RequestInterceptor {
+final class AuthInterceptor: RequestInterceptor {
     
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
         var request = urlRequest
@@ -348,7 +348,7 @@ class AuthInterceptor: RequestInterceptor {
 
 // MARK: - Network Logger
 
-class NetworkLogger: EventMonitor {
+final class NetworkLogger: EventMonitor {
     
     func requestDidResume(_ request: Request) {
         #if DEBUG

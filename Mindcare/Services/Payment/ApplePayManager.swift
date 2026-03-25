@@ -44,11 +44,13 @@ final class ApplePayManager: NSObject, ObservableObject {
     ]
     
     /// Capabilities ที่ต้องการ
-    static let merchantCapabilities: PKMerchantCapability = [
-        .capability3DS,
-        .capabilityCredit,
-        .capabilityDebit
-    ]
+    static var merchantCapabilities: PKMerchantCapability {
+        if #available(iOS 17.0, *) {
+            return [.threeDSecure, .credit, .debit]
+        } else {
+            return [.capability3DS, .capabilityCredit, .capabilityDebit]
+        }
+    }
     
     // MARK: - Initialization
     

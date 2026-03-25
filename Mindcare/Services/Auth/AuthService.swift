@@ -57,13 +57,17 @@ final class AuthService: NSObject, ObservableObject {
     /// Login ด้วย Email และ Password
     func login(email: String, password: String) async throws {
         let response = try await APIService.shared.login(email: email, password: password)
-        await handleAuthResponse(response)
+        await MainActor.run {
+            self.handleAuthResponse(response)
+        }
     }
     
     /// Register ด้วย Email และ Password
     func register(email: String, password: String, name: String) async throws {
         let response = try await APIService.shared.register(email: email, password: password, name: name)
-        await handleAuthResponse(response)
+        await MainActor.run {
+            self.handleAuthResponse(response)
+        }
     }
     
     // MARK: - Apple Sign In
@@ -93,7 +97,9 @@ final class AuthService: NSObject, ObservableObject {
             fullName: fullName
         )
         
-        await handleAuthResponse(response)
+        await MainActor.run {
+            self.handleAuthResponse(response)
+        }
     }
     
     private func performAppleSignIn() async throws -> ASAuthorization {
@@ -159,7 +165,6 @@ final class AuthService: NSObject, ObservableObject {
     
     // MARK: - Handle Auth Response
     
-    @MainActor
     private func handleAuthResponse(_ response: AuthResponse) {
         // Save tokens
         KeychainManager.shared.save(key: AppConstants.Keychain.accessToken, value: response.accessToken)
@@ -168,9 +173,9 @@ final class AuthService: NSObject, ObservableObject {
         }
         
         // Save user info
-        currentUser = response.user
-        userRole = response.user.role
-        isAuthenticated = true
+        self.currentUser = response.user
+        self.userRole = response.user.role
+        self.isAuthenticated = true
         
         if let userId = response.user.id {
             KeychainManager.shared.save(key: AppConstants.Keychain.userID, value: userId)

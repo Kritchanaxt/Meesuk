@@ -82,7 +82,7 @@ struct OnboardingView: View {
             // Page 1: Welcome
             OnboardingPage(
                 image: "brain.head.profile",
-                title: "Welcome to MindCare",
+                title: "Welcome To MindCareAI",
                 description: "Your personal mental health companion. Track your mood, monitor your health, and get personalized support.",
                 color: .purple
             )
@@ -176,4 +176,8 @@ struct OnboardingPage: View {
             Spacer()
         }
     }
+}
+
+#Preview{
+    OnboardingView(onComplete: {})
 }

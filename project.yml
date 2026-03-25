@@ -1,0 +1,53 @@
+name: Mindcare
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: 17.0
+packages:
+  Alamofire:
+    url: https://github.com/Alamofire/Alamofire.git
+    from: 5.8.0
+targets:
+  Mindcare:
+    type: application
+    platform: iOS
+    sources:
+      - path: Mindcare
+        excludes:
+          - Services/Payment/MindcareApp.swift
+          - "**/.DS_Store"
+    info:
+      path: Mindcare/Info.plist
+      properties:
+        UILaunchScreen: {}
+    entitlements:
+      path: Mindcare/Mindcare.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.Mindcare
+        SWIFT_VERSION: 5.9
+    dependencies:
+      - package: Alamofire
+  MindcareTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - MindcareTests
+    dependencies:
+      - target: Mindcare
+  MindcareUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - MindcareUITests
+    dependencies:
+      - target: Mindcare
+schemes:
+  - name: Mindcare
+    build:
+      targets:
+        Mindcare: [run, archive, profile, analyze]
+    test:
+      targets:
+        - name: MindcareTests
+        - name: MindcareUITests

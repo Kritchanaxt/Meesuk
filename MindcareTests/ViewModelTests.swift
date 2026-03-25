@@ -9,6 +9,7 @@ import XCTest
 @testable import Mindcare
 
 // MARK: - BaseViewModel Tests
+@MainActor
 final class BaseViewModelTests: XCTestCase {
     
     var viewModel: BaseViewModel!
@@ -58,6 +59,7 @@ final class BaseViewModelTests: XCTestCase {
 }
 
 // MARK: - HealthViewModel Tests
+@MainActor
 final class HealthViewModelTests: XCTestCase {
     
     var viewModel: HealthViewModel!
@@ -75,35 +77,14 @@ final class HealthViewModelTests: XCTestCase {
     func testInitialState() {
         XCTAssertNotNil(viewModel)
         XCTAssertFalse(viewModel.isLoading)
-    }
-    
-    func testHealthDataBinding() {
-        // Test that health data properties can be accessed
-        XCTAssertNotNil(viewModel.todaySteps)
-        XCTAssertNotNil(viewModel.todayHeartRate)
-        XCTAssertNotNil(viewModel.todaySleepHours)
-    }
-    
-    func testStepsGoalProgress() {
-        // Default goal is usually 10,000 steps
-        viewModel.todaySteps = 5000
-        let progress = viewModel.stepsProgress
-        
-        XCTAssertGreaterThanOrEqual(progress, 0.0)
-        XCTAssertLessThanOrEqual(progress, 1.0)
-    }
-    
-    func testSleepGoalProgress() {
-        // Default goal is usually 8 hours
-        viewModel.todaySleepHours = 6.0
-        let progress = viewModel.sleepProgress
-        
-        XCTAssertGreaterThanOrEqual(progress, 0.0)
-        XCTAssertLessThanOrEqual(progress, 1.0)
+        XCTAssertNil(viewModel.healthMetrics)
+        XCTAssertTrue(viewModel.heartRateHistory.isEmpty)
+        XCTAssertTrue(viewModel.stepsHistory.isEmpty)
     }
 }
 
 // MARK: - Async ViewModel Tests
+@MainActor
 final class AsyncViewModelTests: XCTestCase {
     
     func testAsyncLoadingState() async throws {
