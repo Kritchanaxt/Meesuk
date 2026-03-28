@@ -154,6 +154,35 @@ struct DailyCheckInView: View {
         ("Mee_Low", "Low", Color.mindHexColor("F9C3B9")),
     ]
     @State private var selected: Int? = nil
+    
+    private func submitMood(index: Int) {
+        let level: Int
+        switch index {
+        case 0: level = 5
+        case 1: level = 4
+        case 2: level = 3
+        case 3: level = 2
+        default: level = 3
+        }
+        
+        Task {
+            do {
+                let mood = MoodCheckIn(
+                    moodLevel: level,
+                    emotions: [.happy], // simplified for demo
+                    activities: nil,
+                    notes: nil,
+                    sleepQuality: nil,
+                    energyLevel: nil,
+                    stressLevel: nil
+                )
+                let _ = try await APIService.shared.checkInMood(mood)
+                print("Mood check-in successful!")
+            } catch {
+                print("Failed to check-in mood: \(error.localizedDescription)")
+            }
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -175,7 +204,10 @@ struct DailyCheckInView: View {
             HStack(spacing: 10) {
                 ForEach(moods.indices, id: \.self) { i in
                     let mood = moods[i]
-                    Button(action: { withAnimation(.spring()) { selected = i } }) {
+                    Button(action: { 
+                        withAnimation(.spring()) { selected = i }
+                        submitMood(index: i)
+                    }) {
                         VStack(spacing: 6) {
                             Image(mood.0)
                                 .resizable()

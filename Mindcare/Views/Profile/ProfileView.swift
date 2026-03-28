@@ -184,6 +184,11 @@ struct ProfileView: View {
                 }
             }
         }
+        .onAppear {
+            Task {
+                await viewModel.fetchProfile()
+            }
+        }
         .sheet(isPresented: $showEditProfile) {
             EditProfileView(viewModel: viewModel)
         }

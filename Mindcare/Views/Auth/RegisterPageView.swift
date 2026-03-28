@@ -2,11 +2,7 @@ import SwiftUI
 
 struct RegisterPageView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var nickname = ""
-    @State private var password = ""
-    @State private var mobileNumber = ""
-    @State private var dateOfBirth = ""
-    @State private var isLoading = false
+    @StateObject private var viewModel = RegisterViewModel()
 
     var body: some View {
         GeometryReader { geo in
@@ -31,23 +27,24 @@ struct RegisterPageView: View {
                             // Form Fields
                             VStack(spacing: 12) {
                                 MindcareTextField(
-                                    label: "Nickname", placeholder: "Your Nickname", text: $nickname
+                                    label: "Nickname", placeholder: "Your Nickname", text: $viewModel.nickname
                                 )
 
                                 MindcareTextField(
                                     label: "Password", placeholder: "**************",
-                                    text: $password,
+                                    text: $viewModel.password,
                                     isSecure: true)
 
                                 MindcareTextField(
-                                    label: "Mobile Number", placeholder: "Your Phone Number",
-                                    text: $mobileNumber
+                                    label: "Email", placeholder: "Your Email Address",
+                                    text: $viewModel.email
                                 )
-                                .keyboardType(.phonePad)
+                                .keyboardType(.emailAddress)
+                                .autocapitalization(.none)
 
                                 MindcareTextField(
                                     label: "Date of birth", placeholder: "DD / MM / YY",
-                                    text: $dateOfBirth)
+                                    text: $viewModel.dateOfBirth)
                             }
 
                             // Terms & Privacy
@@ -71,8 +68,10 @@ struct RegisterPageView: View {
                                 MindcareButton(
                                     title: "Register",
                                     action: {
-                                        // Handle registration logic
-                                    }, isLoading: isLoading)
+                                        Task {
+                                            await viewModel.register()
+                                        }
+                                    }, isLoading: viewModel.isLoading)
 
                                 SocialLoginButtons(onGoogleTap: {}, onFacebookTap: {})
                             }
@@ -143,6 +142,16 @@ struct RegisterPageView: View {
             }
         }
         .navigationBarHidden(true)
+        .alert("Registration Error", isPresented: $viewModel.showError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.errorMessage)
+        }
+        .onChange(of: viewModel.isRegistrationSuccessful) { successful in
+            if successful {
+                dismiss()
+            }
+        }
     }
 }
 

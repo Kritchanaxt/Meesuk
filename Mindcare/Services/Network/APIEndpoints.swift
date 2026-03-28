@@ -15,26 +15,30 @@ enum APIEndpoints {
 
     // MARK: - Auth
     enum Auth {
-        static let login = "/auth/login"
-        static let register = "/auth/register"
-        static let logout = "/auth/logout"
-        static let refreshToken = "/auth/refresh"
-        static let appleLogin = "/auth/apple"
-        static let forgotPassword = "/auth/forgot-password"
-        static let resetPassword = "/auth/reset-password"
-        static let verifyEmail = "/auth/verify-email"
+        static let base = "http://[REDACTED_IP]:8081"
+        static let login = "\(base)/auth/login"
+        static let register = "\(base)/auth/register"
+        static let logout = "\(base)/auth/logout"
+        static let refreshToken = "\(base)/auth/refresh"
+        static let appleLogin = "\(base)/auth/apple"
+        static let forgotPassword = "\(base)/auth/forgot-password"
+        static let resetPassword = "\(base)/auth/reset-password"
+        static let verifyEmail = "\(base)/auth/verify-email"
     }
 
     // MARK: - User
     enum User {
-        static let profile = "/users/profile"
-        static let updateProfile = "/users/profile"
-        static let deleteAccount = "/users/account"
-        static let settings = "/users/settings"
-        static let notifications = "/users/notifications"
+        static let base = "http://[REDACTED_IP]:8082"
+        static let baseNotification = "http://[REDACTED_IP]:8088"
+        
+        static let profile = "\(base)/users/profile"
+        static let updateProfile = "\(base)/users/profile"
+        static let deleteAccount = "\(base)/users/account"
+        static let settings = "\(base)/users/settings"
+        static let notifications = "\(baseNotification)/users/notifications"
 
         static func user(id: String) -> String {
-            "/users/\(id)"
+            "\(base)/users/\(id)"
         }
     }
 
@@ -80,22 +84,24 @@ enum APIEndpoints {
 
     // MARK: - Mood / Check-in
     enum Mood {
-        static let checkIn = "/mood/check-in"
-        static let history = "/mood/history"
-        static let trends = "/mood/trends"
+        static let base = "http://[REDACTED_IP]:8085"
+        static let checkIn = "\(base)/mood/check-in"
+        static let history = "\(base)/mood/history"
+        static let trends = "\(base)/mood/trends"
     }
 
     // MARK: - Appointments (สำหรับ Psychiatrist)
     enum Appointments {
-        static let list = "/appointments"
-        static let create = "/appointments"
+        static let base = "http://[REDACTED_IP]:8086"
+        static let list = "\(base)/appointments"
+        static let create = "\(base)/appointments"
 
         static func appointment(id: String) -> String {
-            "/appointments/\(id)"
+            "\(base)/appointments/\(id)"
         }
 
         static func cancel(id: String) -> String {
-            "/appointments/\(id)/cancel"
+            "\(base)/appointments/\(id)/cancel"
         }
     }
 

@@ -129,3 +129,45 @@ class PsychiatristViewModel: ObservableObject {
         }
     }
 }
+
+@MainActor
+class AppointmentViewModel: ObservableObject {
+    @Published var appointments: [Appointment] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    @Published var isBookingSuccessful = false
+    
+    func fetchAppointments() async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            let fetched = try await APIService.shared.getAppointments()
+            self.appointments = fetched
+        } catch {
+            self.errorMessage = error.localizedDescription
+            print("Failed to fetch appointments: \(error)")
+        }
+        isLoading = false
+    }
+    
+    func bookAppointment(psychiatristId: String, date: Date, type: AppointmentType = .consultation) async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            let request = CreateAppointmentRequest(
+                psychiatristId: psychiatristId,
+                scheduledAt: date,
+                duration: 60,
+                type: type,
+                notes: "Booked via App"
+            )
+            let newAppointment = try await APIService.shared.createAppointment(request)
+            self.appointments.append(newAppointment)
+            self.isBookingSuccessful = true
+        } catch {
+            self.errorMessage = error.localizedDescription
+            print("Failed to book appointment: \(error)")
+        }
+        isLoading = false
+    }
+}

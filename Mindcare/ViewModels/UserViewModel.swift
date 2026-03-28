@@ -6,47 +6,57 @@ class UserViewModel: ObservableObject {
     @Published var name: String = ""
     @Published var email: String = ""
     @Published var location: String = "Chonburi, Thailand"
+    
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
 
     private let authService = AuthService.shared
-    private var cancellables = Set<Set<AnyCancellable>>()
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
-        // Initialize with default or current user from AuthService
         if let current = authService.currentUser {
             self.userProfile = current
             self.name = current.name
             self.email = current.email
-        } else {
-            // Mock initial data if no user is logged in (for demo)
-            let mockUser = UserProfile(
-                id: "user-123",
-                email: "elena@example.com",
-                name: "Elena Rodriguez",
-                avatar: "Profile",
-                role: .patient,
-                createdAt: Date()
-            )
-            self.userProfile = mockUser
-            self.name = mockUser.name
-            self.email = mockUser.email
+        }
+    }
+    
+    @MainActor
+    func fetchProfile() async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            let profile = try await APIService.shared.getProfile()
+            self.userProfile = profile
+            self.name = profile.name
+            self.email = profile.email
+            self.authService.currentUser = profile
+        } catch {
+            self.errorMessage = error.localizedDescription
+            print("Error fetching profile: \(error)")
         }
     }
 
-    func updateProfile(newName: String, newEmail: String, newLocation: String) {
-        // Mock update logic
-        self.name = newName
-        self.email = newEmail
-        self.location = newLocation
-
-        if var current = userProfile {
-            current.name = newName
-            current.email = newEmail
-            // We could also update location if UserProfile had that field,
-            // but for now we keep it in the VM for the UI demo.
-            self.userProfile = current
-
-            // Sync back to AuthService if needed
-            authService.currentUser = current
+    @MainActor
+    func updateProfile(newName: String, newEmail: String, newLocation: String) async {
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            var request = UpdateProfileRequest()
+            request.name = newName
+            
+            let updatedProfile = try await APIService.shared.updateProfile(request)
+            
+            self.userProfile = updatedProfile
+            self.name = updatedProfile.name
+            self.email = updatedProfile.email
+            self.location = newLocation // if location gets added to API later
+            self.authService.currentUser = updatedProfile
+        } catch {
+            self.errorMessage = error.localizedDescription
+            print("Error updating profile: \(error)")
         }
     }
 

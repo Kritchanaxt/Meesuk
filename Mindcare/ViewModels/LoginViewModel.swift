@@ -13,7 +13,7 @@ class LoginViewModel: ObservableObject {
     private let authService = AuthService.shared
 
     // Demo credentials
-    private let demoPhone = "0812345678"
+    private let demoEmail = "demo@mindcare.com"
     private let demoPassword = "demo1234"
 
     var isFormValid: Bool {
@@ -21,7 +21,7 @@ class LoginViewModel: ObservableObject {
     }
 
     func fillDemoCredentials() {
-        email = demoPhone
+        email = demoEmail
         password = demoPassword
     }
 
@@ -31,7 +31,7 @@ class LoginViewModel: ObservableObject {
         isLoading = true
 
         // Check for demo mode
-        if email == demoPhone && password == demoPassword {
+        if email == demoEmail && password == demoPassword {
             await loginWithDemoMode()
             isLoading = false
             return
@@ -51,7 +51,7 @@ class LoginViewModel: ObservableObject {
         // Create demo user profile
         let demoUser = UserProfile(
             id: "demo-user-001",
-            email: demoPhone,
+            email: demoEmail,
             name: "Demo User",
             avatar: nil,
             role: .patient,
@@ -99,6 +99,48 @@ class LoginViewModel: ObservableObject {
             }
         }
 
+        isLoading = false
+    }
+}
+
+@MainActor
+class RegisterViewModel: ObservableObject {
+    @Published var nickname = ""
+    @Published var password = ""
+    @Published var email = ""
+    @Published var dateOfBirth = ""
+    
+    @Published var isLoading = false
+    @Published var showError = false
+    @Published var errorMessage = ""
+    @Published var isRegistrationSuccessful = false
+    
+    private let authService = AuthService.shared
+    
+    var isFormValid: Bool {
+        !nickname.isEmpty && !password.isEmpty && !email.isEmpty && !dateOfBirth.isEmpty
+    }
+    
+    func register() async {
+        guard isFormValid else {
+            errorMessage = "Please fill in all fields"
+            showError = true
+            return
+        }
+        
+        isLoading = true
+        showError = false
+        
+        do {
+            try await authService.register(email: email, password: password, name: nickname)
+            
+            // Assuming successful registration logs the user in automatically or we flag success to dismiss
+            isRegistrationSuccessful = true
+        } catch {
+            errorMessage = error.localizedDescription
+            showError = true
+        }
+        
         isLoading = false
     }
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct PsychiatristView: View {
     @State private var appointments: [Appointment] = []
     @StateObject private var viewModel = PsychiatristViewModel()
+    @StateObject private var appointmentVM = AppointmentViewModel()
 
     @State private var showQuestionnaire = false
     @State private var showRecommendation = false
@@ -23,7 +24,9 @@ struct PsychiatristView: View {
 
                     if let selectedDoc = viewModel.selectedDoctor {
                         DoctorCardOverview(
-                            doctor: selectedDoc, onTapChange: { showChangeDoctor = true })
+                            doctor: selectedDoc, 
+                            appointmentVM: appointmentVM,
+                            onTapChange: { showChangeDoctor = true })
                     } else {
                         // Default if none selected yet but we are in matched state
                         Button(action: { showQuestionnaire = true }) {
@@ -523,7 +526,10 @@ struct ChangeDoctorView: View {
 
 struct DoctorCardOverview: View {
     let doctor: Psychiatrist
+    @ObservedObject var appointmentVM: AppointmentViewModel
     var onTapChange: () -> Void
+
+    @State private var showBookingConfirmation = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -549,20 +555,56 @@ struct DoctorCardOverview: View {
 
             Divider()
 
-            Button(action: onTapChange) {
-                Text("Change Doctor")
-                    .font(.custom("Outfit-SemiBold", size: 14))
-                    .foregroundColor(Color.mindHexColor("E67E22"))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(Color.mindHexColor("FDF1E5"))
-                    .cornerRadius(10)
+            HStack(spacing: 15) {
+                Button(action: onTapChange) {
+                    Text("Change Doctor")
+                        .font(.custom("Outfit-SemiBold", size: 14))
+                        .foregroundColor(Color.mindHexColor("E67E22"))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(Color.mindHexColor("FDF1E5"))
+                        .cornerRadius(10)
+                }
+
+                Button(action: {
+                    Task {
+                        // Demo booking for tomorrow
+                        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+                        await appointmentVM.bookAppointment(psychiatristId: doctor.id, date: tomorrow)
+                        if appointmentVM.isBookingSuccessful {
+                            showBookingConfirmation = true
+                        }
+                    }
+                }) {
+                    if appointmentVM.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(Color.mindHexColor("E67E22"))
+                            .cornerRadius(10)
+                    } else {
+                        Text("Book Session")
+                            .font(.custom("Outfit-SemiBold", size: 14))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(Color.mindHexColor("E67E22"))
+                            .cornerRadius(10)
+                    }
+                }
             }
         }
         .padding(20)
         .background(Color.white)
         .cornerRadius(25)
         .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+        .alert("Appointment Booked!", isPresented: $showBookingConfirmation) {
+            Button("OK", role: .cancel) {
+                appointmentVM.isBookingSuccessful = false
+            }
+        } message: {
+            Text("Your session with \(doctor.name) has been scheduled.")
+        }
     }
 }
 

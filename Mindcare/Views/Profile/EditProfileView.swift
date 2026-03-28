@@ -58,12 +58,14 @@ struct EditProfileView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        viewModel.updateProfile(
-                            newName: tempName,
-                            newEmail: tempEmail,
-                            newLocation: tempLocation
-                        )
-                        dismiss()
+                        Task {
+                            await viewModel.updateProfile(
+                                newName: tempName,
+                                newEmail: tempEmail,
+                                newLocation: tempLocation
+                            )
+                            dismiss()
+                        }
                     }
                     .font(.custom("Outfit-Bold", size: 16))
                     .foregroundColor(Color.mindHexColor("E67E22"))
