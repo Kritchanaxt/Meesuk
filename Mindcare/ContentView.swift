@@ -47,15 +47,24 @@ struct ContentView: View {
 
             case .auth:
                 if authService.isAuthenticated {
-                    MainTabView()
-                        .onAppear { appState = .main }
+                    if authService.userRole == .psychiatrist {
+                        PsychiatristMainTabView()
+                            .onAppear { appState = .main }
+                    } else {
+                        MainTabView()
+                            .onAppear { appState = .main }
+                    }
                 } else {
                     LoginPageView()
                 }
 
             case .main:
                 if authService.isAuthenticated {
-                    MainTabView()
+                    if authService.userRole == .psychiatrist {
+                        PsychiatristMainTabView()
+                    } else {
+                        MainTabView()
+                    }
                 } else {
                     LoginPageView()
                         .onAppear { appState = .auth }

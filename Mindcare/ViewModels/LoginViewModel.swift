@@ -15,6 +15,8 @@ class LoginViewModel: ObservableObject {
     // Demo credentials
     private let demoEmail = "demo@mindcare.com"
     private let demoPassword = "demo1234"
+    private let doctorEmail = "doctor@mindcare.com"
+    private let doctorPassword = "doctor1234"
 
     var isFormValid: Bool {
         !email.isEmpty && !password.isEmpty
@@ -25,6 +27,11 @@ class LoginViewModel: ObservableObject {
         password = demoPassword
     }
 
+    func fillDoctorCredentials() {
+        email = doctorEmail
+        password = doctorPassword
+    }
+
     func login() async {
         guard isFormValid else { return }
 
@@ -32,7 +39,13 @@ class LoginViewModel: ObservableObject {
 
         // Check for demo mode
         if email == demoEmail && password == demoPassword {
-            await loginWithDemoMode()
+            await loginWithDemoMode(role: UserRole.patient)
+            isLoading = false
+            return
+        }
+
+        if email == doctorEmail && password == doctorPassword {
+            await loginWithDemoMode(role: UserRole.psychiatrist)
             isLoading = false
             return
         }
@@ -47,14 +60,19 @@ class LoginViewModel: ObservableObject {
         isLoading = false
     }
 
-    private func loginWithDemoMode() async {
+    private func loginWithDemoMode(role: UserRole) async {
+        let isDoctor = role == .psychiatrist
+        let demoId = isDoctor ? "doctor-001" : "demo-user-001"
+        let demoName = isDoctor ? "Dr. Aris Thorne, MD" : "Demo User"
+        let demoEmailValue = isDoctor ? doctorEmail : demoEmail
+
         // Create demo user profile
         let demoUser = UserProfile(
-            id: "demo-user-001",
-            email: demoEmail,
-            name: "Demo User",
-            avatar: nil,
-            role: .patient,
+            id: demoId,
+            email: demoEmailValue,
+            name: demoName,
+            avatar: isDoctor ? "Doctor" : nil,
+            role: role,
             dateOfBirth: nil,
             gender: nil,
             phoneNumber: nil,
@@ -71,15 +89,15 @@ class LoginViewModel: ObservableObject {
             key: AppConstants.Keychain.accessToken, value: "demo-access-token")
         KeychainManager.shared.save(
             key: AppConstants.Keychain.refreshToken, value: "demo-refresh-token")
-        KeychainManager.shared.save(key: AppConstants.Keychain.userID, value: "demo-user-001")
+        KeychainManager.shared.save(key: AppConstants.Keychain.userID, value: demoId)
 
         // Update auth state
         authService.isAuthenticated = true
         authService.currentUser = demoUser
-        authService.userRole = .patient
+        authService.userRole = role
 
         UserDefaults.standard.set(
-            UserRole.patient.rawValue, forKey: AppConstants.UserDefaultsKeys.userRole)
+            role.rawValue, forKey: AppConstants.UserDefaultsKeys.userRole)
 
         NotificationCenter.default.post(
             name: AppConstants.NotificationNames.userDidLogin, object: nil)
@@ -90,8 +108,8 @@ class LoginViewModel: ObservableObject {
 
         switch result {
         case .success:
-            // For demo, just log in with demo mode
-            await loginWithDemoMode()
+            // For demo, just log in with demo mode as patient
+            await loginWithDemoMode(role: UserRole.patient)
         case .failure(let error):
             if (error as NSError).code != ASAuthorizationError.canceled.rawValue {
                 errorMessage = error.localizedDescription

@@ -10,6 +10,7 @@
 * **Swift Compiler**: เวอร์ชัน `6.2.1` (กำหนดการใช้งานภาษา Swift `5.0` ใน Project Settings)
 
 ## 📱 Supported Devices & Deployment Targets
+* **Supported Devices** (`TARGETED_DEVICE_FAMILY = 1, 2, 7`):
   * **iPhone**
   * **iPad**
   * **Apple Vision / visionOS** (xrOS)

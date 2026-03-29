@@ -50,7 +50,7 @@ struct LoginPageView: View {
                             }
 
                             // Demo credentials hint
-                            VStack(spacing: 6) {
+                            VStack(spacing: 10) {
                                 Text("For Testing / Demo Mode")
                                     .font(.system(size: 12, weight: .bold))
                                     .foregroundColor(.gray)
@@ -59,6 +59,19 @@ struct LoginPageView: View {
                                     viewModel.fillDemoCredentials()
                                 }) {
                                     Text("Use Demo: demo@mindcare.com / demo1234")
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 16)
+                                        .background(
+                                            Capsule().stroke(Color(red: 0.93, green: 0.45, blue: 0.35), lineWidth: 1)
+                                        )
+                                }
+
+                                Button(action: {
+                                    viewModel.fillDoctorCredentials()
+                                }) {
+                                    Text("Use Demo: doctor@mindcare.com / doctor1234")
                                         .font(.system(size: 13, weight: .semibold))
                                         .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
                                         .padding(.vertical, 8)

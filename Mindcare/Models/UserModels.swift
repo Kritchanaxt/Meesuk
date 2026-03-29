@@ -7,6 +7,25 @@
 
 import Foundation
 
+// MARK: - User Role
+
+enum UserRole: String, Codable {
+    case patient = "patient"
+    case psychiatrist = "psychiatrist"
+    case admin = "admin"
+    
+    var displayName: String {
+        switch self {
+        case .patient:
+            return "Patient"
+        case .psychiatrist:
+            return "Psychiatrist"
+        case .admin:
+            return "Admin"
+        }
+    }
+}
+
 // MARK: - User Profile
 
 struct UserProfile: Codable, Identifiable {
