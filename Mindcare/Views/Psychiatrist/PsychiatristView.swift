@@ -9,6 +9,7 @@ struct PsychiatristView: View {
     @State private var showRecommendation = false
     @State private var showChangeDoctor = false
     @State private var isMatched = false  // Toggle for demo
+    @State private var currentAppointmentId: String? = nil  // จาก API
 
     var body: some View {
         ZStack {
@@ -94,7 +95,11 @@ struct PsychiatristView: View {
             }
         }
         .sheet(isPresented: $showChangeDoctor) {
-            if let currentDoc = viewModel.selectedDoctor {
+            if let appointmentId = currentAppointmentId {
+                // Use real API to change therapist if we have an appointment
+                ChangeTherapistView(currentAppointmentId: appointmentId)
+            } else if let currentDoc = viewModel.selectedDoctor {
+                // Fallback: UI-only flow before booking
                 ChangeDoctorView(doctor: currentDoc) {
                     showChangeDoctor = false
                     viewModel.resetForm()

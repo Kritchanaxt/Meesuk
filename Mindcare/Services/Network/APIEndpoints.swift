@@ -1,19 +1,9 @@
-//
-//  APIEndpoints.swift
-//  Mindcare
-//
-//  Created for MindCareAI Project
-//
-
 import Foundation
 
 /// API Endpoints สำหรับ MindCare Backend
 enum APIEndpoints {
 
-    // MARK: - Base
-    static let baseURL = AppEnvironment.current.baseURL
-
-    // MARK: - Auth
+    // MARK: - Auth (Port 8081)
     enum Auth {
         static let base = "http://[REDACTED_IP]:8081"
         static let login = "\(base)/auth/login"
@@ -26,119 +16,126 @@ enum APIEndpoints {
         static let verifyEmail = "\(base)/auth/verify-email"
     }
 
-    // MARK: - User
+    // MARK: - User (Port 8082)
     enum User {
         static let base = "http://[REDACTED_IP]:8082"
-        static let baseNotification = "http://[REDACTED_IP]:8088"
-        
         static let profile = "\(base)/users/profile"
         static let updateProfile = "\(base)/users/profile"
-        static let deleteAccount = "\(base)/users/account"
-        static let settings = "\(base)/users/settings"
-        static let notifications = "\(baseNotification)/users/notifications"
+        static let emergencyContacts = "\(base)/emergency-contacts"
 
-        static func user(id: String) -> String {
-            "\(base)/users/\(id)"
+        // Psychiatrist listing (under user service)
+        static let psychiatrists = "\(base)/psychiatrists"
+
+        // Admin
+        static func approvePsychiatrist(id: String) -> String {
+            "\(base)/admin/psychiatrists/\(id)/approve"
         }
     }
 
-    // MARK: - Health Data
+    // MARK: - Health (Port 8083)
     enum Health {
-        static let metrics = "/health/metrics"
-        static let sync = "/health/sync"
-        static let history = "/health/history"
-        static let analysis = "/health/analysis"
-        static let summary = "/health/summary"
+        static let base = "http://[REDACTED_IP]:8083"
+        static let metrics = "\(base)/health/metrics"
+        static let sync = "\(base)/health/sync"
+        static let history = "\(base)/health/history"
+        static let analysis = "\(base)/health/analysis"
+        static let summary = "\(base)/health/summary"
 
-        static func metrics(userId: String) -> String {
-            "/health/\(userId)/metrics"
+        static func metricsForUser(userId: String) -> String {
+            "\(base)/health/\(userId)/metrics"
         }
 
-        static func history(days: Int) -> String {
-            "/health/history?days=\(days)"
+        static func historyWithDays(days: Int) -> String {
+            "\(base)/health/history?days=\(days)"
         }
     }
 
-    // MARK: - AI / Chat
+    // MARK: - AI (Port 8084)
     enum AI {
-        static let chat = "http://[REDACTED_IP]:9999/chat"
-        static let analyze = "/ai/analyze"
-        static let suggestions = "/ai/suggestions"
-        static let riskAssessment = "/ai/risk-assessment"
-
-        static func conversation(id: String) -> String {
-            "/ai/conversations/\(id)"
-        }
+        static let base = "http://[REDACTED_IP]:8084"
+        static let chatBot = "http://[REDACTED_IP]:9999/chat"  // Legacy AI chatbot
+        static let hotline = "\(base)/ai/hotline"
+        static let analyze = "\(base)/ai/analyze"
+        static let suggestions = "\(base)/ai/suggestions"
+        static let riskAssessment = "\(base)/ai/risk-assessment"
     }
 
-    // MARK: - Activities
-    enum Activities {
-        static let list = "/activities"
-        static let recommended = "/activities/recommended"
-        static let complete = "/activities/complete"
-
-        static func activity(id: String) -> String {
-            "/activities/\(id)"
-        }
-    }
-
-    // MARK: - Mood / Check-in
+    // MARK: - Mood (Port 8085)
     enum Mood {
         static let base = "http://[REDACTED_IP]:8085"
         static let checkIn = "\(base)/mood/check-in"
-        static let history = "\(base)/mood/history"
         static let trends = "\(base)/mood/trends"
+        static let seedLast7Days = "\(base)/mood/seed-last-7-days"
+        static let journals = "\(base)/journals"
+        static let triggers = "\(base)/triggers"
+
+        static func userMoodHistory(userId: String) -> String {
+            "\(base)/mood/user/\(userId)/history"
+        }
+
+        static func incrementTrigger(id: String) -> String {
+            "\(base)/triggers/\(id)/increment"
+        }
     }
 
-    // MARK: - Appointments (สำหรับ Psychiatrist)
-    enum Appointments {
+    // MARK: - Appointment (Port 8086)
+    enum Appointment {
         static let base = "http://[REDACTED_IP]:8086"
+
+        // Patient endpoints
         static let list = "\(base)/appointments"
         static let create = "\(base)/appointments"
+        static let sessionNotes = "\(base)/session-notes"
+        static let mySessionNotes = "\(base)/session-notes/my-notes"
+        static let reviews = "\(base)/reviews"
+        static let schedules = "\(base)/schedules"
 
-        static func appointment(id: String) -> String {
-            "\(base)/appointments/\(id)"
+        // Psychiatrist endpoints
+        static let psychiatristQueue = "\(base)/appointments/psychiatrist/queue"
+        static let chatHistory = "\(base)/chat/history"
+
+        static func changeTherapist(id: String) -> String {
+            "\(base)/appointments/\(id)/change-therapist"
+        }
+
+        static func accept(id: String) -> String {
+            "\(base)/appointments/\(id)/accept"
         }
 
         static func cancel(id: String) -> String {
             "\(base)/appointments/\(id)/cancel"
         }
-    }
 
-    // MARK: - Psychiatrist
-    enum Psychiatrist {
-        static let patients = "/psychiatrist/patients"
-        static let alerts = "/psychiatrist/alerts"
-        static let notes = "/psychiatrist/notes"
-
-        static func patient(id: String) -> String {
-            "/psychiatrist/patients/\(id)"
+        static func patientMoodHistory(userId: String) -> String {
+            "\(base)/appointments/psychiatrist/users/\(userId)/moods"
         }
 
-        static func patientNotes(patientId: String) -> String {
-            "/psychiatrist/patients/\(patientId)/notes"
+        static func chatHistoryWith(userId: String) -> String {
+            "\(base)/chat/history/\(userId)"
         }
     }
 
-    // MARK: - Payment
+    // MARK: - Payment (Port 8087)
     enum Payment {
-        static let process = "/payments/process"
-        static let verify = "/payments/verify"
-        static let history = "/payments/history"
-        static let refund = "/payments/refund"
+        static let base = "http://[REDACTED_IP]:8087"
+        static let process = "\(base)/payments/process"
+        static let verify = "\(base)/payments/verify"
+        static let history = "\(base)/payments/history"
+        static let refund = "\(base)/payments/refund"
+        static let subscriptions = "\(base)/payments/subscriptions"
+        static let subscribePlan = "\(base)/payments/subscribe"
+        static let cancelSubscription = "\(base)/payments/subscriptions/cancel"
+        static let plans = "\(base)/payments/plans"
+    }
 
-        // Subscription
-        static let subscriptions = "/payments/subscriptions"
-        static let subscribePlan = "/payments/subscribe"
-        static let cancelSubscription = "/payments/subscriptions/cancel"
-        static let plans = "/payments/plans"
+    // MARK: - Notification (Port 8088)
+    enum Notification {
+        static let base = "http://[REDACTED_IP]:8088"
+        static let list = "\(base)/users/notifications"
+    }
 
-        static func transaction(id: String) -> String {
-            "/payments/transactions/\(id)"
-        }
-
-        static func receipt(transactionId: String) -> String {
-            "/payments/receipts/\(transactionId)"
-        }
+    // MARK: - WebSocket (Port 8089)
+    enum WebSocket {
+        static let base = "ws://[REDACTED_IP]:8089"
     }
 }

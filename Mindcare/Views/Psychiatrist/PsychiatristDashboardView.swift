@@ -1,152 +1,306 @@
 import SwiftUI
 
 struct PsychiatristDashboardView: View {
+    @StateObject private var viewModel = PsychiatristDashboardViewModel()
     @EnvironmentObject var authService: AuthService
-    
+    @State private var showPatientMood = false
+    @State private var selectedAppointmentForAccept: Appointment?
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 25) {
+
                 // MARK: - Header
                 HStack(spacing: 15) {
-                    Image("Dr") // Using the "Dr" asset found in Session2/Page5_Profile
+                    Image("Dr")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 80, height: 80)
                         .background(Color(red: 0.98, green: 0.92, blue: 0.75))
                         .clipShape(Circle())
-                    
+
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Good Morning.")
+                        Text("สวัสดีตอนเช้า")
                             .font(.system(size: 14))
                             .foregroundColor(.gray)
-                        
-                        Text("Dr. Aris Thorne, MD")
+                        Text(authService.currentUser?.name ?? "Dr. Aris Thorne, MD")
                             .font(.system(size: 20, weight: .bold))
                             .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
                     }
-                    
+
                     Spacer()
-                    
-                    // Notification Bell
+
                     ZStack {
                         Circle()
                             .fill(Color.white)
                             .frame(width: 45, height: 45)
-                            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-                        
+                            .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
                         Image(systemName: "bell")
                             .font(.system(size: 18))
                             .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
-                        
-                        Circle()
-                            .fill(Color(red: 0.93, green: 0.45, blue: 0.35))
-                            .frame(width: 8, height: 8)
-                            .offset(x: 8, y: -8)
+
+                        if !viewModel.pendingQueue.isEmpty {
+                            Circle()
+                                .fill(Color.red)
+                                .frame(width: 10, height: 10)
+                                .offset(x: 12, y: -12)
+                        }
                     }
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
-                
+
                 // MARK: - Stats Cards
-                HStack(spacing: 20) {
+                HStack(spacing: 16) {
                     StatCard(
-                        title: "ACTIVE PATIENTS",
-                        value: "48",
-                        trend: "+10",
+                        title: "รอรับคิว",
+                        value: "\(viewModel.pendingQueue.count)",
+                        trend: "+\(viewModel.pendingQueue.count)",
                         icon: "person.2.fill",
-                        trendColor: .green
+                        trendColor: viewModel.pendingQueue.isEmpty ? .gray : .orange
                     )
-                    
                     StatCard(
-                        title: "UPCOMING SESSION",
-                        value: "10",
-                        trend: "+10",
+                        title: "วันนี้",
+                        value: "\(viewModel.confirmedToday.count)",
+                        trend: "นัดหมาย",
                         icon: "calendar.badge.clock",
                         trendColor: .blue
                     )
                 }
                 .padding(.horizontal, 20)
-                
-                // MARK: - Today's Schedule
-                VStack(alignment: .leading, spacing: 15) {
+
+                // MARK: - Pending Queue Section
+                VStack(alignment: .leading, spacing: 14) {
                     HStack {
-                        Text("Today’s Schedule")
+                        Text("คิวรอรับ")
                             .font(.system(size: 18, weight: .bold))
                             .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
-                        
                         Spacer()
-                        
-                        Button("View Calendar") {
-                            // Action
+                        Button(action: {
+                            Task { await viewModel.loadQueue() }
+                        }) {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
                         }
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
                     }
                     .padding(.horizontal, 20)
-                    
-                    VStack(spacing: 12) {
-                        // Marcus A...
-                        ScheduleItem(
-                            imageName: "Patient1",
-                            name: "Marcus A...",
-                            time: "10:00 AM - 11:00 AM",
-                            status: "LIVE NOW",
-                            hasActionButton: true
-                        )
-                        
-                        // Sonia Gupta
-                        ScheduleItem(
-                            imageName: "Patient2",
-                            name: "Sonia Gupta",
-                            time: "01:30 PM - 02:30 PM",
-                            status: "In 2h",
-                            hasActionButton: false
-                        )
-                    }
-                    .padding(.horizontal, 20)
-                }
-                
-                // MARK: - Patient Updates
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Patient Updates")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
+
+                    if viewModel.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                                .padding()
+                            Spacer()
+                        }
+                    } else if viewModel.pendingQueue.isEmpty {
+                        HStack {
+                            Spacer()
+                            VStack(spacing: 8) {
+                                Image(systemName: "checkmark.circle")
+                                    .font(.system(size: 36))
+                                    .foregroundColor(.green.opacity(0.6))
+                                Text("ไม่มีคิวรอรับ")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.gray)
+                            }
+                            .padding()
+                            Spacer()
+                        }
+                    } else {
+                        VStack(spacing: 12) {
+                            ForEach(viewModel.pendingQueue) { appt in
+                                QueueCard(appointment: appt) {
+                                    // Accept button tapped
+                                    Task { await viewModel.acceptAppointment(id: appt.id) }
+                                } onViewMood: {
+                                    Task {
+                                        await viewModel.loadPatientMoodHistory(userId: appt.patientId)
+                                        showPatientMood = true
+                                    }
+                                }
+                            }
+                        }
                         .padding(.horizontal, 20)
-                    
-                    VStack(spacing: 0) {
-                        UpdateItem(
-                            imageName: "Patient3",
-                            name: "Leo Thompsona",
-                            description: "• New Shared Journal"
-                        )
-                        
-                        Divider().padding(.leading, 80)
-                        
-                        UpdateItem(
-                            imageName: "Patient4",
-                            name: "Elena Rodriguez",
-                            description: "• New Message (2)",
-                            isHighlight: true
-                        )
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.white)
-                            .shadow(color: Color.black.opacity(0.02), radius: 10, x: 0, y: 5)
-                    )
+                }
+
+                // MARK: - Today's Confirmed Sessions
+                if !viewModel.confirmedToday.isEmpty {
+                    VStack(alignment: .leading, spacing: 14) {
+                        Text("นัดหมายวันนี้")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
+                            .padding(.horizontal, 20)
+
+                        VStack(spacing: 12) {
+                            ForEach(viewModel.confirmedToday) { appt in
+                                ConfirmedSessionCard(appointment: appt) {
+                                    Task {
+                                        await viewModel.loadPatientMoodHistory(userId: appt.patientId)
+                                        showPatientMood = true
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                }
+
+                // MARK: - Error Alert
+                if let error = viewModel.errorMessage {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                        Text(error)
+                            .font(.system(size: 13))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(12)
+                    .background(Color.orange.opacity(0.08))
+                    .cornerRadius(12)
                     .padding(.horizontal, 20)
                 }
-                
-                Spacer()
-                    .frame(height: 100) // Space for TabBar
+
+                // MARK: - Success Banner
+                if let success = viewModel.successMessage {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text(success)
+                            .font(.system(size: 13))
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(12)
+                    .background(Color.green.opacity(0.08))
+                    .cornerRadius(12)
+                    .padding(.horizontal, 20)
+                }
+
+                Spacer().frame(height: 100)
             }
             .padding(.vertical, 20)
         }
         .background(Color(red: 1.0, green: 0.97, blue: 0.88).ignoresSafeArea())
+        .onAppear {
+            Task { await viewModel.loadQueue() }
+        }
+        .sheet(isPresented: $showPatientMood) {
+            PatientMoodHistoryView(
+                moodEntries: viewModel.patientMoodHistory,
+                isLoading: viewModel.isLoadingMoodHistory
+            )
+        }
     }
 }
 
-// MARK: - Components
+// MARK: - Queue Card
+
+struct QueueCard: View {
+    let appointment: Appointment
+    let onAccept: () -> Void
+    let onViewMood: () -> Void
+
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 14) {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35).opacity(0.4))
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(appointment.patientName ?? "ผู้ป่วย")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
+
+                    Text(appointment.scheduledAt.formatted(.dateTime.day().month().hour().minute()))
+                        .font(.system(size: 13))
+                        .foregroundColor(.gray)
+
+                    Text(appointment.type.displayName)
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Color(red: 0.93, green: 0.45, blue: 0.35))
+                        .cornerRadius(8)
+                }
+
+                Spacer()
+            }
+
+            HStack(spacing: 10) {
+                Button(action: onViewMood) {
+                    Label("ดู Mood", systemImage: "chart.line.uptrend.xyaxis")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 9)
+                        .background(Color(red: 1.0, green: 0.92, blue: 0.88))
+                        .cornerRadius(14)
+                }
+
+                Button(action: onAccept) {
+                    Label("รับคิว", systemImage: "checkmark.circle.fill")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 9)
+                        .background(Color(red: 0.93, green: 0.45, blue: 0.35))
+                        .cornerRadius(14)
+                }
+            }
+        }
+        .padding(15)
+        .background(
+            RoundedRectangle(cornerRadius: 22)
+                .fill(Color(red: 1.0, green: 0.95, blue: 0.88))
+                .shadow(color: .black.opacity(0.04), radius: 6, x: 0, y: 3)
+        )
+    }
+}
+
+// MARK: - Confirmed Session Card
+
+struct ConfirmedSessionCard: View {
+    let appointment: Appointment
+    let onViewMood: () -> Void
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "person.circle.fill")
+                .resizable()
+                .frame(width: 50, height: 50)
+                .foregroundColor(.green.opacity(0.4))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(appointment.patientName ?? "ผู้ป่วย")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
+                Text(appointment.scheduledAt.formatted(.dateTime.hour().minute()) + " — \(appointment.duration) นาที")
+                    .font(.system(size: 13))
+                    .foregroundColor(.gray)
+            }
+
+            Spacer()
+
+            Button(action: onViewMood) {
+                Image(systemName: "waveform.path.ecg")
+                    .font(.system(size: 18))
+                    .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
+            }
+        }
+        .padding(15)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.03), radius: 5, x: 0, y: 2)
+        )
+    }
+}
+
+// MARK: - Stat Card
 
 struct StatCard: View {
     let title: String
@@ -154,16 +308,14 @@ struct StatCard: View {
     let trend: String
     let icon: String
     let trendColor: Color
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: icon)
-                    .font(.system(size: 24))
-                    .foregroundColor(.black)
-                
+                    .font(.system(size: 22))
+                    .foregroundColor(.black.opacity(0.7))
                 Spacer()
-                
                 Text(trend)
                     .font(.system(size: 12, weight: .bold))
                     .foregroundColor(trendColor)
@@ -172,127 +324,20 @@ struct StatCard: View {
                     .background(trendColor.opacity(0.1))
                     .cornerRadius(10)
             }
-            
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.gray)
-                
-                Text(value)
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
-            }
+            Text(title)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundColor(.gray)
+            Text(value)
+                .font(.system(size: 28, weight: .bold))
+                .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
         }
-        .padding(20)
+        .padding(18)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 30)
+            RoundedRectangle(cornerRadius: 26)
                 .fill(Color(red: 1.0, green: 0.95, blue: 0.88))
-                .shadow(color: Color.black.opacity(0.03), radius: 10, x: 0, y: 5)
+                .shadow(color: .black.opacity(0.03), radius: 8, x: 0, y: 4)
         )
-    }
-}
-
-struct ScheduleItem: View {
-    let imageName: String
-    let name: String
-    let time: String
-    let status: String
-    let hasActionButton: Bool
-    
-    var body: some View {
-        HStack(spacing: 15) {
-            Image(systemName: "person.circle.fill") // Use system icon as fallback
-                .resizable()
-                .frame(width: 55, height: 55)
-                .foregroundColor(.gray.opacity(0.3))
-            
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(name)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
-                    
-                    if status == "LIVE NOW" {
-                        Text(status)
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(.orange)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.orange.opacity(0.5), lineWidth: 1)
-                            )
-                    }
-                }
-                
-                Text(time)
-                    .font(.system(size: 13))
-                    .foregroundColor(.gray)
-            }
-            
-            Spacer()
-            
-            if hasActionButton {
-                Button("Join Call") {
-                    // Action
-                }
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(Color(red: 0.93, green: 0.45, blue: 0.35))
-                .padding(.horizontal, 20)
-                .padding(.vertical, 10)
-                .background(Color(red: 1.0, green: 0.92, blue: 0.88))
-                .cornerRadius(18)
-            } else {
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text(status)
-                        .font(.system(size: 13))
-                        .foregroundColor(.gray)
-                    
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(15)
-        .background(
-            RoundedRectangle(cornerRadius: 25)
-                .fill(Color(red: 1.0, green: 0.95, blue: 0.88))
-        )
-    }
-}
-
-struct UpdateItem: View {
-    let imageName: String
-    let name: String
-    let description: String
-    var isHighlight: Bool = false
-    
-    var body: some View {
-        HStack(spacing: 15) {
-            Image(systemName: "person.circle.fill") // Use system icon as fallback
-                .resizable()
-                .frame(width: 50, height: 50)
-                .foregroundColor(.gray.opacity(0.3))
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(name)
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(Color(red: 0.2, green: 0.1, blue: 0.05))
-                
-                Text(description)
-                    .font(.system(size: 13))
-                    .foregroundColor(isHighlight ? .blue : .gray)
-            }
-            
-            Spacer()
-            
-            Image(systemName: "chevron.right")
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(.orange)
-        }
-        .padding(15)
     }
 }
 

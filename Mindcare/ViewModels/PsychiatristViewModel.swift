@@ -110,19 +110,29 @@ class PsychiatristViewModel: ObservableObject {
     func performMatch(completion: @escaping () -> Void = {}) {
         isMatching = true
 
-        // Generate preference object
-        let preference = UserPreference(
-            problems: Array(selectedProblems),
-            intensity: selectedIntensity ?? .moderate,
-            styles: Array(selectedStyles),
-            communication: selectedCommunication ?? .openToAny,
-            budget: selectedBudget ?? .aiRecommend
-        )
+        Task { @MainActor in
+            // Try fetching from real API first
+            var doctors = availableDoctors
+            do {
+                let fetched = try await APIService.shared.getPsychiatrists()
+                if !fetched.isEmpty {
+                    doctors = fetched
+                }
+            } catch {
+                print("⚠️ Could not fetch psychiatrists from API, using local list: \(error.localizedDescription)")
+            }
 
-        let results = engine.match(doctors: availableDoctors, userPreference: preference)
+            let preference = UserPreference(
+                problems: Array(selectedProblems),
+                intensity: selectedIntensity ?? .moderate,
+                styles: Array(selectedStyles),
+                communication: selectedCommunication ?? .openToAny,
+                budget: selectedBudget ?? .aiRecommend
+            )
 
-        // Output top 3 Matches on UI
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {  // Simulate AI think time
+            let results = engine.match(doctors: doctors, userPreference: preference)
+
+            try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 sec simulate AI
             self.recommendedDoctors = Array(results.prefix(3)).map { $0.doctor }
             self.isMatching = false
             completion()
