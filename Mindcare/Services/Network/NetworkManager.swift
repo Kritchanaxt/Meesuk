@@ -314,18 +314,19 @@ final class NetworkManager: ObservableObject {
 
 class AuthInterceptor: RequestInterceptor {
 
+    // Prevent concurrent refresh calls
+    private var isRefreshing = false
+    private let refreshLock = NSLock()
+
     func adapt(
         _ urlRequest: URLRequest, for session: Session,
         completion: @escaping (Result<URLRequest, Error>) -> Void
     ) {
         var request = urlRequest
 
-        // Add Auth Token
         if let token = KeychainManager.shared.get(key: AppConstants.Keychain.accessToken) {
             request.headers.add(.authorization(bearerToken: token))
         }
-
-        // Add Common Headers
         request.headers.add(.contentType("application/json"))
         request.headers.add(.accept("application/json"))
 
@@ -336,23 +337,42 @@ class AuthInterceptor: RequestInterceptor {
         _ request: Request, for session: Session, dueTo error: Error,
         completion: @escaping (RetryResult) -> Void
     ) {
-        guard let response = request.task?.response as? HTTPURLResponse else {
+        guard let response = request.task?.response as? HTTPURLResponse,
+              response.statusCode == 401 else {
             completion(.doNotRetry)
             return
         }
 
-        // Retry on 401 with token refresh
-        if response.statusCode == 401 {
-            Task {
-                do {
-                    try await AuthService.shared.refreshToken()
-                    completion(.retry)
-                } catch {
-                    completion(.doNotRetry)
-                }
-            }
-        } else {
+        // Avoid retrying the refresh endpoint itself (infinite loop guard)
+        if let url = request.task?.originalRequest?.url?.absoluteString,
+           url.contains("/auth/refresh") {
             completion(.doNotRetry)
+            return
+        }
+
+        refreshLock.lock()
+        guard !isRefreshing else {
+            refreshLock.unlock()
+            completion(.doNotRetryWithError(error))
+            return
+        }
+        isRefreshing = true
+        refreshLock.unlock()
+
+        Task {
+            defer {
+                refreshLock.lock()
+                isRefreshing = false
+                refreshLock.unlock()
+            }
+            do {
+                try await AuthService.shared.refreshToken()
+                completion(.retry)
+            } catch {
+                // Refresh failed — log out silently
+                await AuthService.shared.logout()
+                completion(.doNotRetry)
+            }
         }
     }
 }
@@ -361,23 +381,38 @@ class AuthInterceptor: RequestInterceptor {
 
 class NetworkLogger: EventMonitor {
 
+    // Endpoints to suppress from logs (too noisy)
+    private let silentEndpoints = ["/auth/refresh", "/health/metrics"]
+
     func requestDidResume(_ request: Request) {
-        #if DEBUG
-            print("🌐 Request: \(request.description)")
-        #endif
+        // Intentionally silent — only log errors & failures below
     }
 
     func request<Value>(
         _ request: DataRequest, didParseResponse response: DataResponse<Value, AFError>
     ) {
         #if DEBUG
-            if let statusCode = response.response?.statusCode {
-                let emoji = (200...299).contains(statusCode) ? "✅" : "❌"
-                print("\(emoji) Response [\(statusCode)]: \(request.description)")
+            guard let statusCode = response.response?.statusCode else {
+                if let error = response.error {
+                    print("❌ Network Error: \(error.localizedDescription)")
+                }
+                return
             }
 
-            if let error = response.error {
-                print("❌ Error: \(error.localizedDescription)")
+            let urlString = response.request?.url?.absoluteString ?? ""
+
+            // Skip silent endpoints
+            if silentEndpoints.contains(where: { urlString.contains($0) }) { return }
+
+            // Only log errors (4xx, 5xx)
+            if !(200...299).contains(statusCode) {
+                print("❌ [\(statusCode)] \(urlString)")
+                if let error = response.error {
+                    print("   └─ \(error.localizedDescription)")
+                }
+            } else {
+                // For success, log only non-trivial endpoints (skip polling)
+                print("✅ [\(statusCode)] \(urlString)")
             }
         #endif
     }

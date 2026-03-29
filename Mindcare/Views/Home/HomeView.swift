@@ -149,12 +149,21 @@ struct HomeHeaderView: View {
 struct DailyCheckInView: View {
     let moods: [(String, String, Color)] = [
         ("Mee_Great", "Great!", Color.mindHexColor("92E1A7")),
-        ("Mee_Good", "Good", Color.mindHexColor("BFDFEF")),
-        ("Mee_Okay", "Okay", Color.mindHexColor("F9E296")),
-        ("Mee_Low", "Low", Color.mindHexColor("F9C3B9")),
+        ("Mee_Good",  "Good",   Color.mindHexColor("BFDFEF")),
+        ("Mee_Okay",  "Okay",   Color.mindHexColor("F9E296")),
+        ("Mee_Low",   "Low",    Color.mindHexColor("F9C3B9")),
     ]
+
     @State private var selected: Int? = nil
-    
+    @State private var status: CheckInStatus = .idle
+
+    enum CheckInStatus {
+        case idle
+        case loading
+        case success(String)
+        case error(String)
+    }
+
     private func submitMood(index: Int) {
         let level: Int
         switch index {
@@ -164,12 +173,14 @@ struct DailyCheckInView: View {
         case 3: level = 2
         default: level = 3
         }
-        
+
+        status = .loading
+
         Task {
             do {
                 let mood = MoodCheckIn(
                     moodLevel: level,
-                    emotions: [.happy], // simplified for demo
+                    emotions: [.happy],
                     activities: nil,
                     notes: nil,
                     sleepQuality: nil,
@@ -177,21 +188,40 @@ struct DailyCheckInView: View {
                     stressLevel: nil
                 )
                 let _ = try await APIService.shared.checkInMood(mood)
-                print("Mood check-in successful!")
+                withAnimation(.spring()) {
+                    status = .success("บันทึกแล้ว! \(moods[index].1) 🎉")
+                }
+                // Reset after 3 sec
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                withAnimation { status = .idle }
             } catch {
-                print("Failed to check-in mood: \(error.localizedDescription)")
+                withAnimation {
+                    status = .error("บันทึกไม่สำเร็จ กรุณาลองใหม่")
+                }
+                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                withAnimation { status = .idle }
             }
         }
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
+
+            // MARK: Title Row
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Daily Check-in")
-                        .font(.custom("Outfit-Bold", size: 18))
-                        .foregroundColor(Color.mindHexColor("4A3422"))
-                    Text("Tap to log your mood")
+                    HStack(spacing: 6) {
+                        Text("Daily Check-in")
+                            .font(.custom("Outfit-Bold", size: 18))
+                            .foregroundColor(Color.mindHexColor("4A3422"))
+
+                        if case .loading = status {
+                            ProgressView()
+                                .scaleEffect(0.75)
+                                .tint(Color.mindHexColor("EB6538"))
+                        }
+                    }
+                    Text("วันนี้คุณรู้สึกอย่างไร?")
                         .font(.custom("Outfit-Regular", size: 13))
                         .foregroundColor(Color.mindHexColor("9A8B7F"))
                 }
@@ -201,12 +231,16 @@ struct DailyCheckInView: View {
                     .foregroundColor(Color.mindHexColor("9A8B7F"))
             }
 
+            // MARK: Mood Buttons
             HStack(spacing: 10) {
                 ForEach(moods.indices, id: \.self) { i in
                     let mood = moods[i]
-                    Button(action: { 
-                        withAnimation(.spring()) { selected = i }
-                        submitMood(index: i)
+                    Button(action: {
+                        guard case .loading = status else {
+                            withAnimation(.spring()) { selected = i }
+                            submitMood(index: i)
+                            return
+                        }
                     }) {
                         VStack(spacing: 6) {
                             Image(mood.0)
@@ -222,21 +256,78 @@ struct DailyCheckInView: View {
                                         lineWidth: 2.5)
                                 )
                                 .scaleEffect(selected == i ? 1.08 : 1.0)
+                                .opacity(statusIsLoading ? (selected == i ? 1.0 : 0.5) : 1.0)
                             Text(mood.1)
                                 .font(.custom("Outfit-Medium", size: 11))
                                 .foregroundColor(Color.mindHexColor("4A3422"))
                         }
                         .frame(maxWidth: .infinity)
                     }
+                    .disabled(statusIsLoading)
                 }
+            }
+
+            // MARK: Status Banner
+            switch status {
+            case .success(let msg):
+                HStack(spacing: 8) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                        .font(.system(size: 15))
+                    Text(msg)
+                        .font(.custom("Outfit-SemiBold", size: 13))
+                        .foregroundColor(Color(red: 0.1, green: 0.5, blue: 0.2))
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 9)
+                .background(Color.green.opacity(0.1))
+                .cornerRadius(12)
+                .transition(.move(edge: .top).combined(with: .opacity))
+
+            case .error(let msg):
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundColor(.orange)
+                        .font(.system(size: 15))
+                    Text(msg)
+                        .font(.custom("Outfit-Regular", size: 13))
+                        .foregroundColor(.orange)
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 9)
+                .background(Color.orange.opacity(0.08))
+                .cornerRadius(12)
+                .transition(.move(edge: .top).combined(with: .opacity))
+
+            default:
+                EmptyView()
             }
         }
         .padding(18)
         .background(Color.white)
         .cornerRadius(24)
         .shadow(color: .black.opacity(0.04), radius: 12, x: 0, y: 4)
+        .animation(.easeInOut(duration: 0.25), value: statusTag)
+    }
+
+    private var statusIsLoading: Bool {
+        if case .loading = status { return true }
+        return false
+    }
+
+    // For animation value (must be Equatable)
+    private var statusTag: Int {
+        switch status {
+        case .idle:    return 0
+        case .loading: return 1
+        case .success: return 2
+        case .error:   return 3
+        }
     }
 }
+
 
 // MARK: - Apple Watch Card
 

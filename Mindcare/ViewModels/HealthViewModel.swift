@@ -107,14 +107,17 @@ final class HealthViewModel: BaseViewModel {
     func fetchLatestHeartRate() async {
         do {
             let heartRate = try await healthKitManager.fetchLatestHeartRate()
-            print("💓 Latest Heart Rate: \(heartRate) BPM")
-            if healthMetrics == nil {
-                healthMetrics = HealthMetrics()
-            }
+            // Only update + log if value actually changed
+            let prev = healthMetrics?.heartRate
+            if healthMetrics == nil { healthMetrics = HealthMetrics() }
             healthMetrics?.heartRate = heartRate
+            if prev == nil || abs((prev ?? 0) - heartRate) >= 1 {
+                #if DEBUG
+                print("💓 Heart Rate: \(Int(heartRate)) BPM")
+                #endif
+            }
         } catch {
-            print("⚠️ Failed to fetch heart rate: \(error.localizedDescription)")
-            logWarning("Failed to fetch heart rate: \(error.localizedDescription)", category: .healthKit)
+            // Suppress routine fetch errors (HealthKit unavailable in simulator)
         }
     }
     
@@ -170,24 +173,27 @@ final class HealthViewModel: BaseViewModel {
     private var heartRateTimer: Timer?
     
     func startHeartRateMonitoring() {
-        // Observer for immediate HealthKit updates
+        // Observer for HealthKit push updates
         healthKitManager.startHeartRateObserver { [weak self] heartRate in
             Task { @MainActor in
-                if self?.healthMetrics == nil {
-                    self?.healthMetrics = HealthMetrics()
-                }
+                if self?.healthMetrics == nil { self?.healthMetrics = HealthMetrics() }
+                let prev = self?.healthMetrics?.heartRate
                 self?.healthMetrics?.heartRate = heartRate
-                print("💓 [Observer] Heart Rate updated: \(heartRate) BPM")
+                // Only log when value changes by >= 1 BPM
+                if prev == nil || abs((prev ?? 0) - heartRate) >= 1 {
+                    #if DEBUG
+                    print("💓 Heart Rate updated: \(Int(heartRate)) BPM")
+                    #endif
+                }
             }
         }
-        
-        // Polling every 1 second for real-time BPM
-        heartRateTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+
+        // Poll every 15 seconds (not every 1s — HealthKit data doesn't update that fast)
+        heartRateTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 await self?.fetchLatestHeartRate()
             }
         }
-        print("⏱️ Heart rate polling timer started (every 1s - real-time)")
     }
     
     func stopMonitoring() {

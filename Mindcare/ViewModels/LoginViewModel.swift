@@ -65,8 +65,20 @@ class LoginViewModel: ObservableObject {
         let demoId = isDoctor ? "doctor-001" : "demo-user-001"
         let demoName = isDoctor ? "Dr. Aris Thorne, MD" : "Demo User"
         let demoEmailValue = isDoctor ? doctorEmail : demoEmail
+        let demoPasswordValue = isDoctor ? doctorPassword : demoPassword
 
-        // Create demo user profile
+        // ✅ Try real API login first
+        do {
+            try await authService.login(email: demoEmailValue, password: demoPasswordValue)
+            // If success — real token saved, done
+            print("✅ Demo login via real API successful")
+            return
+        } catch {
+            // Backend has no demo account — fall back to local demo session
+            print("ℹ️ Demo API login unavailable (\(error.localizedDescription)), using local demo session")
+        }
+
+        // Fallback: local-only demo session (no real token)
         let demoUser = UserProfile(
             id: demoId,
             email: demoEmailValue,
@@ -84,24 +96,20 @@ class LoginViewModel: ObservableObject {
             emergencyContact: nil
         )
 
-        // Save demo token
-        KeychainManager.shared.save(
-            key: AppConstants.Keychain.accessToken, value: "demo-access-token")
-        KeychainManager.shared.save(
-            key: AppConstants.Keychain.refreshToken, value: "demo-refresh-token")
+        // No real token — clear any stale token so we don't send it
+        KeychainManager.shared.delete(key: AppConstants.Keychain.accessToken)
+        KeychainManager.shared.delete(key: AppConstants.Keychain.refreshToken)
         KeychainManager.shared.save(key: AppConstants.Keychain.userID, value: demoId)
 
-        // Update auth state
         authService.isAuthenticated = true
         authService.currentUser = demoUser
         authService.userRole = role
+        authService.isDemoSession = true  // Flag: API calls that require auth should be skipped
 
-        UserDefaults.standard.set(
-            role.rawValue, forKey: AppConstants.UserDefaultsKeys.userRole)
-
-        NotificationCenter.default.post(
-            name: AppConstants.NotificationNames.userDidLogin, object: nil)
+        UserDefaults.standard.set(role.rawValue, forKey: AppConstants.UserDefaultsKeys.userRole)
+        NotificationCenter.default.post(name: AppConstants.NotificationNames.userDidLogin, object: nil)
     }
+
 
     func handleAppleSignIn(result: Result<ASAuthorization, Error>) async {
         isLoading = true

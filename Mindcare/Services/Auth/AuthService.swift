@@ -24,6 +24,9 @@ final class AuthService: NSObject, ObservableObject {
     
     // MARK: - Demo Mode
     static let isDemoMode = true  // Set to false when backend is ready
+    /// True when user logged in with demo credentials but backend had no account for them
+    @Published var isDemoSession = false
+
     
     // MARK: - Initialization
     
@@ -62,6 +65,7 @@ final class AuthService: NSObject, ObservableObject {
     /// Login ด้วย Email และ Password
     func login(email: String, password: String) async throws {
         let response = try await APIService.shared.login(email: email, password: password)
+        isDemoSession = false
         await handleAuthResponse(response)
     }
     
@@ -133,16 +137,16 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     // MARK: - Logout
-    
-    /// Logout
+
+    /// Logout — clears local session always, best-effort API call
     func logout() async {
+        // Try API logout but ignore 404/errors gracefully
         do {
             try await APIService.shared.logout()
         } catch {
-            print("Logout API error: \(error)")
+            // Logout API may not exist on this backend — ignore silently
+            // Local session will still be cleared below
         }
-        
-        // Clear local data
         clearAuthData()
     }
     
