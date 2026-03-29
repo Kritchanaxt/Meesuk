@@ -16,11 +16,7 @@ struct ProfileView: View {
             VStack(spacing: 0) {
                 // Header
                 HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(Color.mindHexColor("4A3422"))
-                            .font(.title3)
-                    }
+                    Color.clear.frame(width: 30, height: 30)
 
                     Spacer()
 
@@ -70,7 +66,8 @@ struct ProfileView: View {
                         }
                         .padding(.top, 10)
 
-                        // Mental Health Journey
+                        // Mental Health Journey (Temporarily removed, waiting for AI generate)
+                        /*
                         VStack(alignment: .leading, spacing: 15) {
                             Text("My Mental Health Jorney")
                                 .font(.custom("Outfit-Bold", size: 18))
@@ -86,6 +83,7 @@ struct ProfileView: View {
                         .background(Color.white)
                         .cornerRadius(25)
                         .padding(.horizontal, 20)
+                        */
 
                         // Dedicated Doctor
                         VStack(alignment: .leading, spacing: 15) {

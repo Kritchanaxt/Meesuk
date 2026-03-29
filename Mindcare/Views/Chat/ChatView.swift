@@ -165,15 +165,9 @@ struct ChatView: View {
 // MARK: - Subviews
 
 struct ChatHeaderView: View {
-    @Environment(\.dismiss) var dismiss
-
     var body: some View {
         HStack(spacing: 15) {
-            Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left")
-                    .font(.title3)
-                    .foregroundColor(Color.mindHexColor("4A3422"))
-            }
+            Color.clear.frame(width: 30, height: 30)
 
             Spacer()
 
@@ -215,16 +209,18 @@ struct MessageBubble: View {
                         .foregroundColor(Color.mindHexColor("4A3422"))
 
                     if message.content.contains("1323") {
-                        Button(action: {}) {
-                            Text("Call")
-                                .font(.custom("Outfit-Bold", size: 12))
-                                .foregroundColor(Color.mindHexColor("E67E22"))
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 6)
-                                .background(Color.mindHexColor("FDF1E5"))
-                                .cornerRadius(12)
+                        if let url = URL(string: "tel://1323") {
+                            Link(destination: url) {
+                                Text("Call")
+                                    .font(.custom("Outfit-Bold", size: 12))
+                                    .foregroundColor(Color.mindHexColor("E67E22"))
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 6)
+                                    .background(Color.mindHexColor("FDF1E5"))
+                                    .cornerRadius(12)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                 }
                 .padding(.horizontal, 16)
