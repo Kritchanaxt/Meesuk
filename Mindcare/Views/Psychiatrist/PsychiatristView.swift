@@ -10,6 +10,7 @@ struct PsychiatristView: View {
     @State private var showChangeDoctor = false
     @State private var isMatched = false  // Toggle for demo
     @State private var currentAppointmentId: String? = nil  // จาก API
+    @State private var showConsultationChat = false
 
     var body: some View {
         ZStack {
@@ -27,7 +28,8 @@ struct PsychiatristView: View {
                         DoctorCardOverview(
                             doctor: selectedDoc, 
                             appointmentVM: appointmentVM,
-                            onTapChange: { showChangeDoctor = true })
+                            onTapChange: { showChangeDoctor = true },
+                            showConsultationChat: $showConsultationChat)
                     } else {
                         // Default if none selected yet but we are in matched state
                         Button(action: { showQuestionnaire = true }) {
@@ -117,6 +119,9 @@ struct PsychiatristView: View {
                     isMatched = true
                     showRecommendation = false
                 })
+        }
+        .sheet(isPresented: $showConsultationChat) {
+            ConsultationChatView()
         }
     }
 }
@@ -533,6 +538,7 @@ struct DoctorCardOverview: View {
     let doctor: Psychiatrist
     @ObservedObject var appointmentVM: AppointmentViewModel
     var onTapChange: () -> Void
+    @Binding var showConsultationChat: Bool
 
     @State private var showBookingConfirmation = false
 
@@ -598,6 +604,22 @@ struct DoctorCardOverview: View {
                     }
                 }
             }
+            
+            // New: Consultation Chat Button
+            Button(action: { showConsultationChat = true }) {
+                HStack {
+                    Image(systemName: "bubble.left.and.bubble.right.fill")
+                    Text("Consultation Chat")
+                        .font(.custom("Outfit-Bold", size: 16))
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.mindHexColor("3498DB"))
+                .cornerRadius(12)
+                .shadow(color: Color.mindHexColor("3498DB").opacity(0.3), radius: 5, x: 0, y: 3)
+            }
+            .padding(.top, 5)
         }
         .padding(20)
         .background(Color.white)

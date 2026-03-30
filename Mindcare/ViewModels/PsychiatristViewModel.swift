@@ -14,79 +14,42 @@ class PsychiatristViewModel: ObservableObject {
     @Published var isMatching: Bool = false
 
     // Using dummy doctor list from Demo script to supply logic for UI
+    // Using dummy doctor list for 100% Mock Demo
     private var availableDoctors: [Psychiatrist] = [
         Psychiatrist(
-            id: "doc-A",
-            name: "Dr. A",
-            avatar: "Dr_img",
-            specialization: "Psychiatrist",
-            bio:
-                "Dr. A is a warm and specialized psychiatrist who deeply focuses on anxiety and social stress disorders. Matched with you for an optimal text-based communication support system.",
-            rating: 4.8,
-            reviewCount: 100,
-            yearsOfExperience: 5,
-            languages: ["English", "Thai"],
-            isAvailable: true,
-            specialties: ["anxiety", "social_anxiety"],
-            styles: ["warm", "listener"],
-            intensitySupport: ["mild", "moderate"],
-            communicationMethods: ["text", "video"],
-            priceLevel: "low"
-        ),
-        Psychiatrist(
-            id: "doc-B",
-            name: "Dr. B",
-            avatar: "Dr_img",
-            specialization: "Psychologist",
-            bio:
-                "Dr. B is extremely experienced in managing deep burnout and depression. Known for a conversational and warm approach, she brings light to heavy situations.",
-            rating: 4.5,
-            reviewCount: 50,
-            yearsOfExperience: 8,
-            languages: ["English"],
-            isAvailable: true,
-            specialties: ["depression", "burnout"],
-            styles: ["warm", "conversational"],
-            intensitySupport: ["moderate", "high"],
-            communicationMethods: ["video", "voice"],
-            priceLevel: "medium"
-        ),
-        Psychiatrist(
-            id: "doc-C",
-            name: "Dr. C",
-            avatar: "Dr_img",
-            specialization: "Counselor",
-            bio:
-                "Dr. C relies on structured, practical therapy patterns to navigate grief and relationship tension.",
-            rating: 4.9,
-            reviewCount: 200,
-            yearsOfExperience: 10,
-            languages: ["English"],
-            isAvailable: true,
-            specialties: ["grief", "relationship"],
-            styles: ["structured", "practical"],
-            intensitySupport: ["mild", "moderate"],
-            communicationMethods: ["text"],
-            priceLevel: "high"
-        ),
-        Psychiatrist(
-            id: "doc-D",
-            name: "Dr. Sarah Jenkins",
+            id: "doc-julian",
+            name: "Dr. Julian Vance",
             avatar: "Dr_img",
             specialization: "Clinical Psychiatrist",
-            bio:
-                "Dr. Jenkins specializes in clinical adult tele-psychiatry with a focus on holistic mental wellness and addressing trauma or high-level emotional challenges securely.",
+            bio: "Dr. Julian Vance is a highly experienced psychiatrist specializing in cognitive behavioral therapy and anxiety management. He focuses on creating a safe, empathetic space for patients to explore their feelings and develop practical coping strategies.",
             rating: 4.9,
-            reviewCount: 200,
-            yearsOfExperience: 15,
-            languages: ["English", "Spanish"],
+            reviewCount: 342,
+            yearsOfExperience: 12,
+            languages: ["English", "Thai"],
             isAvailable: true,
-            specialties: ["trauma", "depression", "anxiety"],
-            styles: ["structured", "listener"],
-            intensitySupport: ["high", "clinical"],
-            communicationMethods: ["video", "voice", "text"],
-            priceLevel: "high"
+            specialties: ["Anxiety", "Depression", "CBT"],
+            styles: ["Empathetic", "Structured", "Listener"],
+            intensitySupport: ["Moderate", "High"],
+            communicationMethods: ["Video", "Voice", "Text"],
+            priceLevel: "Medium"
         ),
+        Psychiatrist(
+            id: "doc-sarah",
+            name: "Dr. Sarah Jenkins",
+            avatar: "Dr_img",
+            specialization: "Psychotherapist",
+            bio: "Specializes in clinical adult tele-psychiatry with a focus on holistic mental wellness and addressing trauma or high-level emotional challenges securely.",
+            rating: 4.8,
+            reviewCount: 215,
+            yearsOfExperience: 15,
+            languages: ["English"],
+            isAvailable: true,
+            specialties: ["Trauma", "Burnout"],
+            styles: ["Practical", "Conversational"],
+            intensitySupport: ["High"],
+            communicationMethods: ["Video", "Text"],
+            priceLevel: "High"
+        )
     ]
 
     private let engine = MatchingEngine()
@@ -111,16 +74,8 @@ class PsychiatristViewModel: ObservableObject {
         isMatching = true
 
         Task { @MainActor in
-            // Try fetching from real API first
-            var doctors = availableDoctors
-            do {
-                let fetched = try await APIService.shared.getPsychiatrists()
-                if !fetched.isEmpty {
-                    doctors = fetched
-                }
-            } catch {
-                print("⚠️ Could not fetch psychiatrists from API, using local list: \(error.localizedDescription)")
-            }
+            // 100% Mock Flow - Removed API call
+            let doctors = availableDoctors
 
             let preference = UserPreference(
                 problems: Array(selectedProblems),
@@ -150,34 +105,57 @@ class AppointmentViewModel: ObservableObject {
     func fetchAppointments() async {
         isLoading = true
         errorMessage = nil
-        do {
-            let fetched = try await APIService.shared.getAppointments()
-            self.appointments = fetched
-        } catch {
-            self.errorMessage = error.localizedDescription
-            print("Failed to fetch appointments: \(error)")
+        
+        // 100% Mock Flow - Simulating delay without API call
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        
+        // Initialize with one mock appointment if empty
+        if self.appointments.isEmpty {
+            self.appointments = [
+                Appointment(
+                    id: "mock-appt-1",
+                    patientId: "demo-patient",
+                    psychiatristId: "doc-julian",
+                    psychiatristName: "Dr. Julian Vance",
+                    patientName: "Demo User",
+                    scheduledAt: Date().addingTimeInterval(86400),
+                    duration: 60,
+                    type: .consultation,
+                    status: .scheduled,
+                    notes: "Introductory session",
+                    meetingUrl: nil,
+                    createdAt: Date()
+                )
+            ]
         }
+        
         isLoading = false
     }
     
     func bookAppointment(psychiatristId: String, date: Date, type: AppointmentType = .consultation) async {
         isLoading = true
         errorMessage = nil
-        do {
-            let request = CreateAppointmentRequest(
-                psychiatristId: psychiatristId,
-                scheduledAt: date,
-                duration: 60,
-                type: type,
-                notes: "Booked via App"
-            )
-            let newAppointment = try await APIService.shared.createAppointment(request)
-            self.appointments.append(newAppointment)
-            self.isBookingSuccessful = true
-        } catch {
-            self.errorMessage = error.localizedDescription
-            print("Failed to book appointment: \(error)")
-        }
+        
+        // 100% Mock Flow - Simulating success without API call
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        let newAppointment = Appointment(
+            id: "mock-appt-\(UUID().uuidString.prefix(6))",
+            patientId: "demo-patient",
+            psychiatristId: psychiatristId,
+            psychiatristName: "Dr. Julian Vance",
+            patientName: "Demo User",
+            scheduledAt: date,
+            duration: 60,
+            type: type,
+            status: .scheduled,
+            notes: "Booked via App (Mock)",
+            meetingUrl: nil,
+            createdAt: Date()
+        )
+        
+        self.appointments.append(newAppointment)
+        self.isBookingSuccessful = true
         isLoading = false
     }
 }

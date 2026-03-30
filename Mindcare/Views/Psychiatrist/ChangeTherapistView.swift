@@ -117,11 +117,45 @@ struct ChangeTherapistView: View {
 
     private func loadPsychiatrists() async {
         isLoading = true
-        do {
-            psychiatrists = try await APIService.shared.getPsychiatrists()
-        } catch {
-            errorMessage = "โหลดรายชื่อหมอไม่สำเร็จ"
-        }
+        // 100% Mock Flow - Removed API call
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        
+        self.psychiatrists = [
+            Psychiatrist(
+                id: "doc-julian",
+                name: "Dr. Julian Vance",
+                avatar: "Dr_img",
+                specialization: "Clinical Psychiatrist",
+                bio: "Dr. Julian Vance is a highly experienced psychiatrist specializing in cognitive behavioral therapy and anxiety management.",
+                rating: 4.9,
+                reviewCount: 342,
+                yearsOfExperience: 12,
+                languages: ["English", "Thai"],
+                isAvailable: true,
+                specialties: ["Anxiety", "Depression"],
+                styles: ["Empathetic"],
+                intensitySupport: ["Moderate"],
+                communicationMethods: ["Text"],
+                priceLevel: "Medium"
+            ),
+            Psychiatrist(
+                id: "doc-sarah",
+                name: "Dr. Sarah Jenkins",
+                avatar: "Dr_img",
+                specialization: "Psychotherapist",
+                bio: "Specializes in clinical adult tele-psychiatry.",
+                rating: 4.8,
+                reviewCount: 215,
+                yearsOfExperience: 15,
+                languages: ["English"],
+                isAvailable: true,
+                specialties: ["Trauma"],
+                styles: ["Practical"],
+                intensitySupport: ["High"],
+                communicationMethods: ["Video"],
+                priceLevel: "High"
+            )
+        ]
         isLoading = false
     }
 
@@ -129,16 +163,13 @@ struct ChangeTherapistView: View {
         guard let selected = selectedPsychiatrist else { return }
         isChanging = true
         errorMessage = nil
-        do {
-            _ = try await APIService.shared.changeTherapist(
-                appointmentId: currentAppointmentId,
-                newPsychiatristId: selected.id
-            )
-            isSuccess = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { dismiss() }
-        } catch {
-            errorMessage = "เปลี่ยนหมอไม่สำเร็จ: \(error.localizedDescription)"
-        }
+        
+        // 100% Mock Flow - Removed API call
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        isSuccess = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { dismiss() }
+        
         isChanging = false
     }
 }

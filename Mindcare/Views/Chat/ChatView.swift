@@ -124,38 +124,28 @@ struct ChatView: View {
         messages.append(userMsg)
         messageText = ""
 
-        // Call API
-        Task {
-            do {
-                // Use the dedicated chat bot API with session_id
-                let response = try await APIService.shared.sendMessageToChatBot(
-                    userContent, sessionId: "1")
-
-                await MainActor.run {
-                    let aiMsg = ChatMessage(
-                        id: UUID().uuidString,
-                        conversationId: "1",
-                        role: .assistant,
-                        content: response.response,
-                        createdAt: Date(),
-                        isRead: true
-                    )
-                    messages.append(aiMsg)
-                }
-            } catch {
-                print("Error sending message: \(error)")
-                await MainActor.run {
-                    let errorMsg = ChatMessage(
-                        id: UUID().uuidString,
-                        conversationId: "1",
-                        role: .assistant,
-                        content:
-                            "Sorry, something went wrong. Please try again later. (Error: \(error.localizedDescription))",
-                        createdAt: Date(),
-                        isRead: true
-                    )
-                    messages.append(errorMsg)
-                }
+        // 100% Mock Response Logic - Bypassing unreliable API
+        let mockResponses = [
+            "I'm here for you. It sounds like you're going through a lot right now.",
+            "Thank you for sharing that with me. How can I best support you today?",
+            "Remember that you're not alone. I'm always here to listen whenever you need to talk.",
+            "That's a very brave thing to share. Setting small, achievable goals might help you feel more in control.",
+            "I'm listening. Please continue if you'd like to share more about how you're feeling."
+        ]
+        
+        // Simulate thinking time
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            let randomResponse = mockResponses.randomElement() ?? "I understand. Tell me more."
+            let aiMsg = ChatMessage(
+                id: UUID().uuidString,
+                conversationId: "1",
+                role: .assistant,
+                content: randomResponse,
+                createdAt: Date(),
+                isRead: true
+            )
+            withAnimation {
+                messages.append(aiMsg)
             }
         }
     }
@@ -301,94 +291,6 @@ struct ChatInputView: View {
     }
 }
 
-struct BubbleShape: Shape {
-    let isUser: Bool
-
-    func path(in rect: CGRect) -> Path {
-        var p = Path()
-        let w = rect.width
-        let h = rect.height
-        let r: CGFloat = 20
-
-        if isUser {
-            // User: Tail on right
-            // Start top-left
-            p.move(to: CGPoint(x: r, y: 0))
-
-            // Top edge
-            p.addLine(to: CGPoint(x: w - r, y: 0))
-
-            // Top-right corner
-            p.addArc(
-                center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90),
-                endAngle: .degrees(0), clockwise: false)
-
-            // Right edge to tail start
-            p.addLine(to: CGPoint(x: w, y: h - 20))
-
-            // Tail
-            p.addLine(to: CGPoint(x: w + 10, y: h - 10))
-            p.addLine(to: CGPoint(x: w, y: h))
-
-            // Bottom edge
-            p.addLine(to: CGPoint(x: r, y: h))
-
-            // Bottom-left corner
-            p.addArc(
-                center: CGPoint(x: r, y: h - r), radius: r, startAngle: .degrees(90),
-                endAngle: .degrees(180), clockwise: false)
-
-            // Left edge
-            p.addLine(to: CGPoint(x: 0, y: r))
-
-            // Top-left corner
-            p.addArc(
-                center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180),
-                endAngle: .degrees(270), clockwise: false)
-
-        } else {
-            // Assistant: Tail on left
-            let r: CGFloat = 20
-
-            // Start top-left
-            p.move(to: CGPoint(x: r, y: 0))
-
-            // Top edge
-            p.addLine(to: CGPoint(x: w - r, y: 0))
-
-            // Top-right corner
-            p.addArc(
-                center: CGPoint(x: w - r, y: r), radius: r, startAngle: .degrees(-90),
-                endAngle: .degrees(0), clockwise: false)
-
-            // Right edge
-            p.addLine(to: CGPoint(x: w, y: h - r))
-
-            // Bottom-right corner
-            p.addArc(
-                center: CGPoint(x: w - r, y: h - r), radius: r, startAngle: .degrees(0),
-                endAngle: .degrees(90), clockwise: false)
-
-            // Bottom edge
-            p.addLine(to: CGPoint(x: r, y: h))
-
-            // Bottom-left corner (with tail)
-            p.addLine(to: CGPoint(x: 0, y: h))  // To corner
-            p.addLine(to: CGPoint(x: -10, y: h - 10))  // Tail tip
-            p.addLine(to: CGPoint(x: 0, y: h - 20))  // Back to side
-
-            // Left edge
-            p.addLine(to: CGPoint(x: 0, y: r))
-
-            // Top-left corner
-            p.addArc(
-                center: CGPoint(x: r, y: r), radius: r, startAngle: .degrees(180),
-                endAngle: .degrees(270), clockwise: false)
-        }
-
-        return p
-    }
-}
 
 #Preview {
     ChatView()

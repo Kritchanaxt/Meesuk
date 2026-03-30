@@ -60,6 +60,26 @@ struct ChatMessage: Codable, Identifiable {
     }
 }
 
+// MARK: - Consultation Message (New)
+
+struct ConsultationMessage: Identifiable, Codable {
+    let id: String
+    let senderId: String
+    let senderName: String
+    let senderAvatar: String?
+    let content: String
+    let createdAt: Date
+    let isFromUser: Bool
+    var isRead: Bool
+    var messageType: ConsultationMessageType
+    
+    enum ConsultationMessageType: String, Codable {
+        case text
+        case voice
+        case image
+    }
+}
+
 // MARK: - Message Role
 
 enum MessageRole: String, Codable {

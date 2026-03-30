@@ -1,11 +1,7 @@
-//
-//  MoodModels.swift
-//  Mindcare
-//
-//  Created for MindCareAI Project
-//
-
 import Foundation
+
+// MARK: - Mood Models Configuration
+// This file defines the structures for mood tracking and analytics.
 
 // MARK: - Mood Check-in
 
