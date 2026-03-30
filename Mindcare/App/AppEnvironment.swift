@@ -87,6 +87,6 @@ enum AppConstants {
     static let healthSyncInterval: TimeInterval = 3600 // 1 hour
     
     // API Timeouts
-    static let requestTimeout: TimeInterval = 2
-    static let resourceTimeout: TimeInterval = 5
+    static let requestTimeout: TimeInterval = 30
+    static let resourceTimeout: TimeInterval = 60
 }

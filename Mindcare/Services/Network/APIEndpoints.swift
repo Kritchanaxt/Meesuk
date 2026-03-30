@@ -2,7 +2,7 @@ import Foundation
 
 /// API Endpoints สำหรับ MindCare Backend
 enum APIEndpoints {
-    
+
     // MARK: - Base Configuration
     static let host = AppEnvironment.current.apiHost
     static let httpScheme = "http://"
@@ -55,10 +55,10 @@ enum APIEndpoints {
         }
     }
 
-    // MARK: - AI (Port 8084)
+    // MARK: - AI (Port 8084 / Chat: 9999)
     enum AI {
         static let base = "\(httpScheme)\(host):8084"
-        static let chatBot = "http://\(host):9999/chat"  // Legacy AI chatbot
+        static let chatBot = "http://\(host):9999/chat" 
         static let hotline = "\(base)/ai/hotline"
         static let analyze = "\(base)/ai/analyze"
         static let suggestions = "\(base)/ai/suggestions"

@@ -59,6 +59,28 @@ struct UserProfile: Codable, Identifiable {
     }
 }
 
+// MARK: - UserProfile Mock
+extension UserProfile {
+    static func mock(role: UserRole) -> UserProfile {
+        return UserProfile(
+            id: role == .psychiatrist ? "demo-doctor-id" : "demo-patient-id",
+            email: role == .psychiatrist ? "doctor@mindcare.com" : "patient@mindcare.com",
+            name: role == .psychiatrist ? "Demo Doctor" : "Demo Patient",
+            avatar: nil,
+            role: role,
+            dateOfBirth: nil,
+            gender: nil,
+            phoneNumber: nil,
+            createdAt: Date(),
+            updatedAt: Date(),
+            height: nil,
+            weight: nil,
+            bloodType: nil,
+            emergencyContact: nil
+        )
+    }
+}
+
 // MARK: - Gender
 
 enum Gender: String, Codable, CaseIterable {

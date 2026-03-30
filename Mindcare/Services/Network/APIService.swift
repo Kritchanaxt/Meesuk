@@ -75,7 +75,6 @@ final class APIService {
         try await network.get(APIEndpoints.Health.summary)
     }
 
-    // MARK: - AI Chat (Port 8084 / Legacy 9999)
 
     /// Send message to Meesuk AI Chatbot (legacy port 9999)
     func sendMessageToChatBot(_ message: String, sessionId: String) async throws -> SimpleChatResponse {

@@ -60,13 +60,27 @@ final class AuthService: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Email/Password Login
-    
     /// Login ด้วย Email และ Password
     func login(email: String, password: String) async throws {
         let response = try await APIService.shared.login(email: email, password: password)
         isDemoSession = false
         await handleAuthResponse(response)
+    }
+    
+    /// Login แบบข้ามขั้นตอน Network (สำหรับ Demo เท่านั้น)
+    @MainActor
+    func loginWithDemo(role: UserRole) {
+        let mockUser = UserProfile.mock(role: role)
+        
+        let mockResponse = AuthResponse(
+            accessToken: "demo-access-token",
+            refreshToken: "demo-refresh-token",
+            expiresIn: 3600,
+            user: mockUser
+        )
+        
+        isDemoSession = true
+        handleAuthResponse(mockResponse)
     }
     
     /// Register ด้วย Email และ Password
