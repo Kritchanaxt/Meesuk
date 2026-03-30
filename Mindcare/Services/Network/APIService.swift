@@ -16,13 +16,13 @@ final class APIService {
         return try await network.post(APIEndpoints.Auth.login, parameters: params)
     }
 
-    func register(email: String, password: String, name: String) async throws -> AuthResponse {
-        let request = RegisterRequest(email: email, password: password, name: name)
+    func register(email: String, password: String, nickname: String, dateOfBirth: String) async throws -> AuthResponse {
+        let request = RegisterRequest(nickname: nickname, email: email, password: password, dateOfBirth: dateOfBirth)
         return try await network.post(APIEndpoints.Auth.register, body: request)
     }
 
-    func appleLogin(identityToken: String, authorizationCode: String, fullName: String?) async throws -> AuthResponse {
-        let request = AppleLoginRequest(identityToken: identityToken, authorizationCode: authorizationCode, fullName: fullName)
+    func appleLogin(identityToken: String) async throws -> AuthResponse {
+        let request = AppleLoginRequest(identityToken: identityToken)
         return try await network.post(APIEndpoints.Auth.appleLogin, body: request)
     }
 
@@ -32,7 +32,7 @@ final class APIService {
     }
 
     func logout() async throws {
-        try await network.delete(APIEndpoints.Auth.logout)
+        let _: EmptyResponse = try await network.post(APIEndpoints.Auth.logout, parameters: nil)
     }
 
     // MARK: - User APIs

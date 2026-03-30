@@ -2,10 +2,15 @@ import Foundation
 
 /// API Endpoints สำหรับ MindCare Backend
 enum APIEndpoints {
+    
+    // MARK: - Base Configuration
+    static let host = AppEnvironment.current.apiHost
+    static let httpScheme = "http://"
+    static let wsScheme = "ws://"
 
     // MARK: - Auth (Port 8081)
     enum Auth {
-        static let base = "http://[REDACTED_IP]:8081"
+        static let base = "\(httpScheme)\(host):8081"
         static let login = "\(base)/auth/login"
         static let register = "\(base)/auth/register"
         static let logout = "\(base)/auth/logout"
@@ -18,7 +23,7 @@ enum APIEndpoints {
 
     // MARK: - User (Port 8082)
     enum User {
-        static let base = "http://[REDACTED_IP]:8082"
+        static let base = "\(httpScheme)\(host):8082"
         static let profile = "\(base)/users/profile"
         static let updateProfile = "\(base)/users/profile"
         static let emergencyContacts = "\(base)/emergency-contacts"
@@ -34,7 +39,7 @@ enum APIEndpoints {
 
     // MARK: - Health (Port 8083)
     enum Health {
-        static let base = "http://[REDACTED_IP]:8083"
+        static let base = "\(httpScheme)\(host):8083"
         static let metrics = "\(base)/health/metrics"
         static let sync = "\(base)/health/sync"
         static let history = "\(base)/health/history"
@@ -52,8 +57,8 @@ enum APIEndpoints {
 
     // MARK: - AI (Port 8084)
     enum AI {
-        static let base = "http://[REDACTED_IP]:8084"
-        static let chatBot = "http://[REDACTED_IP]:9999/chat"  // Legacy AI chatbot
+        static let base = "\(httpScheme)\(host):8084"
+        static let chatBot = "http://\(host):9999/chat"  // Legacy AI chatbot
         static let hotline = "\(base)/ai/hotline"
         static let analyze = "\(base)/ai/analyze"
         static let suggestions = "\(base)/ai/suggestions"
@@ -62,7 +67,7 @@ enum APIEndpoints {
 
     // MARK: - Mood (Port 8085)
     enum Mood {
-        static let base = "http://[REDACTED_IP]:8085"
+        static let base = "\(httpScheme)\(host):8085"
         static let checkIn = "\(base)/mood/check-in"
         static let trends = "\(base)/mood/trends"
         static let seedLast7Days = "\(base)/mood/seed-last-7-days"
@@ -74,13 +79,13 @@ enum APIEndpoints {
         }
 
         static func incrementTrigger(id: String) -> String {
-            "\(base)/triggers/\(id)/increment"
+            "\(triggers)/\(id)/increment"
         }
     }
 
     // MARK: - Appointment (Port 8086)
     enum Appointment {
-        static let base = "http://[REDACTED_IP]:8086"
+        static let base = "\(httpScheme)\(host):8086"
 
         // Patient endpoints
         static let list = "\(base)/appointments"
@@ -117,7 +122,7 @@ enum APIEndpoints {
 
     // MARK: - Payment (Port 8087)
     enum Payment {
-        static let base = "http://[REDACTED_IP]:8087"
+        static let base = "\(httpScheme)\(host):8087"
         static let process = "\(base)/payments/process"
         static let verify = "\(base)/payments/verify"
         static let history = "\(base)/payments/history"
@@ -130,12 +135,12 @@ enum APIEndpoints {
 
     // MARK: - Notification (Port 8088)
     enum Notification {
-        static let base = "http://[REDACTED_IP]:8088"
+        static let base = "\(httpScheme)\(host):8088"
         static let list = "\(base)/users/notifications"
     }
 
     // MARK: - WebSocket (Port 8089)
     enum WebSocket {
-        static let base = "ws://[REDACTED_IP]:8089"
+        static let base = "\(wsScheme)\(host):8089"
     }
 }

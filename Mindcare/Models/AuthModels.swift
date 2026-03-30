@@ -40,16 +40,16 @@ struct TokenResponse: Codable {
 // MARK: - Register Request
 
 struct RegisterRequest: Codable {
+    let nickname: String
     let email: String
     let password: String
-    let name: String
-    let role: UserRole?
+    let dateOfBirth: String
     
-    init(email: String, password: String, name: String, role: UserRole? = .patient) {
-        self.email = email
-        self.password = password
-        self.name = name
-        self.role = role
+    enum CodingKeys: String, CodingKey {
+        case nickname
+        case email
+        case password
+        case dateOfBirth = "date_of_birth"
     }
 }
 
@@ -57,13 +57,9 @@ struct RegisterRequest: Codable {
 
 struct AppleLoginRequest: Codable {
     let identityToken: String
-    let authorizationCode: String
-    let fullName: String?
     
     enum CodingKeys: String, CodingKey {
         case identityToken = "identity_token"
-        case authorizationCode = "authorization_code"
-        case fullName = "full_name"
     }
 }
 

@@ -158,7 +158,7 @@ class RegisterViewModel: ObservableObject {
         showError = false
         
         do {
-            try await authService.register(email: email, password: password, name: nickname)
+            try await authService.register(email: email, password: password, nickname: nickname, dateOfBirth: dateOfBirth)
             
             // Assuming successful registration logs the user in automatically or we flag success to dismiss
             isRegistrationSuccessful = true

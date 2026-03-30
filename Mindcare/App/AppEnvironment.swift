@@ -40,6 +40,19 @@ enum AppEnvironment {
             return false
         }
     }
+    
+    /// The base IP or Domain for the API services (without port)
+    var apiHost: String {
+        switch self {
+        case .development:
+            // return "localhost"
+            return "[REDACTED_IP]" // Current active dev server
+        case .staging:
+            return "staging-api.mindcare.app"
+        case .production:
+            return "api.mindcare.app"
+        }
+    }
 }
 
 /// App Constants
@@ -74,6 +87,6 @@ enum AppConstants {
     static let healthSyncInterval: TimeInterval = 3600 // 1 hour
     
     // API Timeouts
-    static let requestTimeout: TimeInterval = 30
-    static let resourceTimeout: TimeInterval = 60
+    static let requestTimeout: TimeInterval = 2
+    static let resourceTimeout: TimeInterval = 5
 }

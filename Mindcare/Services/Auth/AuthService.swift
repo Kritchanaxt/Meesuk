@@ -70,8 +70,8 @@ final class AuthService: NSObject, ObservableObject {
     }
     
     /// Register ด้วย Email และ Password
-    func register(email: String, password: String, name: String) async throws {
-        let response = try await APIService.shared.register(email: email, password: password, name: name)
+    func register(email: String, password: String, nickname: String, dateOfBirth: String) async throws {
+        let response = try await APIService.shared.register(email: email, password: password, nickname: nickname, dateOfBirth: dateOfBirth)
         await handleAuthResponse(response)
     }
     
@@ -97,9 +97,7 @@ final class AuthService: NSObject, ObservableObject {
         
         // Send to backend
         let response = try await APIService.shared.appleLogin(
-            identityToken: identityToken,
-            authorizationCode: authorizationCode,
-            fullName: fullName
+            identityToken: identityToken
         )
         
         await handleAuthResponse(response)
