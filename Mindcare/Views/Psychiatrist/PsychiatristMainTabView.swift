@@ -4,19 +4,23 @@ struct PsychiatristMainTabView: View {
     @State private var selectedTab: Int = 0
     @EnvironmentObject var authService: AuthService
     
+    init() {
+        UITabBar.appearance().isHidden = true
+    }
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $selectedTab) {
                 PsychiatristDashboardView()
                     .tag(0)
                 
-                Text("Patients View Placeholder")
+                PsychiatristPatientsView()
                     .tag(1)
                 
-                Text("Messages View Placeholder")
+                PsychiatristMessagesView()
                     .tag(2)
                 
-                Text("Settings View Placeholder")
+                PsychiatristSettingsView()
                     .tag(3)
             }
             

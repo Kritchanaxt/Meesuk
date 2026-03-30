@@ -204,6 +204,8 @@ struct DoctorMatchCard: View {
     let doctor: Psychiatrist
     let rank: Int
     var onSelect: () -> Void
+    
+    @State private var showingCredentials = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -287,23 +289,32 @@ struct DoctorMatchCard: View {
                 Divider()
                     .padding(.horizontal, 25)
 
-                HStack {
-                    Image("Credentrails")  // Asset: Session2/Page3_Match/Credentrails
-                        .resizable()
-                        .frame(width: 30, height: 30)
+                Button(action: { 
+                    let feedback = UIImpactFeedbackGenerator(style: .medium)
+                    feedback.impactOccurred()
+                    showingCredentials = true 
+                }) {
+                    HStack {
+                        Image("Credentrails")  // Asset: Session2/Page3_Match/Credentrails
+                            .resizable()
+                            .frame(width: 30, height: 30)
 
-                    Text("View Full Credentials")
-                        .font(.custom("Outfit-Bold", size: 16))
-                        .foregroundColor(Color.mindHexColor("4A3422"))
+                        Text("View Full Credentials")
+                            .font(.custom("Outfit-Bold", size: 16))
+                            .foregroundColor(Color.mindHexColor("4A3422"))
 
-                    Spacer()
+                        Spacer()
+                    }
+                    .padding(.horizontal, 25)
+                    .padding(.bottom, 10)
                 }
-                .padding(.horizontal, 25)
-                .padding(.bottom, 10)
             }
             .background(Color.white)
             .cornerRadius(30)
             .padding(.horizontal, 20)
+            .sheet(isPresented: $showingCredentials) {
+                DoctorCredentialsView(doctor: doctor)
+            }
 
             // Action Button
             Button(action: onSelect) {

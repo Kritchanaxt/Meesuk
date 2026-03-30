@@ -10,6 +10,9 @@ import Combine
 
 struct HomeView: View {
     @StateObject private var viewModel = HealthViewModel()
+    @State private var showingMoodConfirmation = false
+    @State private var selectedMoodName = ""
+    @State private var selectedMoodImage = ""
     
     var body: some View {
         ZStack {
@@ -19,7 +22,11 @@ struct HomeView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     HomeHeaderView()
-                    DailyCheckInView()
+                    DailyCheckInView(
+                        showingConfirmation: $showingMoodConfirmation,
+                        selectedMoodName: $selectedMoodName,
+                        selectedMoodImage: $selectedMoodImage
+                    )
                     
                     // Watch + Heart Rate Row
                     HStack(spacing: 14) {
@@ -63,6 +70,25 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
+                .blur(radius: showingMoodConfirmation ? 5 : 0)
+            }
+            
+            // Premium Popup Overlay
+            if showingMoodConfirmation {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation { showingMoodConfirmation = false }
+                    }
+                
+                MoodConfirmationPopup(
+                    moodName: selectedMoodName,
+                    moodImage: selectedMoodImage,
+                    onContinue: {
+                        withAnimation { showingMoodConfirmation = false }
+                    }
+                )
+                .transition(.scale(scale: 0.8).combined(with: .opacity))
             }
         }
         .onAppear {
@@ -154,6 +180,10 @@ struct DailyCheckInView: View {
         ("Mee_Low",   "Low",    Color.mindHexColor("F9C3B9")),
     ]
 
+    @Binding var showingConfirmation: Bool
+    @Binding var selectedMoodName: String
+    @Binding var selectedMoodImage: String
+    
     @State private var selected: Int? = nil
     @State private var status: CheckInStatus = .idle
 
@@ -165,41 +195,23 @@ struct DailyCheckInView: View {
     }
 
     private func submitMood(index: Int) {
-        let level: Int
-        switch index {
-        case 0: level = 5
-        case 1: level = 4
-        case 2: level = 3
-        case 3: level = 2
-        default: level = 3
-        }
-
+        // 100% Mock Flow - Removed API call for demo quality
         status = .loading
+        
+        let feedback = UIImpactFeedbackGenerator(style: .medium)
+        feedback.impactOccurred()
 
         Task {
-            do {
-                let mood = MoodCheckIn(
-                    moodLevel: level,
-                    emotions: [.happy],
-                    activities: nil,
-                    notes: nil,
-                    sleepQuality: nil,
-                    energyLevel: nil,
-                    stressLevel: nil
-                )
-                let _ = try await APIService.shared.checkInMood(mood)
+            // Simulate brief local processing
+            try? await Task.sleep(nanoseconds: 800_000_000)
+            
+            await MainActor.run {
                 withAnimation(.spring()) {
-                    status = .success("บันทึกแล้ว! \(moods[index].1) 🎉")
+                    self.selectedMoodName = moods[index].1
+                    self.selectedMoodImage = moods[index].0
+                    self.showingConfirmation = true
+                    self.status = .idle // Reset for next use
                 }
-                // Reset after 3 sec
-                try? await Task.sleep(nanoseconds: 3_000_000_000)
-                withAnimation { status = .idle }
-            } catch {
-                withAnimation {
-                    status = .error("บันทึกไม่สำเร็จ กรุณาลองใหม่")
-                }
-                try? await Task.sleep(nanoseconds: 3_000_000_000)
-                withAnimation { status = .idle }
             }
         }
     }
@@ -922,4 +934,86 @@ struct BarChart: View {
 
 #Preview {
     HomeView()
+}
+// MARK: - Mood Confirmation Popup
+
+struct MoodConfirmationPopup: View {
+    let moodName: String
+    let moodImage: String
+    var onContinue: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 25) {
+            // Success Icon with glow
+            ZStack {
+                Circle()
+                    .fill(Color.mindHexColor("3AB05D").opacity(0.15))
+                    .frame(width: 80, height: 80)
+                
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 44))
+                    .foregroundColor(Color.mindHexColor("3AB05D"))
+            }
+            .padding(.top, 5)
+            
+            VStack(spacing: 12) {
+                Text("วันนี้คุณรู้สึก : \(moodName)")
+                    .font(.custom("Outfit-Bold", size: 22))
+                    .foregroundColor(Color.mindHexColor("4A3422"))
+                
+                Image(moodImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 90, height: 90)
+                    .padding(15)
+                    .background(Circle().fill(Color.mindHexColor("FFF8E7")))
+                    .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+                
+                Text(encouragementMessage)
+                    .font(.custom("Outfit-Regular", size: 15))
+                    .foregroundColor(Color.mindHexColor("7C6A5B"))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+            }
+            
+            Button(action: onContinue) {
+                Text("ดำเนินการต่อ")
+                    .font(.custom("Outfit-Bold", size: 16))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        LinearGradient(
+                            colors: [Color.mindHexColor("EB6538"), Color.mindHexColor("F39C12")],
+                            startPoint: .leading, endPoint: .trailing)
+                    )
+                    .cornerRadius(18)
+                    .shadow(color: Color.mindHexColor("EB6538").opacity(0.35), radius: 12, x: 0, y: 6)
+            }
+            .padding(.horizontal, 25)
+            .padding(.bottom, 5)
+        }
+        .padding(30)
+        .background(
+            RoundedRectangle(cornerRadius: 35)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.15), radius: 25, x: 0, y: 10)
+        )
+        .padding(.horizontal, 35)
+    }
+    
+    private var encouragementMessage: String {
+        switch moodName {
+        case "Great!":
+            return "ยอดเยี่ยมมากครับ! รักษาระดับความสุขนี้เอาไว้ แล้วไปสนุกกับวันใหม่ต่อเลยนะครับ"
+        case "Good":
+            return "เป็นวันที่ดีนะครับ! ขอให้มีความสุขแบบนี้ไปตลอดทั้งวันเลยนะครับ"
+        case "Okay":
+            return "แค่วันธรรมดาๆ วันหนึ่งที่แสนสงบ เรายินดีรับฟังและพร้อมซัพพอร์ตคุณเสมอ"
+        case "Low":
+            return "ไม่เป็นไรนะครับที่เราจะมีความสุขน้อยลงบ้าง พักผ่อนให้เต็มที่ มีอะไรเล่าให้ Meesuk ฟังได้ตลอดนะครับ"
+        default:
+            return "ขอบคุณที่แบ่งปันความรู้สึกกับเรานะครับ"
+        }
+    }
 }
